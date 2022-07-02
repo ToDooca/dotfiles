@@ -564,6 +564,72 @@ schemes:
       cyan:    '#54ced6'
       white:   '#282a2e'
 
+
+     ###Challenger Deep ###
+    ChallengerDeep: &ChallengerDeep
+       # Default colors
+      primary:
+        background: '#1b182c'
+        foreground: '#cbe3e7'
+
+       # Normal colors
+      normal:
+        black:   '#100e23'
+        red:     '#ff8080'
+        green:   '#95ffa4'
+        yellow:  '#ffe9aa'
+        blue:    '#91ddff'
+        magenta: '#c991e1'
+        cyan:    '#aaffe4'
+        white:   '#cbe3e7'
+
+      # Bright colors
+      bright:
+        black:   '#565575'
+        red:     '#ff5458'
+        green:   '#62d196'
+        yellow:  '#ffb378'
+        blue:    '#65b2ff'
+        magenta: '#906cff'
+        cyan:    '#63f2f1'
+        white:   '#a6b3cc'
+
+
+      ###DuCozy###
+    DuCozy: &DuCozy
+        #Default colors:
+      primary:
+        background: '#000b1e'
+        foreground: '#95b0c9'
+
+        # Colors that should be used to draw the terminal cursor. If these are unset,
+        # the cursor colour will be the inverse of the cell colour.
+        # cursor:
+        #   text: '#2e2e2d'
+        #   cursor: #ffffff'
+
+        # Normal colors
+      normal:
+        black:   '#123e7c'
+        red:     '#ee1216'
+        green:   '#e3bec6'
+        yellow:  '#f2a783'
+        blue:    '#7eabc1'
+        magenta: '#794dce'
+        cyan:    '#0abdc6'
+        white:   '#d7d7d5'
+
+        # Bright colors
+      bright:
+        black:   '#1c61c2'
+        red:     '#f12f32'
+        green:   '#ddbfc7'
+        yellow:  '#f5b79a'
+        blue:    '#9ad1eb'
+        magenta: '#855fce'
+        cyan:    '#42c9cf'
+        white:   '#d7d7d5'
+
 ######################################################################
 ## SET THEME: Choose ONE color scheme from those in the above list. ##
 ## ###################################################################
@@ -578,8 +644,10 @@ schemes:
 # *SolarizedLight
 # *SolarizedDark
 # *TomorrowNight
+# *ChallengerDeep
+# *DuCozy
 
-colors: *OceanicNext
+colors: *DuCozy
 
 #######################################
 ##       END OF COLOR SCHEMES        ##
