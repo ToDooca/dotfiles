@@ -45,7 +45,7 @@ window:
   # Window opacity as a floating point number from `0.0` to `1.0`.
   # The value `0.0` is completely transparent and `1.0` is opaque.
   # opacity: 1.0
-  opacity: 0.80
+  opacity: 0.75
 
   # Window decorations
   #
@@ -611,7 +611,7 @@ schemes:
         # Normal colors
       normal:
         black:   '#123e7c'
-        red:     '#ee1216'
+        red:     '#ff5677'
         green:   '#e3bec6'
         yellow:  '#f2a783'
         blue:    '#7eabc1'
@@ -622,7 +622,7 @@ schemes:
         # Bright colors
       bright:
         black:   '#1c61c2'
-        red:     '#f12f32'
+        red:     '#ff5677'
         green:   '#ddbfc7'
         yellow:  '#f5b79a'
         blue:    '#9ad1eb'
