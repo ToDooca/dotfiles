@@ -11,16 +11,16 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 
-# __     __         _       _     _
-# \ \   / /_ _ _ __(_) __ _| |__ | | ___  ___   _
-#  \ \ / / _` | '__| |/ _` | '_ \| |/ _ \/ __| (_)
-#   \ V / (_| | |  | | (_| | |_) | |  __/\__ \  _
-#    \_/ \__,_|_|  |_|\__,_|_.__/|_|\___||___/ (_)
-# 
-
 mod = "mod4"
 terminal = "alacritty"
 browser = "brave"
+
+#  _  __          _     _           _
+# | |/ /___ _   _| |__ (_)_ __   __| |___
+# | ' // _ \ | | | '_ \| | '_ \ / _` / __|
+# | . \  __/ |_| | |_) | | | | | (_| \__ \
+# |_|\_\___|\__, |_.__/|_|_| |_|\__,_|___/
+#           |___/
 
 keys = [
     Key([mod], "Left", lazy.layout.left(), desc="Move focus to left"),
@@ -65,6 +65,13 @@ keys = [
     Key([mod], "m", lazy.spawn('spotify'), desc="Open spotify floating window"),
 ]
 
+#   ____
+#  / ___|_ __ ___  _   _ _ __  ___
+# | |  _| '__/ _ \| | | | '_ \/ __|
+# | |_| | | | (_) | |_| | |_) \__ \
+#  \____|_|  \___/ \__,_| .__/|___/
+#                       |_|
+
 groups = [
     Group('1', label="main", matches=[Match(wm_class='brave'), Match(wm_class='chrome')], layout="spiral"),
     Group('2', label="", layout="spiral"),
@@ -73,8 +80,8 @@ groups = [
     Group('5', layout="spiral"),
     Group('6', layout="spiral"),
     Group('7', label="", layout="spiral"),
-    Group('8', label="", layout="max"),
-    Group('9', label="戮", layout="max"),
+    Group('8', label="", layout="spiral"),
+    Group('9', label="戮", layout="spiral"),
 ]
 
 for i in groups:
@@ -89,13 +96,14 @@ for i in groups:
             desc="move focused window to group{}".format(i.name)),
     ])
 
-layouts = [
-    layout.Max(
-        border_focus='#794dce',
-        border_normal='#bbaee1',
-        border_width=2,
-        margin=10
-     ),
+#  _                            _
+# | |    __ _ _   _  ___  _   _| |_ ___
+# | |   / _` | | | |/ _ \| | | | __/ __|
+# | |__| (_| | |_| | (_) | |_| | |_\__ \
+# |_____\__,_|\__, |\___/ \__,_|\__|___/
+#             |___/
+
+layouts = [ 
     layout.Spiral(
         border_focus='#794dce',
         border_normal='#bbaee1',
@@ -111,12 +119,25 @@ layouts = [
     ),
 ]
 
+# __        ___     _            _
+# \ \      / (_) __| | __ _  ___| |_ ___
+#  \ \ /\ / /| |/ _` |/ _` |/ _ \ __/ __|
+#   \ V  V / | | (_| | (_| |  __/ |_\__ \
+#    \_/\_/  |_|\__,_|\__, |\___|\__|___/
+#                     |___/
+
 widget_defaults = dict(
     font="sans",
     fontsize=12,
     padding=3,
 )
 extension_defaults = widget_defaults.copy()
+
+#  ____
+# / ___|  ___ _ __ ___  ___ _ __  ___
+# \___ \ / __| '__/ _ \/ _ \ '_ \/ __|
+#  ___) | (__| | |  __/  __/ | | \__ \
+# |____/ \___|_|  \___|\___|_| |_|___/
 
 screens = [
     Screen(
@@ -145,12 +166,24 @@ screens = [
     ),
 ]
 
+#  __  __
+# |  \/  | ___  _   _ ___  ___
+# | |\/| |/ _ \| | | / __|/ _ \
+# | |  | | (_) | |_| \__ \  __/
+# |_|  |_|\___/ \__,_|___/\___|
+
 # Drag floating layouts.
 mouse = [
     Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
     Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
+
+#  _   _             _
+# | | | | ___   ___ | | _____
+# | |_| |/ _ \ / _ \| |/ / __|
+# |  _  | (_) | (_) |   <\__ \
+# |_| |_|\___/ \___/|_|\_\___/
 
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
@@ -179,7 +212,14 @@ reconfigure_screens = True
 auto_minimize = True
 wmname = "LG3D"
 
+#  ____  _             _
+# / ___|| |_ __ _ _ __| |_ _   _ _ __
+# \___ \| __/ _` | '__| __| | | | '_ \
+#  ___) | || (_| | |  | |_| |_| | |_) |
+# |____/ \__\__,_|_|   \__|\__,_| .__/
+#                               |_|
+
 @hook.subscribe.startup_once
 def autostart():
     home = os.path.expanduser('~/.config/qtile/autostart.sh')
-    subprocess.Popen([home])
+    subprocess.run([home])
