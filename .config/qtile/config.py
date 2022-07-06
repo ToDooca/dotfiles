@@ -7,14 +7,21 @@
 
 from libqtile import hook
 from libqtile import bar, layout, widget
-from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile.config import Click, Drag, Group, Key, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 
 mod = "mod4"
 terminal = "alacritty"
 browser = "brave"
-
+colors = [["#123e7c", "#1c61c2"],
+          ["#ff5677", "#ff5677"],
+          ["#e3bec6", "#ddbfc7"],
+          ["#f2a783", "#f5b791"],
+          ["#7eabc1", "#9ad1eb"],
+          ["#794dce", "#855fce"],
+          ["#0abdc6", "#42c9cf"],
+          ["#d7d7d5", "#d7d7d5"]]
 #  _  __          _     _           _
 # | |/ /___ _   _| |__ (_)_ __   __| |___
 # | ' // _ \ | | | '_ \| | '_ \ / _` / __|
@@ -62,7 +69,9 @@ keys = [
     Key([mod, "mod1"], "d", lazy.spawn('discord'),  desc="Launch Discord"),
     Key([], "Print", lazy.spawn('flameshot gui'), desc="Take a Screenshot"),
     Key([mod], "e", lazy.spawn('thunar'), desc="Open thunar"),
-    Key([mod], "m", lazy.spawn('spotify'), desc="Open spotify floating window"),
+    Key([mod], "m", lazy.group['scratchpad'].dropdown_toggle('spotify'), desc="Open spotify floating window"),
+    Key([mod, "shift"], "m", lazy.spawn('pavucontrol'), desc="Launch volume control"),
+    Key([mod, "shift"], "x", lazy.spawn('xkill'), desc="Launch volume control"),
 ]
 
 #   ____
@@ -96,6 +105,15 @@ for i in groups:
             desc="move focused window to group{}".format(i.name)),
     ])
 
+# Append ScratchPad to groups list
+groups.append(
+        ScratchPad("scratchpad", [
+        #define a drop down terminal.
+        DropDown("term", terminal, opacity=0.75, height=0.5, width=0.8),
+        DropDown("spotify", "spotify", y=0.13, x=0.17, opacity=1, height= 0.7, width=0.65),
+    ]),
+ )
+
 #  _                            _
 # | |    __ _ _   _  ___  _   _| |_ ___
 # | |   / _` | | | |/ _ \| | | | __/ __|
@@ -115,8 +133,12 @@ layouts = [
         ratio=0.5
     ),
     layout.Floating(
-        
-    ),
+       border_focus='#794dce',
+       border_normal='#bbaee1',
+       border_width=2,
+       float_rules=[
+           Match(wm_class="pavucontrol"),
+     ]),
 ]
 
 # __        ___     _            _
@@ -127,8 +149,8 @@ layouts = [
 #                     |___/
 
 widget_defaults = dict(
-    font="sans",
-    fontsize=12,
+    font="Fira Code",
+    fontsize=14,
     padding=3,
 )
 extension_defaults = widget_defaults.copy()
@@ -141,23 +163,32 @@ extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
-        bottom=bar.Bar(
+        top=bar.Bar(
             [
-                widget.CurrentLayout(),
-                widget.GroupBox(),
-                widget.Prompt(),
-                widget.WindowName(),
-                widget.Chord(
-                    chords_colors={
-                        "launch": ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
+                widget.GroupBox(
+                    fontsize=16,
+                    margin_y=3,
+                    margin_x=0,
+                    padding_y=5,
+                    padding_x=3,
+                    borderwidth=3,
+                    #active=colors[-4],
+                    #inacitve=colors[-3],
+                    rounded=False,
+                    highlight_method='block',
+                    urgent_alert_method='block',
+                    #this_current_screen_border=colors[5],
+                    #this_screen_border=colors[4],
+                    #other_current_screen_border=colors[3],
+                    #other_screen_border=colors[3],
+                    #foreground=colors[5],
+                    #background=colors[7],
+                    disable_drag=True
                 ),
-                widget.TextBox("default config", name="default"),
-                widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
-                widget.Systray(),
-                widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
+                widget.CPU(format='CPU: {load_percent}%', ),
+                widget.Clock(format="%e/%B/%Y %T"),
                 widget.QuickExit(),
+                widget.Systray(),
             ],
             24,
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
