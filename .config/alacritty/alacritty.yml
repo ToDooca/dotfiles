@@ -44,7 +44,6 @@ window:
   #
   # Window opacity as a floating point number from `0.0` to `1.0`.
   # The value `0.0` is completely transparent and `1.0` is opaque.
-  # opacity: 1.0
   opacity: 0.75
 
   # Window decorations
@@ -108,23 +107,9 @@ scrolling:
 
 # Font configuration
 font:
-  # Normal (roman) font face
   normal:
     # Font family
-    #
-    # Default:
-    #   - (macOS) Menlo
-    #   - (Linux/BSD) monospace
-    #   - (Windows) Consolas
     family: Fira Code 
-    # family: CodeNewRoman Nerd Font
-    # family: RobotoMono Nerd Font
-    # family: Hack
-    # family: JetBrains Mono
-    # family: UbuntuMono Nerd Font
-    # family: Monofur Nerd Font
-    # family: TerminessTTF Nerd Font
-    # family: Mononoki Nerd Font
 
     # The `style` can be specified to pick a specific face.
     style: Regular
@@ -599,14 +584,9 @@ schemes:
     DuCozy: &DuCozy
         #Default colors:
       primary:
-        background: '#000b1e'
-        foreground: '#95b0c9'
 
-        # Colors that should be used to draw the terminal cursor. If these are unset,
-        # the cursor colour will be the inverse of the cell colour.
-        # cursor:
-        #   text: '#2e2e2d'
-        #   cursor: #ffffff'
+        backgoround: '#404040'
+        foreground: '#95b0c9'
 
         # Normal colors
       normal:

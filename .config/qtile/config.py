@@ -4,24 +4,17 @@
 # | |_| | |_| | \__ \ | |__| (_) | | | |  _| | (_| |
 # |____/ \__,_| |___/  \____\___/|_| |_|_| |_|\__, |
 #                                             |___/
-
-from libqtile import hook
+import os
+import subprocess
+from libqtile import hook, qtile
 from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
-from libqtile.utils import guess_terminal
 
 mod = "mod4"
 terminal = "alacritty"
 browser = "brave"
-colors = [["#123e7c", "#1c61c2"],
-          ["#ff5677", "#ff5677"],
-          ["#e3bec6", "#ddbfc7"],
-          ["#f2a783", "#f5b791"],
-          ["#7eabc1", "#9ad1eb"],
-          ["#794dce", "#855fce"],
-          ["#0abdc6", "#42c9cf"],
-          ["#d7d7d5", "#d7d7d5"]]
+
 #  _  __          _     _           _
 # | |/ /___ _   _| |__ (_)_ __   __| |___
 # | ' // _ \ | | | '_ \| | '_ \ / _` / __|
@@ -65,8 +58,8 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "a", lazy.spawn('rofi -show combi'), desc="Open rofi combi"),
     Key([mod], "d", lazy.spawn('rofi -show drun'), desc="Open drun drun"),
-    Key([mod], "w", lazy.spawn(browser),  desc="Launch default browser"),
-    Key([mod, "mod1"], "d", lazy.spawn('discord'),  desc="Launch Discord"),
+    Key([mod], "w", lazy.spawn(browser), desc="Launch default browser"),
+    Key([mod, "mod1"], "d", lazy.spawn('discord'), desc="Launch Discord"),
     Key([], "Print", lazy.spawn('flameshot gui'), desc="Take a Screenshot"),
     Key([mod], "e", lazy.spawn('thunar'), desc="Open thunar"),
     Key([mod], "m", lazy.group['scratchpad'].dropdown_toggle('spotify'), desc="Open spotify floating window"),
@@ -82,15 +75,15 @@ keys = [
 #                       |_|
 
 groups = [
-    Group('1', label="main", matches=[Match(wm_class='brave'), Match(wm_class='chrome')], layout="spiral"),
-    Group('2', label="", layout="spiral"),
+    Group('1', matches=[Match(wm_class='brave'), Match(wm_class='chrome')], layout="spiral"),
+    Group('2', layout="spiral"),
     Group('3', layout="spiral"),
     Group('4', layout="spiral"),
     Group('5', layout="spiral"),
     Group('6', layout="spiral"),
-    Group('7', label="", layout="spiral"),
+    Group('7', layout="spiral"),
     Group('8', label="", layout="spiral"),
-    Group('9', label="戮", layout="spiral"),
+    Group('9', label="", layout="spiral"),
 ]
 
 for i in groups:
@@ -98,7 +91,6 @@ for i in groups:
         # mod + letter of group = switch to group
         Key([mod], i.name, lazy.group[i.name].toscreen(),
             desc="Switch to group{}".format(i.name)),
-        
         # Or, use below if you prefer not to switch to that group.
         # mod + control + letter of group = move focused window to group.
         Key([mod, "control"], i.name, lazy.window.togroup(i.name),
@@ -107,12 +99,12 @@ for i in groups:
 
 # Append ScratchPad to groups list
 groups.append(
-        ScratchPad("scratchpad", [
-        #define a drop down terminal.
+    ScratchPad("scratchpad", [
+        # define a drop down terminal.
         DropDown("term", terminal, opacity=0.75, height=0.5, width=0.8),
-        DropDown("spotify", "spotify", y=0.13, x=0.17, opacity=1, height= 0.7, width=0.65),
+        DropDown("spotify", "spotify", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
     ]),
- )
+)
 
 #  _                            _
 # | |    __ _ _   _  ___  _   _| |_ ___
@@ -121,7 +113,7 @@ groups.append(
 # |_____\__,_|\__, |\___/ \__,_|\__|___/
 #             |___/
 
-layouts = [ 
+layouts = [
     layout.Spiral(
         border_focus='#794dce',
         border_normal='#bbaee1',
@@ -133,12 +125,13 @@ layouts = [
         ratio=0.5
     ),
     layout.Floating(
-       border_focus='#794dce',
-       border_normal='#bbaee1',
-       border_width=2,
-       float_rules=[
-           Match(wm_class="pavucontrol"),
-     ]),
+        border_focus='#794dce',
+        border_normal='#bbaee1',
+        border_width=2,
+        float_rules=[
+            Match(wm_class="pavucontrol"),
+        ]
+    ),
 ]
 
 # __        ___     _            _
@@ -155,6 +148,85 @@ widget_defaults = dict(
 )
 extension_defaults = widget_defaults.copy()
 
+arrowPinkInitial = widget.TextBox(
+                text='',
+                background='#404040',
+                foreground='#bbaee1',
+                padding=0,
+                fontsize=45
+            )
+arrowPink = widget.TextBox(
+                text='',
+                background='#794dce',
+                foreground='#bbaee1',
+                padding=0,
+                fontsize=45
+            )
+arrowPurple = widget.TextBox(
+                text='',
+                background='#bbaee1',
+                foreground='#794dce',
+                padding=0,
+                fontsize=45
+            )
+thermalSensorCPU = widget.ThermalSensor(
+                foreground='#ffffff',
+                background='#794dce',
+                threshold=90,
+                fmt=' CPU:{}',
+                tag_sensor='Tccd1',
+                padding=5
+            )
+
+thermalSensorGPU = widget.ThermalSensor(
+                foreground='#ffffff',
+                background='#794dce',
+                threshold=90,
+                fmt='GPU:{}',
+                tag_sensor='edge',
+                padding=5
+            )
+ramMemory = widget.Memory(
+                foreground='#ffffff',
+                background='#bbaee1',
+                measure_mem='G',
+                mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')},
+                fmt=' {}',
+                padding=5
+            )
+checkPackageUpdates = widget.CheckUpdates(
+                update_interval=1800,
+                distro="Arch_checkupdates",
+                display_format=" {updates} ",
+                no_update_string=' ',
+                colour_have_updates='#ff5677',
+                colour_no_updates='#ffffff',
+                mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e yay -Syu')},
+                padding=5,
+                background='#794dce'
+            )
+pulseVolume = widget.PulseVolume(
+                foreground='#ffffff',
+                background='#bbaee1',
+                fmt=' {}',
+                padding=5
+            )
+keyboardLayout = widget.KeyboardLayout(
+                foreground='#ffffff',
+                background='#794dce',
+                fmt=' {}',
+                padding=5
+            )
+currentPlayer = widget.Cmus(
+    background='#404040',
+    foreground='#ffffff',
+    play_color='#0abdc6',
+    noplay_color='#ffffff',
+    padding=5
+)
+systemClock = widget.Clock(format="%e/%B/%Y %T", background='#794dce')
+
+
 #  ____
 # / ___|  ___ _ __ ___  ___ _ __  ___
 # \___ \ / __| '__/ _ \/ _ \ '_ \/ __|
@@ -163,38 +235,120 @@ extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
-        top=bar.Bar(
-            [
-                widget.GroupBox(
-                    fontsize=16,
-                    margin_y=3,
-                    margin_x=0,
-                    padding_y=5,
-                    padding_x=3,
-                    borderwidth=3,
-                    #active=colors[-4],
-                    #inacitve=colors[-3],
-                    rounded=False,
-                    highlight_method='block',
-                    urgent_alert_method='block',
-                    #this_current_screen_border=colors[5],
-                    #this_screen_border=colors[4],
-                    #other_current_screen_border=colors[3],
-                    #other_screen_border=colors[3],
-                    #foreground=colors[5],
-                    #background=colors[7],
-                    disable_drag=True
-                ),
-                widget.CPU(format='CPU: {load_percent}%', ),
-                widget.Clock(format="%e/%B/%Y %T"),
-                widget.QuickExit(),
-                widget.Systray(),
-            ],
-            24,
-            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
-            # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
-        ),
+        top=bar.Bar([
+            widget.GroupBox(
+                font='Fira Code Bold',
+                fontsize=14,
+                margin_y=3,
+                margin_x=0,
+                padding_y=7,
+                padding_x=7,
+                borderwidth=5,
+                highlight_method='line',
+                background='#404040',
+                highlight_color='404040',
+                active='#ffffff',
+                this_current_screen_border='#794dce',
+                this_screen_border='#794dce',
+                hide_unused=True,
+                rounded=False,
+                disable_drag=True
+            ),
+            widget.Spacer(background='#404040'),
+            currentPlayer,
+            arrowPinkInitial,
+            widget.CPU(format=' {load_percent}%', background='#bbaee1'),
+            arrowPurple,
+            thermalSensorCPU,
+            thermalSensorGPU,
+            arrowPink,
+            ramMemory,
+            arrowPurple,
+            checkPackageUpdates,
+            arrowPink,
+            pulseVolume,
+            arrowPurple,
+            keyboardLayout,
+            arrowPink,
+            widget.Systray(background='#bbaee1', padding=5),
+            arrowPurple,
+            systemClock
+        ], 25),
     ),
+    Screen(
+        top=bar.Bar([
+            widget.GroupBox(
+                font='Fira Code Bold',
+                fontsize=14,
+                margin_y=3,
+                margin_x=0,
+                padding_y=7,
+                padding_x=7,
+                borderwidth=5,
+                highlight_method='line',
+                background='#404040',
+                highlight_color='404040',
+                active='#ffffff',
+                this_current_screen_border='#794dce',
+                this_screen_border='#794dce',
+                hide_unused=True,
+                rounded=False,
+                disable_drag=True
+            ),          
+            widget.Spacer(background='#404040'),
+            currentPlayer,
+            arrowPinkInitial,
+            widget.CPU(format=' {load_percent}%', background='#bbaee1'),
+            arrowPurple,
+            thermalSensorCPU,
+            thermalSensorGPU,
+            arrowPink,
+            ramMemory,
+            arrowPurple,
+            checkPackageUpdates,
+            arrowPink,
+            pulseVolume,
+            arrowPurple,
+            systemClock
+        ], 25),
+    ),
+    Screen(
+        top=bar.Bar([
+            widget.GroupBox(
+                font='Fira Code Bold',
+                fontsize=14,
+                margin_y=3,
+                margin_x=0,
+                padding_y=7,
+                padding_x=7,
+                borderwidth=5,
+                highlight_method='line',
+                background='#404040',
+                highlight_color='404040',
+                active='#ffffff',
+                this_current_screen_border='#794dce',
+                this_screen_border='#794dce',
+                hide_unused=True,
+                rounded=False,
+                disable_drag=True
+            ),
+            widget.Spacer(background='#404040'),
+            currentPlayer,
+            arrowPinkInitial,
+            widget.CPU(format=' {load_percent}%', background='#bbaee1'),
+            arrowPurple,
+            thermalSensorCPU,
+            thermalSensorGPU,
+            arrowPink,
+            ramMemory,
+            arrowPurple,
+            checkPackageUpdates,
+            arrowPink,
+            pulseVolume,
+            arrowPurple,
+            systemClock
+        ], 25),
+    )
 ]
 
 #  __  __
@@ -216,11 +370,7 @@ mouse = [
 # |  _  | (_) | (_) |   <\__ \
 # |_| |_|\___/ \___/|_|\_\___/
 
-dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
-follow_mouse_focus = True
-bring_front_click = False
-cursor_warp = False
 floating_layout = layout.Floating(
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
@@ -235,6 +385,7 @@ floating_layout = layout.Floating(
 )
 # When using the Wayland backend, this can be used to configure input devices.
 wl_input_rules = None
+bring_front_click = False
 auto_fullscreen = True
 follow_mouse_focus = True
 cursor_warp = False
@@ -242,6 +393,7 @@ focus_on_window_activation = "smart"
 reconfigure_screens = True
 auto_minimize = True
 wmname = "LG3D"
+
 
 #  ____  _             _
 # / ___|| |_ __ _ _ __| |_ _   _ _ __

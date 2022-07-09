@@ -41,7 +41,8 @@ call plug#begin('~/.config/nvim/plugged')
 				\ Plug 'Xuyuanp/nerdtree-git-plugin'
 
 	" colorschemes
-	Plug 'ghifarit53/tokyonight-vim'
+ 	 Plug 'EdenEast/nightfox.nvim'
+	 Plug 'ghifarit53/tokyonight-vim'
 call plug#end()
 let g:airline_theme='tokyonight'
 
@@ -50,7 +51,7 @@ let g:airline_theme='tokyonight'
 filetype indent plugin on
 let mapleader=" "
 set backspace=indent,eol,start
-"set colorcolumn=80
+set colorcolumn=80
 set cursorline
 set encoding=utf-8
 set hlsearch
@@ -98,7 +99,7 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 " autocmd BufWritePre * %s/\s\+$//e
 
 " Colorscheme -------------------------------------
-colorscheme tokyonight 
+colorscheme nightfox
 set background=dark
 set termguicolors
 " darker background
