@@ -217,12 +217,13 @@ keyboardLayout = widget.KeyboardLayout(
                 fmt=' {}',
                 padding=5
             )
-currentPlayer = widget.Cmus(
+currentPlayer = widget.Mpd2(
     background='#404040',
     foreground='#ffffff',
     play_color='#0abdc6',
     noplay_color='#ffffff',
-    padding=5
+    padding=5,
+    mouse_buttons={1: 'next', 2: 'stop', 3: 'previous'},
 )
 systemClock = widget.Clock(format="%e/%B/%Y %T", background='#794dce')
 
