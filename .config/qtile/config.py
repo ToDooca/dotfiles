@@ -149,84 +149,104 @@ widget_defaults = dict(
 extension_defaults = widget_defaults.copy()
 
 arrowPinkInitial = widget.TextBox(
-                text='',
-                background='#404040',
-                foreground='#bbaee1',
-                padding=0,
-                fontsize=45
-            )
+    text='',
+    background='#404040',
+    foreground='#bbaee1',
+    padding=0,
+    fontsize=45
+)
 arrowPink = widget.TextBox(
-                text='',
-                background='#794dce',
-                foreground='#bbaee1',
-                padding=0,
-                fontsize=45
-            )
+    text='',
+    background='#794dce',
+    foreground='#bbaee1',
+    padding=0,
+    fontsize=45
+)
 arrowPurple = widget.TextBox(
-                text='',
-                background='#bbaee1',
-                foreground='#794dce',
-                padding=0,
-                fontsize=45
-            )
+    text='',
+    background='#bbaee1',
+    foreground='#794dce',
+    padding=0,
+    fontsize=45
+)
 thermalSensorCPU = widget.ThermalSensor(
-                foreground='#ffffff',
-                background='#794dce',
-                threshold=90,
-                fmt=' CPU:{}',
-                tag_sensor='Tccd1',
-                padding=5
-            )
-
+    foreground='#ffffff',
+    background='#794dce',
+    threshold=90,
+    fmt=' CPU:{}',
+    tag_sensor='Tccd1',
+    padding=5
+)
 thermalSensorGPU = widget.ThermalSensor(
-                foreground='#ffffff',
-                background='#794dce',
-                threshold=90,
-                fmt='GPU:{}',
-                tag_sensor='edge',
-                padding=5
-            )
-ramMemory = widget.Memory(
-                foreground='#ffffff',
-                background='#bbaee1',
-                measure_mem='G',
-                mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')},
-                fmt=' {}',
-                padding=5
-            )
-checkPackageUpdates = widget.CheckUpdates(
-                update_interval=1800,
-                distro="Arch_checkupdates",
-                display_format=" {updates} ",
-                no_update_string=' ',
-                colour_have_updates='#ff5677',
-                colour_no_updates='#ffffff',
-                mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e yay -Syu')},
-                padding=5,
-                background='#794dce'
-            )
-pulseVolume = widget.PulseVolume(
-                foreground='#ffffff',
-                background='#bbaee1',
-                fmt=' {}',
-                padding=5
-            )
+    foreground='#ffffff',
+    background='#794dce',
+    threshold=90,
+    fmt='GPU:{}',
+    tag_sensor='edge',
+    padding=5
+)
 keyboardLayout = widget.KeyboardLayout(
                 foreground='#ffffff',
                 background='#794dce',
                 fmt=' {}',
                 padding=5
             )
-currentPlayer = widget.Mpd2(
+ramMemory = widget.Memory(
+    foreground='#ffffff',
+    background='#bbaee1',
+    measure_mem='G',
+    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')},
+    fmt=' {}',
+    padding=5
+)
+checkPackageUpdates = widget.CheckUpdates(
+    update_interval=1800,
+    distro="Arch_checkupdates",
+    display_format=" {updates} ",
+    no_update_string=' ',
+    colour_have_updates='#ff5677',
+    colour_no_updates='#ffffff',
+    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e yay -Syu')},
+    padding=5,
+    background='#794dce'
+)
+pulseVolume = widget.PulseVolume(
+    foreground='#ffffff',
+    background='#bbaee1',
+    fmt=' {}',
+    padding=5
+)
+currentPlayer = widget.Mpris2(
+    background='#404040',
+    foreground='#bbaee1',
+    padding=5,
+    name='spotify',
+    objname="org.mpris.MediaPlayer2.spotify",
+    display_metadata=['xesam:title', 'xesam:artist'],
+    fmt=' {}',
+    mouse_callbacks='',
+    stop_pause_text=' ',
+)
+diskFreeRoot = widget.DF(
     background='#404040',
     foreground='#ffffff',
-    play_color='#0abdc6',
-    noplay_color='#ffffff',
-    padding=5,
-    mouse_buttons={1: 'next', 2: 'stop', 3: 'previous'},
+    # fmt='{}',
+    partition='/'
 )
-systemClock = widget.Clock(format="%e/%B/%Y %T", background='#794dce')
+diskFreeHome = widget.DF(
+    background='#404040',
+    foreground='#ffffff',
+    fmt='{}',
+    partition='/home'
+)
+diskFreeHDD = widget.DF(
+    background='#404040',
+    foreground='#ffffff',
+    fmt='{}',
+    partition='/run/mount/sda1'
+)
 
+systemClock = widget.Clock(format="%e/%B/%Y %T", background='#794dce')
 
 #  ____
 # / ___|  ___ _ __ ___  ___ _ __  ___
@@ -247,8 +267,9 @@ screens = [
                 borderwidth=5,
                 highlight_method='line',
                 background='#404040',
-                highlight_color='404040',
+                highlight_color='#404040',
                 active='#ffffff',
+                inactive='#bbaee1',
                 this_current_screen_border='#794dce',
                 this_screen_border='#794dce',
                 hide_unused=True,
@@ -258,6 +279,9 @@ screens = [
             widget.Spacer(background='#404040'),
             currentPlayer,
             arrowPinkInitial,
+            # diskFreeRoot,
+            # diskFreeHome,
+            # diskFreeHDD,
             widget.CPU(format=' {load_percent}%', background='#bbaee1'),
             arrowPurple,
             thermalSensorCPU,
@@ -288,14 +312,15 @@ screens = [
                 borderwidth=5,
                 highlight_method='line',
                 background='#404040',
-                highlight_color='404040',
+                highlight_color='#404040',
                 active='#ffffff',
+                inactive='#bbaee1',
                 this_current_screen_border='#794dce',
                 this_screen_border='#794dce',
                 hide_unused=True,
                 rounded=False,
                 disable_drag=True
-            ),          
+            ),
             widget.Spacer(background='#404040'),
             currentPlayer,
             arrowPinkInitial,
@@ -325,8 +350,9 @@ screens = [
                 borderwidth=5,
                 highlight_method='line',
                 background='#404040',
-                highlight_color='404040',
+                highlight_color='#404040',
                 active='#ffffff',
+                inactive='#bbaee1',
                 this_current_screen_border='#794dce',
                 this_screen_border='#794dce',
                 hide_unused=True,
