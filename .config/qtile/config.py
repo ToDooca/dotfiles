@@ -187,7 +187,7 @@ thermalSensorGPU = widget.ThermalSensor(
 )
 keyboardLayout = widget.KeyboardLayout(
                 foreground='#ffffff',
-                background='#794dce',
+                background='#bbaee1',
                 fmt=' {}',
                 padding=5
             )
@@ -196,7 +196,7 @@ ramMemory = widget.Memory(
     background='#bbaee1',
     measure_mem='G',
     mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')},
-    fmt=' {}',
+    fmt='{}',
     padding=5
 )
 checkPackageUpdates = widget.CheckUpdates(
@@ -219,33 +219,38 @@ pulseVolume = widget.PulseVolume(
 currentPlayer = widget.Mpris2(
     background='#404040',
     foreground='#bbaee1',
-    padding=5,
     name='spotify',
     objname="org.mpris.MediaPlayer2.spotify",
     display_metadata=['xesam:title', 'xesam:artist'],
     fmt=' {}',
-    mouse_callbacks='',
     stop_pause_text=' ',
 )
+
 diskFreeRoot = widget.DF(
-    background='#404040',
+    background='#794dce',
     foreground='#ffffff',
-    # fmt='{}',
-    partition='/'
-)
-diskFreeHome = widget.DF(
-    background='#404040',
-    foreground='#ffffff',
-    fmt='{}',
-    partition='/home'
-)
-diskFreeHDD = widget.DF(
-    background='#404040',
-    foreground='#ffffff',
-    fmt='{}',
-    partition='/run/mount/sda1'
+    fmt=' {}',
+    format='{f}GB',
+    partition="/",
+    visible_on_warn=False
 )
 
+diskFreeHome = widget.DF(
+    background='#794dce',
+    foreground='#ffffff',
+    fmt='| {}|',
+    format='{f}GB',
+    partition="/home",
+    visible_on_warn=False
+)
+diskFreeHDD = widget.DF(
+    background='#794dce',
+    foreground='#ffffff',
+    fmt=' {}',
+    format='{f}GB',
+    partition="/run/mount/sda1",
+    visible_on_warn=False
+)
 systemClock = widget.Clock(format="%e/%B/%Y %T", background='#794dce')
 
 #  ____
@@ -279,9 +284,6 @@ screens = [
             widget.Spacer(background='#404040'),
             currentPlayer,
             arrowPinkInitial,
-            # diskFreeRoot,
-            # diskFreeHome,
-            # diskFreeHDD,
             widget.CPU(format=' {load_percent}%', background='#bbaee1'),
             arrowPurple,
             thermalSensorCPU,
@@ -289,15 +291,20 @@ screens = [
             arrowPink,
             ramMemory,
             arrowPurple,
+            diskFreeRoot,
+            diskFreeHome,
+            diskFreeHDD,
+            arrowPink,
+            keyboardLayout,
+            arrowPurple,
             checkPackageUpdates,
             arrowPink,
             pulseVolume,
             arrowPurple,
-            keyboardLayout,
+            systemClock,
             arrowPink,
             widget.Systray(background='#bbaee1', padding=5),
-            arrowPurple,
-            systemClock
+            widget.Spacer(background='#bbaee1', length=10)
         ], 25),
     ),
     Screen(
@@ -330,6 +337,12 @@ screens = [
             thermalSensorGPU,
             arrowPink,
             ramMemory,
+            arrowPurple,
+            diskFreeRoot,
+            diskFreeHome,
+            diskFreeHDD,
+            arrowPink,
+            keyboardLayout,
             arrowPurple,
             checkPackageUpdates,
             arrowPink,
@@ -368,6 +381,12 @@ screens = [
             thermalSensorGPU,
             arrowPink,
             ramMemory,
+            arrowPurple,
+            diskFreeRoot,
+            diskFreeHome,
+            diskFreeHDD,
+            arrowPink,
+            keyboardLayout,
             arrowPurple,
             checkPackageUpdates,
             arrowPink,
