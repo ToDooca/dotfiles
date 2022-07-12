@@ -115,8 +115,8 @@ groups.append(
 
 layouts = [
     layout.Spiral(
-        border_focus='#794dce',
-        border_normal='#bbaee1',
+        border_focus='#4d4c7d',
+        border_normal='#e9d5da',
         clockwise=True,
         main_pane='left',
         border_width=2,
@@ -125,8 +125,8 @@ layouts = [
         ratio=0.5
     ),
     layout.Floating(
-        border_focus='#794dce',
-        border_normal='#bbaee1',
+        border_focus='#4d4c7d',
+        border_normal='#e9d5da',
         border_width=2,
         float_rules=[
             Match(wm_class="pavucontrol"),
@@ -142,83 +142,76 @@ layouts = [
 #                     |___/
 
 widget_defaults = dict(
-    font="Fira Code",
+    font="Fira Code Bold",
     fontsize=14,
     padding=3,
 )
 extension_defaults = widget_defaults.copy()
 
-arrowPinkInitial = widget.TextBox(
-    text='',
-    background='#404040',
-    foreground='#bbaee1',
-    padding=0,
-    fontsize=45
-)
-arrowPink = widget.TextBox(
-    text='',
-    background='#794dce',
-    foreground='#bbaee1',
-    padding=0,
-    fontsize=45
-)
-arrowPurple = widget.TextBox(
-    text='',
-    background='#bbaee1',
-    foreground='#794dce',
-    padding=0,
-    fontsize=45
+
+def widget_icon(icon):
+    return widget.TextBox(
+        font='Fira Code',
+        text=icon,
+        background='#363062',
+        foreground='#827397'
+    )
+
+
+divider = widget.TextBox(
+    text='|',
+    background='#363062',
+    foreground='#4d4c7d'
 )
 thermalSensorCPU = widget.ThermalSensor(
-    foreground='#ffffff',
-    background='#794dce',
+    foreground='#e9d5da',
+    background='#363062',
     threshold=90,
-    fmt=' CPU:{}',
+    fmt='CPU:{}',
     tag_sensor='Tccd1',
     padding=5
 )
 thermalSensorGPU = widget.ThermalSensor(
-    foreground='#ffffff',
-    background='#794dce',
+    foreground='#e9d5da',
+    background='#363062',
     threshold=90,
     fmt='GPU:{}',
     tag_sensor='edge',
     padding=5
 )
 keyboardLayout = widget.KeyboardLayout(
-                foreground='#ffffff',
-                background='#bbaee1',
-                fmt=' {}',
-                padding=5
-            )
+    foreground='#e9d5da',
+    background='#363062',
+    padding=5,
+    configured_keyboards=['us', 'sr-latin', 'sr-cy']
+)
 ramMemory = widget.Memory(
-    foreground='#ffffff',
-    background='#bbaee1',
+    foreground='#e9d5da',
+    background='#363062',
     measure_mem='G',
+    format='{MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}',
     mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')},
-    fmt='{}',
     padding=5
 )
 checkPackageUpdates = widget.CheckUpdates(
     update_interval=1800,
     distro="Arch_checkupdates",
-    display_format=" {updates} ",
-    no_update_string=' ',
+    display_format="{updates} ",
+    no_update_string=' ',
     colour_have_updates='#ff5677',
-    colour_no_updates='#ffffff',
+    colour_no_updates='#e9d5da',
     mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e yay -Syu')},
     padding=5,
-    background='#794dce'
+    background='#363062'
 )
 pulseVolume = widget.PulseVolume(
-    foreground='#ffffff',
-    background='#bbaee1',
-    fmt=' {}',
+    foreground='#e9d5da',
+    background='#363062',
     padding=5
 )
 currentPlayer = widget.Mpris2(
-    background='#404040',
-    foreground='#bbaee1',
+    background='#363062',
+    foreground='#e9d5da',
     name='spotify',
     objname="org.mpris.MediaPlayer2.spotify",
     display_metadata=['xesam:title', 'xesam:artist'],
@@ -227,31 +220,31 @@ currentPlayer = widget.Mpris2(
 )
 
 diskFreeRoot = widget.DF(
-    background='#794dce',
-    foreground='#ffffff',
+    background='#363062',
+    foreground='#e9d5da',
+    warn_color='#ff5677',
     fmt=' {}',
     format='{f}GB',
     partition="/",
-    visible_on_warn=False
 )
 
 diskFreeHome = widget.DF(
-    background='#794dce',
-    foreground='#ffffff',
-    fmt='| {}|',
+    background='#363062',
+    foreground='#e9d5da',
+    warn_color='#ff5677',
+    fmt=' {}',
     format='{f}GB',
     partition="/home",
-    visible_on_warn=False
 )
 diskFreeHDD = widget.DF(
-    background='#794dce',
-    foreground='#ffffff',
+    background='#363062',
+    foreground='#e9d5da',
+    warn_color='#ff5677',
     fmt=' {}',
     format='{f}GB',
     partition="/run/mount/sda1",
-    visible_on_warn=False
 )
-systemClock = widget.Clock(format="%e/%B/%Y %T", background='#794dce')
+systemClock = widget.Clock(format="%e/%B/%Y %T", background='#363062', foreground='#e9d5da')
 
 #  ____
 # / ___|  ___ _ __ ___  ___ _ __  ___
@@ -269,42 +262,46 @@ screens = [
                 margin_x=0,
                 padding_y=7,
                 padding_x=7,
-                borderwidth=5,
+                borderwidth=3,
                 highlight_method='line',
-                background='#404040',
-                highlight_color='#404040',
-                active='#ffffff',
-                inactive='#bbaee1',
-                this_current_screen_border='#794dce',
-                this_screen_border='#794dce',
-                hide_unused=True,
+                background='#363062',
+                highlight_color='#363062',
+                inactive='#827397',
+                active='#e9d5da',
+                this_current_screen_border='#e9d5da',
+                this_screen_border='#e9d5da',
                 rounded=False,
                 disable_drag=True
             ),
-            widget.Spacer(background='#404040'),
-            currentPlayer,
-            arrowPinkInitial,
-            widget.CPU(format=' {load_percent}%', background='#bbaee1'),
-            arrowPurple,
-            thermalSensorCPU,
-            thermalSensorGPU,
-            arrowPink,
-            ramMemory,
-            arrowPurple,
-            diskFreeRoot,
-            diskFreeHome,
-            diskFreeHDD,
-            arrowPink,
+            divider,
+            widget_icon(''),
             keyboardLayout,
-            arrowPurple,
-            checkPackageUpdates,
-            arrowPink,
+            divider,
+            widget_icon(''),
             pulseVolume,
-            arrowPurple,
+            divider,
+            widget_icon(''),
+            checkPackageUpdates,
+            divider,
+            widget.Spacer(background='#363062'),
             systemClock,
-            arrowPink,
-            widget.Systray(background='#bbaee1', padding=5),
-            widget.Spacer(background='#bbaee1', length=10)
+            widget.Spacer(background='#363062'),
+            divider,
+            widget_icon(''),
+            ramMemory,
+            divider,
+            widget_icon(''),
+            widget.CPU(format='{load_percent}%', background='#363062', foreground='#e9d5da'),
+            divider,
+            widget_icon(''),
+            thermalSensorCPU,
+            thermalSensorGPU,
+            divider,
+            diskFreeRoot,
+            diskFreeHome,
+            diskFreeHDD,
+            widget.Systray(background='#363062', padding=5),
+            widget.Spacer(background='#363062', length=15)
         ], 25),
     ),
     Screen(
@@ -316,39 +313,40 @@ screens = [
                 margin_x=0,
                 padding_y=7,
                 padding_x=7,
-                borderwidth=5,
+                borderwidth=3,
                 highlight_method='line',
-                background='#404040',
-                highlight_color='#404040',
-                active='#ffffff',
-                inactive='#bbaee1',
-                this_current_screen_border='#794dce',
-                this_screen_border='#794dce',
-                hide_unused=True,
+                background='#363062',
+                highlight_color='#363062',
+                inactive='#827397',
+                active='#e9d5da',
+                this_current_screen_border='#e9d5da',
+                this_screen_border='#e9d5da',
                 rounded=False,
                 disable_drag=True
             ),
-            widget.Spacer(background='#404040'),
-            currentPlayer,
-            arrowPinkInitial,
-            widget.CPU(format=' {load_percent}%', background='#bbaee1'),
-            arrowPurple,
+            divider,
+            widget_icon(''),
+            keyboardLayout,
+            divider,
+            widget_icon(''),
+            pulseVolume,
+            divider,
+            widget_icon(''),
+            checkPackageUpdates,
+            divider,
+            widget.Spacer(background='#363062'),
+            systemClock,
+            widget.Spacer(background='#363062'),
+            divider,
+            widget_icon(''),
+            ramMemory,
+            divider,
+            widget_icon(''),
+            widget.CPU(format='{load_percent}%', background='#363062', foreground='#e9d5da'),
+            divider,
+            widget_icon(''),
             thermalSensorCPU,
             thermalSensorGPU,
-            arrowPink,
-            ramMemory,
-            arrowPurple,
-            diskFreeRoot,
-            diskFreeHome,
-            diskFreeHDD,
-            arrowPink,
-            keyboardLayout,
-            arrowPurple,
-            checkPackageUpdates,
-            arrowPink,
-            pulseVolume,
-            arrowPurple,
-            systemClock
         ], 25),
     ),
     Screen(
@@ -360,39 +358,40 @@ screens = [
                 margin_x=0,
                 padding_y=7,
                 padding_x=7,
-                borderwidth=5,
+                borderwidth=3,
                 highlight_method='line',
-                background='#404040',
-                highlight_color='#404040',
-                active='#ffffff',
-                inactive='#bbaee1',
-                this_current_screen_border='#794dce',
-                this_screen_border='#794dce',
-                hide_unused=True,
+                background='#363062',
+                highlight_color='#363062',
+                inactive='#827397',
+                active='#e9d5da',
+                this_current_screen_border='#e9d5da',
+                this_screen_border='#e9d5da',
                 rounded=False,
                 disable_drag=True
             ),
-            widget.Spacer(background='#404040'),
-            currentPlayer,
-            arrowPinkInitial,
-            widget.CPU(format=' {load_percent}%', background='#bbaee1'),
-            arrowPurple,
+            divider,
+            widget_icon(''),
+            keyboardLayout,
+            divider,
+            widget_icon(''),
+            pulseVolume,
+            divider,
+            widget_icon(''),
+            checkPackageUpdates,
+            divider,
+            widget.Spacer(background='#363062'),
+            systemClock,
+            widget.Spacer(background='#363062'),
+            divider,
+            widget_icon(''),
+            ramMemory,
+            divider,
+            widget_icon(''),
+            widget.CPU(format='{load_percent}%', background='#363062', foreground='#e9d5da'),
+            divider,
+            widget_icon(''),
             thermalSensorCPU,
             thermalSensorGPU,
-            arrowPink,
-            ramMemory,
-            arrowPurple,
-            diskFreeRoot,
-            diskFreeHome,
-            diskFreeHDD,
-            arrowPink,
-            keyboardLayout,
-            arrowPurple,
-            checkPackageUpdates,
-            arrowPink,
-            pulseVolume,
-            arrowPurple,
-            systemClock
         ], 25),
     )
 ]

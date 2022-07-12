@@ -586,28 +586,28 @@ schemes:
       primary:
 
         backgoround: '#404040'
-        foreground: '#95b0c9'
+        foreground: '#e9d6da'
 
         # Normal colors
       normal:
-        black:   '#123e7c'
+        black:   '#3c356c'
         red:     '#ff5677'
-        green:   '#e3bec6'
+        green:   '#2f8f9d'
         yellow:  '#f2a783'
-        blue:    '#7eabc1'
+        blue:    '#5b7db1'
         magenta: '#794dce'
-        cyan:    '#0abdc6'
+        cyan:    '#94c8e0'
         white:   '#d7d7d5'
 
         # Bright colors
       bright:
-        black:   '#1c61c2'
-        red:     '#ff5677'
-        green:   '#ddbfc7'
+        black:   '#95b0c9'
+        red:     '#ff6c88'
+        green:   '#3bacb6'
         yellow:  '#f5b79a'
-        blue:    '#9ad1eb'
-        magenta: '#855fce'
-        cyan:    '#42c9cf'
+        blue:    '#678dc7'
+        magenta: '#8863d0'
+        cyan:    '#9ad1eb'
         white:   '#d7d7d5'
 
 ######################################################################
@@ -915,5 +915,4 @@ key_bindings:
   - { key: PageDown,  mods: None,          action: ScrollPageDown, mode: ~Alt  }
   - { key: Home,      mods: Shift,         action: ScrollToTop,    mode: ~Alt  }
   - { key: End,       mods: Shift,         action: ScrollToBottom, mode: ~Alt  }
-
 
