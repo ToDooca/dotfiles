@@ -61,10 +61,34 @@ keys = [
     Key([mod], "w", lazy.spawn(browser), desc="Launch default browser"),
     Key([mod, "mod1"], "d", lazy.spawn('discord'), desc="Launch Discord"),
     Key([], "Print", lazy.spawn('flameshot gui'), desc="Take a Screenshot"),
-    Key([mod], "e", lazy.spawn('thunar'), desc="Open thunar"),
-    Key([mod], "m", lazy.group['scratchpad'].dropdown_toggle('spotify'), desc="Open spotify floating window"),
+    Key([mod], "e", lazy.spawn('nautilus'), desc="Open thunar"),
+    Key([mod, "shift"], "x", lazy.spawn('xkill'), desc="Launch xkill"),
+
+    # Music controls
     Key([mod, "shift"], "m", lazy.spawn('pavucontrol'), desc="Launch volume control"),
-    Key([mod, "shift"], "x", lazy.spawn('xkill'), desc="Launch volume control"),
+    Key([mod], "m", lazy.group['scratchpad'].dropdown_toggle('spotify'), desc="Open spotify floating window"),
+
+    Key([mod], "comma", lazy.spawn("playerctl previous"), desc="Play prev song"),
+    Key([mod], "period", lazy.spawn("playerctl next"), desc="Play next song"),
+    Key([mod], "slash", lazy.spawn("playerctl play-pause"), desc="Play next song"),
+
+    Key([mod, "control"], "comma", lazy.spawn("padefault volume-focus -5%"), desc="Play prev song"),
+    Key([mod, "control", "mod1"], "period", lazy.spawn("padefault volume-focus +5%"), desc="Play next song"),
+    Key([mod, "control", "mod1"], "slash", lazy.spawn("padefault volume-focus 100%"), desc="Play next song"),
+
+    Key([], "XF86AudioPlay", lazy.spawn("playerctl play-pause"), desc="Play next song"),
+    Key([], "XF86AudioPause", lazy.spawn("playerctl play-pause"), desc="Play next song"),
+    Key([], "XF86AudioStop", lazy.spawn("playerctl stop"), desc="Play next song"),
+    Key([], "XF86AudioNext", lazy.spawn("playerctl next"), desc="Play next song"),
+    Key([], "XF86AudioPrev", lazy.spawn("playerctl previous"), desc="Play next song"),
+
+
+    # Toggle between monitors
+    Key([mod], "x", lazy.to_screen(0), desc='Keyboard focus to monitor 1'),
+    Key([mod], "z", lazy.to_screen(1), desc='Keyboard focus to monitor 2'),
+    Key([mod], "c", lazy.to_screen(2), desc='Keyboard focus to monitor 3'),
+
+
 ]
 
 #   ____
@@ -75,15 +99,15 @@ keys = [
 #                       |_|
 
 groups = [
-    Group('1', matches=[Match(wm_class='brave'), Match(wm_class='chrome')], layout="spiral"),
-    Group('2', layout="spiral"),
-    Group('3', layout="spiral"),
-    Group('4', layout="spiral"),
-    Group('5', layout="spiral"),
-    Group('6', layout="spiral"),
-    Group('7', layout="spiral"),
-    Group('8', label="", layout="spiral"),
-    Group('9', label="", layout="spiral"),
+    Group('1', matches=[Match(wm_class='brave'), Match(wm_class='chrome')], layout="columns"),
+    Group('2', layout="columns"),
+    Group('3', layout="columns"),
+    Group('4', layout="columns"),
+    Group('5', layout="columns"),
+    Group('6', layout="columns"),
+    Group('7', layout="columns"),
+    Group('8', label="", layout="columns"),
+    Group('9', label="", layout="columns"),
 ]
 
 for i in groups:
@@ -114,15 +138,13 @@ groups.append(
 #             |___/
 
 layouts = [
-    layout.Spiral(
+    layout.Columns(
         border_focus='#4d4c7d',
         border_normal='#e9d5da',
         clockwise=True,
-        main_pane='left',
         border_width=2,
-        margin=10,
-        new_client_position='after_current',
-        ratio=0.5
+        margin=7,
+        border_on_single=True,
     ),
     layout.Floating(
         border_focus='#4d4c7d',
