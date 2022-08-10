@@ -23,23 +23,28 @@ browser = "brave"
 #           |___/
 
 keys = [
+    # Layout Keybinds
     Key([mod], "Left", lazy.layout.left(), desc="Move focus to left"),
     Key([mod], "Right", lazy.layout.right(), desc="Move focus to right"),
     Key([mod], "Down", lazy.layout.down(), desc="Move focus down"),
     Key([mod], "Up", lazy.layout.up(), desc="Move focus up"),
     Key([mod], "space", lazy.layout.next(), desc="Move window focus to other window"),
     # Move windows between left/right columns or move up/down in current stack.
-    Key([mod, "shift"], "Left", lazy.layout.shuffle_left(), desc="Move window to the left"),
-    Key([mod, "shift"], "Right", lazy.layout.shuffle_right(), desc="Move window to the right"),
-    Key([mod, "shift"], "Down", lazy.layout.shuffle_down(), desc="Move window down"),
-    Key([mod, "shift"], "Up", lazy.layout.shuffle_up(), desc="Move window up"),
+    Key([mod, "control"], "Left", lazy.layout.shuffle_left(), desc="Move window to the left"),
+    Key([mod, "control"], "Right", lazy.layout.shuffle_right(), desc="Move window to the right"),
+    Key([mod, "control"], "Down", lazy.layout.shuffle_down(), desc="Move window down"),
+    Key([mod, "control"], "Up", lazy.layout.shuffle_up(), desc="Move window up"),
     # Grow windows. If current window is on the edge of screen and direction
     # will be to screen edge - window would shrink.
     Key([mod, "mod1"], "Left", lazy.layout.grow_left(), desc="Grow window to the left"),
     Key([mod, "mod1"], "Right", lazy.layout.grow_right(), desc="Grow window to the right"),
     Key([mod, "mod1"], "Down", lazy.layout.grow_down(), desc="Grow window down"),
     Key([mod, "mod1"], "Up", lazy.layout.grow_up(), desc="Grow window up"),
+
     Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
+
+    Key([mod], "f", lazy.window.toggle_floating(), desc="Toggle Floating layout"),
+
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
     # Unsplit = 1 window displayed, like Max layout, but still with
@@ -50,6 +55,8 @@ keys = [
         lazy.layout.toggle_split(),
         desc="Toggle between split and unsplit sides of stack",
     ),
+
+
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
@@ -67,12 +74,13 @@ keys = [
     # Music controls
     Key([mod, "shift"], "m", lazy.spawn('pavucontrol'), desc="Launch volume control"),
     Key([mod], "m", lazy.group['scratchpad'].dropdown_toggle('spotify'), desc="Open spotify floating window"),
+    Key([mod, "mod1", "control"], "m", lazy.spawn('stremio'), desc="Launch stremio"),
 
     Key([mod], "comma", lazy.spawn("playerctl previous"), desc="Play prev song"),
     Key([mod], "period", lazy.spawn("playerctl next"), desc="Play next song"),
     Key([mod], "slash", lazy.spawn("playerctl play-pause"), desc="Play next song"),
 
-    Key([mod, "control"], "comma", lazy.spawn("padefault volume-focus -5%"), desc="Play prev song"),
+    Key([mod, "control", "mod1"], "comma", lazy.spawn("padefault volume-focus -5%"), desc="Play prev song"),
     Key([mod, "control", "mod1"], "period", lazy.spawn("padefault volume-focus +5%"), desc="Play next song"),
     Key([mod, "control", "mod1"], "slash", lazy.spawn("padefault volume-focus 100%"), desc="Play next song"),
 
@@ -82,12 +90,12 @@ keys = [
     Key([], "XF86AudioNext", lazy.spawn("playerctl next"), desc="Play next song"),
     Key([], "XF86AudioPrev", lazy.spawn("playerctl previous"), desc="Play next song"),
 
-
     # Toggle between monitors
     Key([mod], "x", lazy.to_screen(0), desc='Keyboard focus to monitor 1'),
     Key([mod], "z", lazy.to_screen(1), desc='Keyboard focus to monitor 2'),
     Key([mod], "c", lazy.to_screen(2), desc='Keyboard focus to monitor 3'),
 
+    Key([mod, "mod1"], "l", lazy.group['scratchpad'].dropdown_toggle('lutris'), desc="Open lutris floating window"),
 
 ]
 
@@ -99,15 +107,25 @@ keys = [
 #                       |_|
 
 groups = [
-    Group('1', matches=[Match(wm_class='brave'), Match(wm_class='chrome')], layout="columns"),
+    Group('1', matches=[Match(wm_class='brave')], layout="columns"),
     Group('2', layout="columns"),
     Group('3', layout="columns"),
     Group('4', layout="columns"),
     Group('5', layout="columns"),
     Group('6', layout="columns"),
-    Group('7', layout="columns"),
-    Group('8', label="", layout="columns"),
-    Group('9', label="", layout="columns"),
+    Group('7', label="", layout="columns", matches=[
+        Match(wm_class='steam'),
+        Match(wm_class='lutris'),
+    ]),
+    Group('8', label="", layout="columns", matches=[
+        Match(wm_class='netflix'),
+        Match(wm_class='stremio'),
+    ]),
+    Group('9', label="", layout="columns", matches=[
+        Match(wm_class='telegram-desktop'),
+        Match(wm_class='discord'),
+        Match(wm_class='whatsapp-for-linux'),
+    ]),
 ]
 
 for i in groups:
@@ -117,7 +135,7 @@ for i in groups:
             desc="Switch to group{}".format(i.name)),
         # Or, use below if you prefer not to switch to that group.
         # mod + control + letter of group = move focused window to group.
-        Key([mod, "control"], i.name, lazy.window.togroup(i.name),
+        Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
             desc="move focused window to group{}".format(i.name)),
     ])
 
@@ -127,6 +145,8 @@ groups.append(
         # define a drop down terminal.
         DropDown("term", terminal, opacity=0.75, height=0.5, width=0.8),
         DropDown("spotify", "spotify", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
+        DropDown("steam", "steam", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
+        DropDown("lutris", "lutris", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
     ]),
 )
 
@@ -152,6 +172,8 @@ layouts = [
         border_width=2,
         float_rules=[
             Match(wm_class="pavucontrol"),
+            Match(wm_class="steam"),
+            Match(wm_class="lutris"),
         ]
     ),
 ]

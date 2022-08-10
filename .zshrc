@@ -67,6 +67,7 @@ ZSH_THEME="agnoster"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
+
 plugins=(
 git
 zsh-syntax-highlighting
@@ -74,6 +75,7 @@ zsh-autosuggestions
 sudo
 web-search
 copyfile
+cd-ls
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -103,3 +105,42 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+gcommit() { git add .; git commit -m "$1"; }
+
+#Aliases
+alias webstorm='_setsid webstorm'
+alias idea='_setsid idea'
+alias goland='_setsid goland'
+alias pycharm='_setsid pycharm'
+alias clion='_setsid clion'
+alias datagrip='_setsid datagrip'
+alias zathura='_setsid zathura'
+alias studio='_setsid studio'
+alias rider='_setsid rider'
+alias brave='_setsid brave'
+alias et='_setsid et'
+alias wps='_setsid wps'
+alias wpp='_setsid wpp'
+alias mkdir='mkdir -v'
+alias rmdir='rmdir -v'
+
+# Code function
+function code() {
+                if [ $# -eq 0 ]; then
+                                builtin cd "$CODE" && ls
+                elif [ $# -eq 1 ]; then
+                        if [ -d "$CODE/$1" ]; then
+                                builtin cd "$CODE/$1" && ls
+                        else
+                                cdir="$(find "$CODE" -maxdepth 2 -name "*$1*" | sed -n '1p')"
+                                [ -d "$cdir" ] && builtin cd "$cdir" && ls
+                        fi
+                elif [ $# -eq 2 ]; then
+                        if [ -d "$CODE/$1/$2" ]; then
+                                builtin cd "$CODE/$1/$2" && ls
+                        else
+                                cdir="$(find "$CODE/$1" -maxdepth 1 -name "*$2*" | sed -n '1p')"
+                                [ -d "$cdir" ] && builtin cd "$cdir" && ls
+                        fi
+                fi
+        }
