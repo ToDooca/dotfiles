@@ -33,61 +33,64 @@ def app_or_group(group, app):
 # @formatter:off
 keys = [
     # Layout Keybinds
-    Key([mod], "Left",              lazy.layout.left(),             desc="Move focus to left"),
-    Key([mod], "Right",             lazy.layout.right(),            desc="Move focus to right"),
-    Key([mod], "Down",              lazy.layout.down(),             desc="Move focus down"),
-    Key([mod], "Up",                lazy.layout.up(),               desc="Move focus up"),
-    Key([mod], "space",             lazy.layout.next(),             desc="Move window focus to other window"),
+    Key([mod], "Left",              lazy.layout.left(),              desc="Move focus to left"),
+    Key([mod], "Right",             lazy.layout.right(),             desc="Move focus to right"),
+    Key([mod], "Down",              lazy.layout.down(),              desc="Move focus down"),
+    Key([mod], "Up",                lazy.layout.up(),                desc="Move focus up"),
+    Key([mod], "space",             lazy.layout.next(),              desc="Move window focus to other window"),
 
     # Move windows between left/right columns or move up/down in current stack.
-    Key([mod, "shift"], "Left",     lazy.layout.shuffle_left(),     desc="Move window to the left"),
-    Key([mod, "shift"], "Right",    lazy.layout.shuffle_right(),    desc="Move window to the right"),
-    Key([mod, "shift"], "Down",     lazy.layout.shuffle_down(),     desc="Move window down"),
-    Key([mod, "shift"], "Up",       lazy.layout.shuffle_up(),       desc="Move window up"),
+    Key([mod, "shift"], "Left",     lazy.layout.shuffle_left(),      desc="Move window to the left"),
+    Key([mod, "shift"], "Right",    lazy.layout.shuffle_right(),     desc="Move window to the right"),
+    Key([mod, "shift"], "Down",     lazy.layout.shuffle_down(),      desc="Move window down"),
+    Key([mod, "shift"], "Up",       lazy.layout.shuffle_up(),        desc="Move window up"),
 
     # Grow windows. If current window is on the edge of screen and direction
     # will be to screen edge - window would shrink.
-    Key([mod, "mod1"], "Left",      lazy.layout.grow_left(),        desc="Grow window to the left"),
-    Key([mod, "mod1"], "Right",     lazy.layout.grow_right(),       desc="Grow window to the right"),
-    Key([mod, "mod1"], "Down",      lazy.layout.grow_down(),        desc="Grow window down"),
-    Key([mod, "mod1"], "Up",        lazy.layout.grow_up(),          desc="Grow window up"),
-    Key([mod], "n",                 lazy.layout.normalize(),        desc="Reset all window sizes"),
+    Key([mod, "mod1"], "Left",      lazy.layout.grow_left(),         desc="Grow window to the left"),
+    Key([mod, "mod1"], "Right",     lazy.layout.grow_right(),        desc="Grow window to the right"),
+    Key([mod, "mod1"], "Down",      lazy.layout.grow_down(),         desc="Grow window down"),
+    Key([mod, "mod1"], "Up",        lazy.layout.grow_up(),           desc="Grow window up"),
+    Key([mod], "n",                 lazy.layout.normalize(),         desc="Reset all window sizes"),
 
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
     # Unsplit = 1 window displayed, like Max layout, but still with
     # multiple stack panes
-    Key([mod, "shift"], "Return",   lazy.layout.toggle_split(),     desc="Toggle between split and unsplit stack"),
-    Key([mod], "Return",            lazy.spawn(terminal),           desc="Launch terminal"),
+    Key([mod, "shift"], "Return",   lazy.layout.toggle_split(),      desc="Toggle between split and unsplit stack"),
+    Key([mod], "Return",            lazy.spawn(terminal),            desc="Launch terminal"),
 
     # Toggle between different layouts as defined below
-    Key([mod], "Tab",               lazy.next_layout(),             desc="Toggle between layouts"),
-    Key([mod], "q",                 lazy.window.kill(),             desc="Kill focused window"),
-    Key([mod, "control"], "r",      lazy.reload_config(),           desc="Reload the config"),
-    Key([mod, "control"], "q",      lazy.shutdown(),                desc="Shutdown Qtile"),
-    Key([mod], "a",                 lazy.spawn('rofi -show combi'), desc="Open rofi combi"),
-    Key([mod], "d",                 lazy.spawn('rofi -show drun'),  desc="Open drun drun"),
-    Key([mod], "w",                 lazy.spawn(browser),            desc="Launch default browser"),
-    Key([mod, "shift"], "f",        lazy.window.toggle_floating(),  desc="Toggle Floating layout"),
-    Key([mod], "f",                 lazy.window.toggle_max(),       desc="Toggle Full-screen layout"),
+    Key([mod], "Tab",               lazy.next_layout(),              desc="Toggle between layouts"),
+    Key([mod], "q",                 lazy.window.kill(),              desc="Kill focused window"),
+    Key([mod, "control"], "r",      lazy.reload_config(),            desc="Reload the config"),
+    Key([mod, "control"], "q",      lazy.shutdown(),                 desc="Shutdown Qtile"),
+    Key([mod], "a",                 lazy.spawn('rofi -show combi'),  desc="Open rofi combi"),
+    Key([mod], "d",                 lazy.spawn('rofi -show drun'),   desc="Open drun drun"),
+    Key([mod], "w",                 lazy.spawn(browser),             desc="Launch default browser"),
+    Key([mod, "shift"], "f",        lazy.window.toggle_floating(),   desc="Toggle Floating layout"),
+    Key([mod, "mod1"], "f",         lazy.window.toggle_maximize(),   desc="Toggle Full-screen layout"),
+    Key([mod], "f",                 lazy.window.toggle_fullscreen(), desc="Toggle Full-screen layout"),
     Key([mod, "mod1"], "d",         lazy.function(app_or_group('9', 'discord')),          lazy.window.toscreen(2)),
     Key([mod], "t",                 lazy.function(app_or_group('9', 'telegram-desktop')), lazy.window.toscreen(2)),
+    Key([mod, "mod1"], "l",         lazy.group['scratchpad'].dropdown_toggle('lutris'), desc="Open floating lutris"),
+
 
     # Key([mod, "mod1"], "d", lazy.spawn('discord'), desc="Launch Discord"),
-    Key([], "Print",                lazy.spawn('flameshot gui'),    desc="Take a Screenshot"),
-    Key([mod], "e",                 lazy.spawn('nautilus'),         desc="Open thunar"),
-    Key([mod, "shift"], "x",        lazy.spawn('xkill'),            desc="Launch xkill"),
-    Key([mod, "shift"], "p",        lazy.spawn('killall picom'),    desc="turn off picom"),
+    Key([], "Print",                lazy.spawn('flameshot gui'),     desc="Take a Screenshot"),
+    Key([mod], "e",                 lazy.spawn('nautilus'),          desc="Open thunar"),
+    Key([mod, "shift"], "x",        lazy.spawn('xkill'),             desc="Launch xkill"),
+    Key([mod, "shift"], "p",        lazy.spawn('killall picom'),     desc="turn off picom"),
     Key([mod], "p",                 lazy.spawn('picom --experimental-backends')),
 
-
-
     # Toggle between monitors
-    Key([mod], "x",                 lazy.to_screen(0),              desc='Keyboard focus to monitor 1'),
-    Key([mod], "z",                 lazy.to_screen(1),              desc='Keyboard focus to monitor 2'),
-    Key([mod], "c",                 lazy.to_screen(2),              desc='Keyboard focus to monitor 3'),
+    Key([mod], "x",                 lazy.to_screen(0),               desc='Keyboard focus to monitor 1'),
+    Key([mod], "z",                 lazy.to_screen(1),               desc='Keyboard focus to monitor 2'),
+    Key([mod], "c",                 lazy.to_screen(2),               desc='Keyboard focus to monitor 3'),
 
-    Key([mod, "mod1"], "l",         lazy.group['scratchpad'].dropdown_toggle('lutris'), desc="Open floating lutris"),
+    # Notifications
+    Key([mod, "mod1"], "n",         lazy.spawn("dunstctl set-paused toggle"), desc='Toggle notifications'),
+
 
     # Music and audio related keybinds
     Key([mod, "shift"], "m",                lazy.spawn('pavucontrol')),
@@ -174,12 +177,6 @@ layouts = [
         margin=7,
         border_on_single=True,
     ),
-    layout.Max(
-        border_focus='#4d4c7d',
-        border_normal='#e9d5da',
-        border_width=2,
-        margin=7,
-    ),
     layout.Floating(
         border_focus='#4d4c7d',
         border_normal='#e9d5da',
@@ -205,6 +202,20 @@ widget_defaults = dict(
     padding=3,
 )
 extension_defaults = widget_defaults.copy()
+
+
+def notification_widget():
+    return widget.TextBox(
+        font='Fira Code',
+        background='#363062',
+        foreground='#827397',
+        text='',
+        mouse_callbacks={
+            'Button1': lazy.spawn("dunstctl history-pop"),
+            'Button2': lazy.spawn("dunstctl set-paused toggle"),
+            'Button3': lazy.spawn("dunstctl close-all")
+        }
+    )
 
 
 def widget_icon(icon):
@@ -241,7 +252,8 @@ keyboardLayout = widget.KeyboardLayout(
     foreground='#e9d5da',
     background='#363062',
     padding=5,
-    configured_keyboards=['us', 'sr-latin', 'sr-cy']
+    configured_keyboards=['us', 'rs latin', 'rs']
+
 )
 ramMemory = widget.Memory(
     foreground='#e9d5da',
@@ -302,7 +314,11 @@ diskFreeHDD = widget.DF(
     format='{f}GB',
     partition="/run/mount/sda1",
 )
-systemClock = widget.Clock(format="%e/%B/%Y %T", background='#363062', foreground='#e9d5da')
+systemClock = widget.Clock(
+    format="%e/%B/%Y %T",
+    background='#363062',
+    foreground='#e9d5da',
+)
 
 #  ____
 # / ___|  ___ _ __ ___  ___ _ __  ___
@@ -337,6 +353,8 @@ screens = [
             divider,
             widget_icon(''),
             pulseVolume,
+            divider,
+            notification_widget(),
             divider,
             widget_icon(''),
             checkPackageUpdates,
@@ -389,6 +407,8 @@ screens = [
             widget_icon(''),
             pulseVolume,
             divider,
+            notification_widget(),
+            divider,
             widget_icon(''),
             checkPackageUpdates,
             divider,
@@ -433,6 +453,8 @@ screens = [
             divider,
             widget_icon(''),
             pulseVolume,
+            divider,
+            notification_widget(),
             divider,
             widget_icon(''),
             checkPackageUpdates,
