@@ -15,6 +15,15 @@ mod = "mod4"
 terminal = "alacritty"
 browser = "brave"
 
+
+def app_or_group(group, app):
+    def f(qtile):
+        qtile.groups_map[group].cmd_toscreen()
+        qtile.cmd_spawn(app)
+
+    return f
+
+
 #  _  __          _     _           _
 # | |/ /___ _   _| |__ (_)_ __   __| |___
 # | ' // _ \ | | | '_ \| | '_ \ / _` / __|
@@ -30,10 +39,10 @@ keys = [
     Key([mod], "Up", lazy.layout.up(), desc="Move focus up"),
     Key([mod], "space", lazy.layout.next(), desc="Move window focus to other window"),
     # Move windows between left/right columns or move up/down in current stack.
-    Key([mod, "control"], "Left", lazy.layout.shuffle_left(), desc="Move window to the left"),
-    Key([mod, "control"], "Right", lazy.layout.shuffle_right(), desc="Move window to the right"),
-    Key([mod, "control"], "Down", lazy.layout.shuffle_down(), desc="Move window down"),
-    Key([mod, "control"], "Up", lazy.layout.shuffle_up(), desc="Move window up"),
+    Key([mod, "shift"], "Left", lazy.layout.shuffle_left(), desc="Move window to the left"),
+    Key([mod, "shift"], "Right", lazy.layout.shuffle_right(), desc="Move window to the right"),
+    Key([mod, "shift"], "Down", lazy.layout.shuffle_down(), desc="Move window down"),
+    Key([mod, "shift"], "Up", lazy.layout.shuffle_up(), desc="Move window up"),
     # Grow windows. If current window is on the edge of screen and direction
     # will be to screen edge - window would shrink.
     Key([mod, "mod1"], "Left", lazy.layout.grow_left(), desc="Grow window to the left"),
@@ -56,7 +65,6 @@ keys = [
         desc="Toggle between split and unsplit sides of stack",
     ),
 
-
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
@@ -66,7 +74,9 @@ keys = [
     Key([mod], "a", lazy.spawn('rofi -show combi'), desc="Open rofi combi"),
     Key([mod], "d", lazy.spawn('rofi -show drun'), desc="Open drun drun"),
     Key([mod], "w", lazy.spawn(browser), desc="Launch default browser"),
-    Key([mod, "mod1"], "d", lazy.spawn('discord'), desc="Launch Discord"),
+    Key([mod, "mod1"], "d", lazy.function(app_or_group('9', 'discord')), lazy.window.toscreen(2)),
+    Key([mod], "t", lazy.function(app_or_group('9', 'telegram-desktop')), lazy.window.toscreen(2)),
+    # Key([mod, "mod1"], "d", lazy.spawn('discord'), desc="Launch Discord"),
     Key([], "Print", lazy.spawn('flameshot gui'), desc="Take a Screenshot"),
     Key([mod], "e", lazy.spawn('nautilus'), desc="Open thunar"),
     Key([mod, "shift"], "x", lazy.spawn('xkill'), desc="Launch xkill"),
@@ -74,7 +84,7 @@ keys = [
     # Music controls
     Key([mod, "shift"], "m", lazy.spawn('pavucontrol'), desc="Launch volume control"),
     Key([mod], "m", lazy.group['scratchpad'].dropdown_toggle('spotify'), desc="Open spotify floating window"),
-    Key([mod, "mod1", "control"], "m", lazy.spawn('stremio'), desc="Launch stremio"),
+    Key([mod, "mod1", "control"], "m", lazy.function(app_or_group('8', 'stremio')), desc="Launch stremio"),
 
     Key([mod], "comma", lazy.spawn("playerctl previous"), desc="Play prev song"),
     Key([mod], "period", lazy.spawn("playerctl next"), desc="Play next song"),
