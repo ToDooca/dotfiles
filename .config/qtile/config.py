@@ -8,10 +8,13 @@ import os
 import subprocess
 from libqtile import hook, qtile
 from libqtile import bar, layout, widget
-from libqtile.config import Click, Drag, Group, Key, Match, Screen, ScratchPad, DropDown
+from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
 
 mod = "mod4"
+alt = "mod1"
+shift = "shift"
+control = "control"
 terminal = "alacritty"
 browser = "brave"
 
@@ -30,85 +33,108 @@ def app_or_group(group, app):
 # | . \  __/ |_| | |_) | | | | | (_| \__ \
 # |_|\_\___|\__, |_.__/|_|_| |_|\__,_|___/
 #           |___/
-# @formatter:off
 keys = [
+
+    Key([mod], "Return",            lazy.spawn(terminal),                     desc="Launch terminal"),
+    Key([mod], "Tab",               lazy.next_layout(),                       desc="Toggle between layouts"),
+    Key([mod], "q",                 lazy.window.kill(),                       desc="Kill focused window"),
+    Key([mod, control], "r",        lazy.reload_config(),                     desc="Reload the config"),
+    Key([mod, control], "q",        lazy.shutdown(),                          desc="Shutdown Qtile"),
+    Key([mod], "a",                 lazy.spawn('rofi -show combi'),           desc="Open rofi combi"),
+    Key([mod], "d",                 lazy.spawn('rofi -show drun'),            desc="Open drun drun"),
+    Key([mod], "w",                 lazy.spawn(browser),                      desc="Launch default browser"),
+    Key([mod, shift], "f",          lazy.window.toggle_floating(),            desc="Toggle Floating layout"),
+    Key([mod, alt], "f",            lazy.window.toggle_maximize(),            desc="Toggle Full-screen layout"),
+    Key([mod], "f",                 lazy.window.toggle_fullscreen(),          desc="Toggle Full-screen layout"),
+    Key([], "Print",                lazy.spawn('flameshot gui'),              desc="Take a Screenshot"),
+    Key([mod], "e",                 lazy.spawn('nautilus'),                   desc="Open thunar"),
+    Key([mod, shift], "x",          lazy.spawn('xkill'),                      desc="Launch xkill"),
+    Key([mod, shift], "p",          lazy.spawn('killall picom'),              desc="turn off picom"),
+    Key([mod, shift], "c",          lazy.group['6'].toscreen(),               desc="go to coding group"),
+    Key([mod], "p",                 lazy.spawn('picom --experimental-backends')),
+    Key([mod, alt], "l",            lazy.function(app_or_group('7', 'lutris')), lazy.group['7'].toscreen()),
+    Key([mod, alt], "d",            lazy.function(app_or_group('9', 'discord')), lazy.group['9'].toscreen()),
+    Key([mod], "t",                 lazy.function(app_or_group('9', 'telegram-desktop')), lazy.group['9'].toscreen()),
+    Key([mod, shift], "t",          lazy.function(app_or_group('9', 'whatsapp-for-linux')), lazy.group['9'].toscreen()),
+
     # Layout Keybinds
-    Key([mod], "Left",              lazy.layout.left(),              desc="Move focus to left"),
-    Key([mod], "Right",             lazy.layout.right(),             desc="Move focus to right"),
-    Key([mod], "Down",              lazy.layout.down(),              desc="Move focus down"),
-    Key([mod], "Up",                lazy.layout.up(),                desc="Move focus up"),
-    Key([mod], "space",             lazy.layout.next(),              desc="Move window focus to other window"),
+    Key([mod], "Left",              lazy.layout.left(),                       desc="Move focus to left"),
+    Key([mod], "Right",             lazy.layout.right(),                      desc="Move focus to right"),
+    Key([mod], "Down",              lazy.layout.down(),                       desc="Move focus down"),
+    Key([mod], "Up",                lazy.layout.up(),                         desc="Move focus up"),
+    Key([mod], "space",             lazy.layout.next(),                       desc="Move window focus to other window"),
 
     # Move windows between left/right columns or move up/down in current stack.
-    Key([mod, "shift"], "Left",     lazy.layout.shuffle_left(),      desc="Move window to the left"),
-    Key([mod, "shift"], "Right",    lazy.layout.shuffle_right(),     desc="Move window to the right"),
-    Key([mod, "shift"], "Down",     lazy.layout.shuffle_down(),      desc="Move window down"),
-    Key([mod, "shift"], "Up",       lazy.layout.shuffle_up(),        desc="Move window up"),
+    Key([mod, shift], "Left",       lazy.layout.shuffle_left(),               desc="Move window to the left"),
+    Key([mod, shift], "Right",      lazy.layout.shuffle_right(),              desc="Move window to the right"),
+    Key([mod, shift], "Down",       lazy.layout.shuffle_down(),               desc="Move window down"),
+    Key([mod, shift], "Up",         lazy.layout.shuffle_up(),                 desc="Move window up"),
 
     # Grow windows. If current window is on the edge of screen and direction
     # will be to screen edge - window would shrink.
-    Key([mod, "mod1"], "Left",      lazy.layout.grow_left(),         desc="Grow window to the left"),
-    Key([mod, "mod1"], "Right",     lazy.layout.grow_right(),        desc="Grow window to the right"),
-    Key([mod, "mod1"], "Down",      lazy.layout.grow_down(),         desc="Grow window down"),
-    Key([mod, "mod1"], "Up",        lazy.layout.grow_up(),           desc="Grow window up"),
-    Key([mod], "n",                 lazy.layout.normalize(),         desc="Reset all window sizes"),
+    Key([mod, alt], "Left",         lazy.layout.grow_left(),                  desc="Grow window to the left"),
+    Key([mod, alt], "Right",        lazy.layout.grow_right(),                 desc="Grow window to the right"),
+    Key([mod, alt], "Down",         lazy.layout.grow_down(),                  desc="Grow window down"),
+    Key([mod, alt], "Up",           lazy.layout.grow_up(),                    desc="Grow window up"),
+    Key([mod], "n",                 lazy.layout.normalize(),                  desc="Reset all window sizes"),
+
+    # Toggle between monitors
+    Key([mod], "x",                 lazy.to_screen(0),                        desc='Keyboard focus to monitor 1'),
+    Key([mod], "z",                 lazy.to_screen(1),                        desc='Keyboard focus to monitor 2'),
+    Key([mod], "c",                 lazy.to_screen(2),                        desc='Keyboard focus to monitor 3'),
+
+    # Notifications
+    Key([mod, alt], "n",            lazy.spawn("dunstctl set-paused toggle"), desc='Toggle notifications'),
+    Key([mod], "n",                 lazy.spawn("dunstctl close-all"),         desc='Toggle notifications'),
+
+    # Keyboard Layouts
+    Key([mod], "l",                 lazy.spawn("setxkbmap -layout us"),       desc='Toggle us layout'),
+    Key([mod, shift], "l",          lazy.spawn("setxkbmap -layout rs latin"), desc='Toggle Serbian latin layout'),
+
+    # Power options
+    KeyChord([mod], "0", [
+        Key([shift], "s",           lazy.spawn('systemctl poweroff'),         desc='Turn off the computer'),
+        Key([], "r",                lazy.spawn('systemctl reboot'),           desc='Reboot the computer'),
+        Key([], "s",                lazy.spawn('systemctl suspend'),          desc='Suspend'),
+        Key([], "h",                lazy.spawn('systemctl hibernate'),        desc='Hibernate'),
+    ]),
+
+    # Code Editors
+    KeyChord([mod, shift], "o", [
+        Key([], "i",                lazy.spawn('idea'),     lazy.group['6'].toscreen()),
+        Key([], "p",                lazy.spawn('pycharm'),  lazy.group['6'].toscreen()),
+        Key([], "w",                lazy.spawn('webstorm'), lazy.group['6'].toscreen()),
+    ]),
+    KeyChord([mod], "o", [
+        Key([], "i",                lazy.spawn('codeopen -m rofi -t idea'),     lazy.group['6'].toscreen()),
+        Key([], "p",                lazy.spawn('codeopen -m rofi -t pycharm'),  lazy.group['6'].toscreen()),
+        Key([], "w",                lazy.spawn('codeopen -m rofi -t webstorm'), lazy.group['6'].toscreen()),
+    ]),
+
+    # Music and audio related keybinds
+    Key([mod, shift], "m",                lazy.group['scratchpad'].dropdown_toggle('pavucontrol')),
+    Key([mod], "m",                         lazy.group['scratchpad'].dropdown_toggle('spotify')),
+    Key([mod, alt, control], "m",      lazy.function(app_or_group('8', 'stremio'))),
+    Key([mod], "comma",                     lazy.spawn("playerctl previous"),     desc="Play prev song"),
+    Key([mod], "period",                    lazy.spawn("playerctl next"),         desc="Play next song"),
+    Key([mod], "slash",                     lazy.spawn("playerctl play-pause"),   desc="Play/Pause song"),
+    Key([], "XF86AudioPlay",                lazy.spawn("playerctl play-pause"),   desc="Play/Pause song"),
+    Key([], "XF86AudioPause",               lazy.spawn("playerctl play-pause"),   desc="Play/Pause song"),
+    Key([], "XF86AudioStop",                lazy.spawn("playerctl stop"),         desc="Stop current song"),
+    Key([], "XF86AudioNext",                lazy.spawn("playerctl next"),         desc="Play next song"),
+    Key([], "XF86AudioPrev",                lazy.spawn("playerctl previous"),     desc="Play previous song"),
+    Key([mod, control, alt], "comma",  lazy.spawn("padefault volume-focus -5%"),  desc="Increase volume by 5%"),
+    Key([mod, control, alt], "period", lazy.spawn("padefault volume-focus +5%"),  desc="Decrease volume by 5%"),
+    Key([mod, control, alt], "slash",  lazy.spawn("padefault volume-focus 100%"), desc="Set volume to 100%"),
 
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
     # Unsplit = 1 window displayed, like Max layout, but still with
     # multiple stack panes
-    Key([mod, "shift"], "Return",   lazy.layout.toggle_split(),      desc="Toggle between split and unsplit stack"),
-    Key([mod], "Return",            lazy.spawn(terminal),            desc="Launch terminal"),
-
-    # Toggle between different layouts as defined below
-    Key([mod], "Tab",               lazy.next_layout(),              desc="Toggle between layouts"),
-    Key([mod], "q",                 lazy.window.kill(),              desc="Kill focused window"),
-    Key([mod, "control"], "r",      lazy.reload_config(),            desc="Reload the config"),
-    Key([mod, "control"], "q",      lazy.shutdown(),                 desc="Shutdown Qtile"),
-    Key([mod], "a",                 lazy.spawn('rofi -show combi'),  desc="Open rofi combi"),
-    Key([mod], "d",                 lazy.spawn('rofi -show drun'),   desc="Open drun drun"),
-    Key([mod], "w",                 lazy.spawn(browser),             desc="Launch default browser"),
-    Key([mod, "shift"], "f",        lazy.window.toggle_floating(),   desc="Toggle Floating layout"),
-    Key([mod, "mod1"], "f",         lazy.window.toggle_maximize(),   desc="Toggle Full-screen layout"),
-    Key([mod], "f",                 lazy.window.toggle_fullscreen(), desc="Toggle Full-screen layout"),
-    Key([mod, "mod1"], "d",         lazy.function(app_or_group('9', 'discord')),          lazy.window.toscreen(2)),
-    Key([mod], "t",                 lazy.function(app_or_group('9', 'telegram-desktop')), lazy.window.toscreen(2)),
-    Key([mod, "mod1"], "l",         lazy.group['scratchpad'].dropdown_toggle('lutris'), desc="Open floating lutris"),
-
-
-    # Key([mod, "mod1"], "d", lazy.spawn('discord'), desc="Launch Discord"),
-    Key([], "Print",                lazy.spawn('flameshot gui'),     desc="Take a Screenshot"),
-    Key([mod], "e",                 lazy.spawn('nautilus'),          desc="Open thunar"),
-    Key([mod, "shift"], "x",        lazy.spawn('xkill'),             desc="Launch xkill"),
-    Key([mod, "shift"], "p",        lazy.spawn('killall picom'),     desc="turn off picom"),
-    Key([mod], "p",                 lazy.spawn('picom --experimental-backends')),
-
-    # Toggle between monitors
-    Key([mod], "x",                 lazy.to_screen(0),               desc='Keyboard focus to monitor 1'),
-    Key([mod], "z",                 lazy.to_screen(1),               desc='Keyboard focus to monitor 2'),
-    Key([mod], "c",                 lazy.to_screen(2),               desc='Keyboard focus to monitor 3'),
-
-    # Notifications
-    Key([mod, "mod1"], "n",         lazy.spawn("dunstctl set-paused toggle"), desc='Toggle notifications'),
-
-
-    # Music and audio related keybinds
-    Key([mod, "shift"], "m",                lazy.spawn('pavucontrol')),
-    Key([mod], "m",                         lazy.group['scratchpad'].dropdown_toggle('spotify')),
-    Key([mod, "mod1", "control"], "m",      lazy.function(app_or_group('8', 'stremio'))),
-    Key([mod], "comma",                     lazy.spawn("playerctl previous"),          desc="Play prev song"),
-    Key([mod], "period",                    lazy.spawn("playerctl next"),              desc="Play next song"),
-    Key([mod], "slash",                     lazy.spawn("playerctl play-pause"),        desc="Play/Pause song"),
-    Key([], "XF86AudioPlay",                lazy.spawn("playerctl play-pause"),        desc="Play/Pause song"),
-    Key([], "XF86AudioPause",               lazy.spawn("playerctl play-pause"),        desc="Play/Pause song"),
-    Key([], "XF86AudioStop",                lazy.spawn("playerctl stop"),              desc="Play next song"),
-    Key([], "XF86AudioNext",                lazy.spawn("playerctl next"),              desc="Play next song"),
-    Key([], "XF86AudioPrev",                lazy.spawn("playerctl previous"),          desc="Play next song"),
-    Key([mod, "control", "mod1"], "comma",  lazy.spawn("padefault volume-focus -5%"),  desc="Play prev song"),
-    Key([mod, "control", "mod1"], "period", lazy.spawn("padefault volume-focus +5%"),  desc="Play next song"),
-    Key([mod, "control", "mod1"], "slash",  lazy.spawn("padefault volume-focus 100%"), desc="Play next song"),
+    Key([mod, shift], "Return",           lazy.layout.toggle_split()),
 
 ]
+# @formatter:off
 # @formatter:on
 #   ____
 #  / ___|_ __ ___  _   _ _ __  ___
@@ -123,19 +149,23 @@ groups = [
     Group('3', layout="columns"),
     Group('4', layout="columns"),
     Group('5', layout="columns"),
-    Group('6', layout="columns"),
-    Group('7', label="", layout="columns", matches=[
-        Match(wm_class='steam'),
-        Match(wm_class='lutris'),
+    Group('6', label="", layout="stack", matches=[
+        Match(wm_class="jetbrains-idea"),
+        Match(wm_class="jetbrains-webstorm"),
+        Match(wm_class="jetbrains-pycharm"),
+    ]),
+    Group('7', label="", layout="floating", matches=[
+        Match(wm_class="steam"),
+        Match(wm_class="lutris"),
     ]),
     Group('8', label="", layout="columns", matches=[
-        Match(wm_class='netflix'),
-        Match(wm_class='stremio'),
+        Match(wm_class="netflix"),
+        Match(wm_class="stremio"),
     ]),
     Group('9', label="", layout="columns", matches=[
-        Match(wm_class='telegram-desktop'),
-        Match(wm_class='discord'),
-        Match(wm_class='whatsapp-for-linux'),
+        Match(wm_class="telegram-desktop"),
+        Match(wm_class="discord"),
+        Match(wm_class="whatsapp-for-linux"),
     ]),
 ]
 
@@ -146,8 +176,10 @@ for i in groups:
             desc="Switch to group{}".format(i.name)),
         # Or, use below if you prefer not to switch to that group.
         # mod + control + letter of group = move focused window to group.
-        Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
+        Key([mod, control], i.name, lazy.window.togroup(i.name),
             desc="move focused window to group{}".format(i.name)),
+        Key([mod, shift], i.name, lazy.window.togroup(i.name), lazy.group[i.name].toscreen(),
+            desc="move focused window and screen to group{}".format(i.name)),
     ])
 
 # Append ScratchPad to groups list
@@ -157,7 +189,7 @@ groups.append(
         DropDown("term", terminal, opacity=0.75, height=0.5, width=0.8),
         DropDown("spotify", "spotify", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
         DropDown("steam", "steam", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
-        DropDown("lutris", "lutris", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
+        DropDown("pavucontrol", "pavucontrol", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
     ]),
 )
 
@@ -168,25 +200,24 @@ groups.append(
 # |_____\__,_|\__, |\___/ \__,_|\__|___/
 #             |___/
 
+default_layout_settings = dict(
+    border_focus='#4d4c7d',
+    border_normal='#e9d5da',
+    border_width=2,
+)
+
 layouts = [
     layout.Columns(
-        border_focus='#4d4c7d',
-        border_normal='#e9d5da',
-        clockwise=True,
-        border_width=2,
+        **default_layout_settings,
         margin=7,
         border_on_single=True,
     ),
-    layout.Floating(
-        border_focus='#4d4c7d',
-        border_normal='#e9d5da',
-        border_width=2,
-        float_rules=[
-            Match(wm_class="pavucontrol"),
-            Match(wm_class="steam"),
-            Match(wm_class="lutris"),
-        ]
+    layout.Stack(
+        **default_layout_settings,
+        margin=7,
+        num_stacks=1,
     ),
+    layout.Floating(**default_layout_settings),
 ]
 
 # __        ___     _            _
@@ -484,9 +515,8 @@ screens = [
 
 # Drag floating layouts.
 mouse = [
-    Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
+    Drag([mod], "Button2", lazy.window.set_position_floating(), start=lazy.window.get_position()),
     Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
-    Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
 
 #  _   _             _
