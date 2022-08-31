@@ -8,7 +8,7 @@ import os
 import subprocess
 from libqtile import hook, qtile
 from libqtile import bar, layout, widget
-from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen, ScratchPad, DropDown
+from libqtile.config import Drag, Group, Key, KeyChord, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
 
 mod = "mod4"
@@ -154,7 +154,7 @@ groups = [
         Match(wm_class="jetbrains-webstorm"),
         Match(wm_class="jetbrains-pycharm"),
     ]),
-    Group('7', label="", layout="floating", matches=[
+    Group('7', label="", layout="columns", matches=[
         Match(wm_class="steam"),
         Match(wm_class="lutris"),
     ]),
@@ -201,8 +201,8 @@ groups.append(
 #             |___/
 
 default_layout_settings = dict(
-    border_focus='#4d4c7d',
-    border_normal='#e9d5da',
+    border_focus="#4d4c7d",
+    border_normal="#e9d5da",
     border_width=2,
 )
 
@@ -217,7 +217,6 @@ layouts = [
         margin=7,
         num_stacks=1,
     ),
-    layout.Floating(**default_layout_settings),
 ]
 
 # __        ___     _            _
@@ -525,19 +524,21 @@ mouse = [
 # |  _  | (_) | (_) |   <\__ \
 # |_| |_|\___/ \___/|_|\_\___/
 
-dgroups_app_rules = []  # type: list
 floating_layout = layout.Floating(
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
         *layout.Floating.default_float_rules,
+        Match(wm_class="spotify"),
+        Match(wm_class="pavucontrol"),
+        Match(wm_class="steam"),
+        Match(wm_class="lutris"),
         Match(wm_class="confirmreset"),  # gitk
         Match(wm_class="makebranch"),  # gitk
         Match(wm_class="maketag"),  # gitk
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
-    ]
-)
+    ], **default_layout_settings)
 # When using the Wayland backend, this can be used to configure input devices.
 wl_input_rules = None
 bring_front_click = False
