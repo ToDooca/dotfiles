@@ -53,10 +53,10 @@ keys = [
     Key([mod, shift], "p",          lazy.spawn('killall picom'),              desc="turn off picom"),
     Key([mod, shift], "c",          lazy.group['6'].toscreen(),               desc="go to coding group"),
     Key([mod], "p",                 lazy.spawn('picom --experimental-backends')),
-    Key([mod, alt], "l",            lazy.function(app_or_group('7', 'lutris')), lazy.group['7'].toscreen()),
-    Key([mod, alt], "d",            lazy.function(app_or_group('9', 'discord')), lazy.group['9'].toscreen()),
-    Key([mod], "t",                 lazy.function(app_or_group('9', 'telegram-desktop')), lazy.group['9'].toscreen()),
-    Key([mod, shift], "t",          lazy.function(app_or_group('9', 'whatsapp-for-linux')), lazy.group['9'].toscreen()),
+    Key([mod, alt], "l",            lazy.function(app_or_group('7', 'lutris'))),
+    Key([mod, alt], "d",            lazy.function(app_or_group('9', 'discord'))),
+    Key([mod], "t",                 lazy.function(app_or_group('9', 'telegram-desktop'))),
+    Key([mod, shift], "t",          lazy.function(app_or_group('9', 'whatsapp-for-linux'))),
 
     # Layout Keybinds
     Key([mod], "Left",              lazy.layout.left(),                       desc="Move focus to left"),
