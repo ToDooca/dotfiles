@@ -33,6 +33,7 @@ def app_or_group(group, app):
 # | . \  __/ |_| | |_) | | | | | (_| \__ \
 # |_|\_\___|\__, |_.__/|_|_| |_|\__,_|___/
 #           |___/
+# @formatter:off
 keys = [
 
     Key([mod], "Return",            lazy.spawn(terminal),                     desc="Launch terminal"),
@@ -112,20 +113,20 @@ keys = [
     ]),
 
     # Music and audio related keybinds
-    Key([mod, shift], "m",                lazy.group['scratchpad'].dropdown_toggle('pavucontrol')),
+    Key([mod, shift], "m",                  lazy.group['scratchpad'].dropdown_toggle('pavucontrol')),
     Key([mod], "m",                         lazy.group['scratchpad'].dropdown_toggle('spotify')),
-    Key([mod, alt, control], "m",      lazy.function(app_or_group('8', 'stremio'))),
-    Key([mod], "comma",                     lazy.spawn("playerctl previous"),     desc="Play prev song"),
-    Key([mod], "period",                    lazy.spawn("playerctl next"),         desc="Play next song"),
-    Key([mod], "slash",                     lazy.spawn("playerctl play-pause"),   desc="Play/Pause song"),
-    Key([], "XF86AudioPlay",                lazy.spawn("playerctl play-pause"),   desc="Play/Pause song"),
-    Key([], "XF86AudioPause",               lazy.spawn("playerctl play-pause"),   desc="Play/Pause song"),
-    Key([], "XF86AudioStop",                lazy.spawn("playerctl stop"),         desc="Stop current song"),
-    Key([], "XF86AudioNext",                lazy.spawn("playerctl next"),         desc="Play next song"),
-    Key([], "XF86AudioPrev",                lazy.spawn("playerctl previous"),     desc="Play previous song"),
-    Key([mod, control, alt], "comma",  lazy.spawn("padefault volume-focus -5%"),  desc="Increase volume by 5%"),
-    Key([mod, control, alt], "period", lazy.spawn("padefault volume-focus +5%"),  desc="Decrease volume by 5%"),
-    Key([mod, control, alt], "slash",  lazy.spawn("padefault volume-focus 100%"), desc="Set volume to 100%"),
+    Key([mod, alt, control], "m",           lazy.function(app_or_group('8', 'stremio'))),
+    Key([mod], "comma",                     lazy.spawn("playerctl previous"),          desc="Play prev song"),
+    Key([mod], "period",                    lazy.spawn("playerctl next"),              desc="Play next song"),
+    Key([mod], "slash",                     lazy.spawn("playerctl play-pause"),        desc="Play/Pause song"),
+    Key([], "XF86AudioPlay",                lazy.spawn("playerctl play-pause"),        desc="Play/Pause song"),
+    Key([], "XF86AudioPause",               lazy.spawn("playerctl play-pause"),        desc="Play/Pause song"),
+    Key([], "XF86AudioStop",                lazy.spawn("playerctl stop"),              desc="Stop current song"),
+    Key([], "XF86AudioNext",                lazy.spawn("playerctl next"),              desc="Play next song"),
+    Key([], "XF86AudioPrev",                lazy.spawn("playerctl previous"),          desc="Play previous song"),
+    Key([mod, control, alt], "comma",       lazy.spawn("padefault volume-focus -5%"),  desc="Increase volume by 5%"),
+    Key([mod, control, alt], "period",      lazy.spawn("padefault volume-focus +5%"),  desc="Decrease volume by 5%"),
+    Key([mod, control, alt], "slash",       lazy.spawn("padefault volume-focus 100%"), desc="Set volume to 100%"),
 
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
@@ -134,7 +135,6 @@ keys = [
     Key([mod, shift], "Return",           lazy.layout.toggle_split()),
 
 ]
-# @formatter:off
 # @formatter:on
 #   ____
 #  / ___|_ __ ___  _   _ _ __  ___
