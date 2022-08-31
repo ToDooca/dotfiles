@@ -18,15 +18,6 @@ control = "control"
 terminal = "alacritty"
 browser = "brave"
 
-
-def app_or_group(group, app):
-    def f(qtile):
-        qtile.groups_map[group].cmd_toscreen()
-        qtile.cmd_spawn(app)
-
-    return f
-
-
 #  _  __          _     _           _
 # | |/ /___ _   _| |__ (_)_ __   __| |___
 # | ' // _ \ | | | '_ \| | '_ \ / _` / __|
@@ -53,10 +44,10 @@ keys = [
     Key([mod, shift], "p",          lazy.spawn('killall picom'),              desc="turn off picom"),
     Key([mod, shift], "c",          lazy.group['6'].toscreen(),               desc="go to coding group"),
     Key([mod], "p",                 lazy.spawn('picom --experimental-backends')),
-    Key([mod, alt], "l",            lazy.function(app_or_group('7', 'lutris'))),
-    Key([mod, alt], "d",            lazy.function(app_or_group('9', 'discord'))),
-    Key([mod], "t",                 lazy.function(app_or_group('9', 'telegram-desktop'))),
-    Key([mod, shift], "t",          lazy.function(app_or_group('9', 'whatsapp-for-linux'))),
+    Key([mod, alt], "l",            lazy.spawn('lutris')),
+    Key([mod, alt], "d",            lazy.spawn('discord')),
+    Key([mod], "t",                 lazy.spawn('telegram-desktop')),
+    Key([mod, shift], "t",          lazy.spawn('whatsapp-for-linux')),
 
     # Layout Keybinds
     Key([mod], "Left",              lazy.layout.left(),                       desc="Move focus to left"),
@@ -115,7 +106,7 @@ keys = [
     # Music and audio related keybinds
     Key([mod, shift], "m",             lazy.group['scratchpad'].dropdown_toggle('pavucontrol')),
     Key([mod], "m",                    lazy.group['scratchpad'].dropdown_toggle('spotify')),
-    Key([mod, alt, control], "m",      lazy.function(app_or_group('8', 'stremio'))),
+    Key([mod, alt, control], "m",      lazy.spawn('stremio'), lazy.group['8'].toscreen()),
     Key([mod], "comma",                lazy.spawn("playerctl --player=spotify,%any previous")),
     Key([mod], "period",               lazy.spawn("playerctl --player=spotify,%any next")),
     Key([mod], "slash",                lazy.spawn("playerctl --player=spotify,%any play-pause")),
