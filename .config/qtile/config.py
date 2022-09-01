@@ -526,6 +526,7 @@ floating_layout = layout.Floating(
         Match(wm_class="pavucontrol"),
         Match(wm_class="steam"),
         Match(wm_class="lutris"),
+        Match(wm_class="battle.net.exe"),
         Match(wm_class="confirmreset"),  # gitk
         Match(wm_class="makebranch"),  # gitk
         Match(wm_class="maketag"),  # gitk
