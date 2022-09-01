@@ -145,7 +145,7 @@ groups = [
         Match(wm_class="jetbrains-webstorm"),
         Match(wm_class="jetbrains-pycharm"),
     ]),
-    Group('7', label="", layout="columns", matches=[
+    Group('7', label="", layout="monadwide", matches=[
         Match(wm_class="steam"),
         Match(wm_class="lutris"),
     ]),
@@ -208,6 +208,9 @@ layouts = [
         margin=7,
         num_stacks=1,
     ),
+    layout.MonadWide(
+        **default_layout_settings
+    )
 ]
 
 # __        ___     _            _
