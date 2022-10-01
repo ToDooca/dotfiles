@@ -110,6 +110,11 @@ keys = [
     Key([mod], "comma",                lazy.spawn("playerctl --player=spotify,%any previous")),
     Key([mod], "period",               lazy.spawn("playerctl --player=spotify,%any next")),
     Key([mod], "slash",                lazy.spawn("playerctl --player=spotify,%any play-pause")),
+    Key([], "XF86AudioMute",           lazy.spawn("playerctl -p spotify play-pause")),
+    Key([], "XF86AudioRaiseVolume",    lazy.spawn("playerctl -p spotify volume 0.05+")),
+    Key([], "XF86AudioLowerVolume",    lazy.spawn("playerctl -p spotify volume 0.05-")),
+    Key([], "XF86AudioPlay",           lazy.spawn("playerctl --player=spotify,%any play-pause")),
+    Key([], "XF86AudioPlay",           lazy.spawn("playerctl --player=spotify,%any play-pause")),
     Key([], "XF86AudioPlay",           lazy.spawn("playerctl --player=spotify,%any play-pause")),
     Key([], "XF86AudioPause",          lazy.spawn("playerctl --player=spotify,%any play-pause")),
     Key([], "XF86AudioStop",           lazy.spawn("playerctl --player=spotify,%any stop")),
@@ -146,7 +151,7 @@ groups = [
         Match(wm_class="jetbrains-pycharm"),
     ]),
     Group('7', label="", layout="monadwide", matches=[
-        Match(wm_class="steam"),
+        Match(wm_class="Steam"),
         Match(wm_class="lutris"),
     ]),
     Group('8', label="", layout="columns", matches=[
@@ -179,7 +184,7 @@ groups.append(
         # define a drop down terminal.
         DropDown("term", terminal, opacity=0.75, height=0.5, width=0.8),
         DropDown("spotify", "spotify", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
-        DropDown("steam", "steam", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
+        DropDown("Steam", "Steam", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
         DropDown("pavucontrol", "pavucontrol", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
     ]),
 )
@@ -524,7 +529,7 @@ floating_layout = layout.Floating(
         *layout.Floating.default_float_rules,
         Match(wm_class="spotify"),
         Match(wm_class="pavucontrol"),
-        Match(wm_class="steam"),
+        Match(wm_class="Steam"),
         Match(wm_class="lutris"),
         Match(wm_class="battle.net.exe"),
         Match(wm_class="confirmreset"),  # gitk
