@@ -110,6 +110,7 @@ keys = [
     Key([mod], "comma",                lazy.spawn("playerctl --player=spotify,%any previous")),
     Key([mod], "period",               lazy.spawn("playerctl --player=spotify,%any next")),
     Key([mod], "slash",                lazy.spawn("playerctl --player=spotify,%any play-pause")),
+    Key([control], "XF86AudioMute",    lazy.spawn("playerctl --player=spotify,%any next")),
     Key([], "XF86AudioMute",           lazy.spawn("playerctl -p spotify play-pause")),
     Key([], "XF86AudioRaiseVolume",    lazy.spawn("playerctl -p spotify volume 0.05+")),
     Key([], "XF86AudioLowerVolume",    lazy.spawn("playerctl -p spotify volume 0.05-")),
