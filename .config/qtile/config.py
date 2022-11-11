@@ -80,7 +80,7 @@ keys = [
     Key([mod], "n",                 lazy.spawn("dunstctl close-all"),         desc='Toggle notifications'),
 
     # Keyboard Layouts
-    Key([mod], "l",                 lazy.spawn("setxkbmap -layout us"),       desc='Toggle us layout'),
+    Key([mod], "l",                 lazy.spawn("setxkbmap -layout us"), lazy.spawn("xmodmap /home/du/.Xmodmap"), desc='Toggle us layout'),
     Key([mod, shift], "l",          lazy.spawn("setxkbmap -layout rs latin"), desc='Toggle Serbian latin layout'),
 
     # Power options
