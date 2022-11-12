@@ -262,24 +262,6 @@ divider = widget.TextBox(
     background='#363062',
     foreground='#4d4c7d'
 )
-thermalSensorCPU = widget.ThermalSensor(
-    foreground='#e9d5da',
-    background='#363062',
-    foreground_alert='#ff5677',
-    threshold=45,
-    fmt='CPU:{}',
-    tag_sensor='Tccd1',
-    padding=5
-)
-thermalSensorGPU = widget.ThermalSensor(
-    foreground='#e9d5da',
-    background='#363062',
-    foreground_alert='#ff5677',
-    threshold=75,
-    fmt='GPU:{}',
-    tag_sensor='edge',
-    padding=5
-)
 keyboardLayout = widget.KeyboardLayout(
     foreground='#e9d5da',
     background='#363062',
@@ -311,16 +293,6 @@ pulseVolume = widget.PulseVolume(
     background='#363062',
     padding=5
 )
-currentPlayer = widget.Mpris2(
-    background='#363062',
-    foreground='#e9d5da',
-    name='spotify',
-    objname="org.mpris.MediaPlayer2.spotify",
-    display_metadata=['xesam:title', 'xesam:artist'],
-    fmt=' {}',
-    stop_pause_text=' ',
-)
-
 diskFreeRoot = widget.DF(
     background='#363062',
     foreground='#e9d5da',
@@ -329,7 +301,6 @@ diskFreeRoot = widget.DF(
     format='{f}GB',
     partition="/",
 )
-
 diskFreeHome = widget.DF(
     background='#363062',
     foreground='#e9d5da',
@@ -350,6 +321,24 @@ systemClock = widget.Clock(
     format="%e/%B/%Y %T",
     background='#363062',
     foreground='#e9d5da',
+)
+thermalSensorCPU = widget.ThermalSensor(
+    foreground='#e9d5da',
+    background='#363062',
+    foreground_alert='#ff5677',
+    threshold=45,
+    fmt='CPU:{}',
+    tag_sensor='Tccd1',
+    padding=5
+)
+thermalSensorGPU = widget.ThermalSensor(
+    foreground='#e9d5da',
+    background='#363062',
+    foreground_alert='#ff5677',
+    threshold=75,
+    fmt='GPU:{}',
+    tag_sensor='edge',
+    padding=5
 )
 
 #  ____
