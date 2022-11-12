@@ -30,7 +30,8 @@ keys = [
     Key([mod], "Return",            lazy.spawn(terminal),                     desc="Launch terminal"),
     Key([mod], "Tab",               lazy.next_layout(),                       desc="Toggle between layouts"),
     Key([mod], "q",                 lazy.window.kill(),                       desc="Kill focused window"),
-    Key([mod, control], "r",        lazy.reload_config(),                     desc="Reload the config"),
+    Key([mod, control], "r",        lazy.reload_config(),
+                                    lazy.spawn("xmodmap /home/du/.Xmodmap"),  desc="Reload the config"),
     Key([mod, control], "q",        lazy.shutdown(),                          desc="Shutdown Qtile"),
     Key([mod], "a",                 lazy.spawn('rofi -show combi'),           desc="Open rofi combi"),
     Key([mod], "d",                 lazy.spawn('rofi -show drun'),            desc="Open drun drun"),
@@ -80,7 +81,8 @@ keys = [
     Key([mod], "n",                 lazy.spawn("dunstctl close-all"),         desc='Toggle notifications'),
 
     # Keyboard Layouts
-    Key([mod], "l",                 lazy.spawn("setxkbmap -layout us"), lazy.spawn("xmodmap /home/du/.Xmodmap"), desc='Toggle us layout'),
+    Key([mod], "l",                 lazy.spawn("setxkbmap -layout us"),
+                                    lazy.spawn("xmodmap /home/du/.Xmodmap"),  desc='Toggle us layout'),
     Key([mod, shift], "l",          lazy.spawn("setxkbmap -layout rs latin"), desc='Toggle Serbian latin layout'),
 
     # Power options
@@ -383,6 +385,9 @@ screens = [
             widget.Spacer(background='#363062'),
             systemClock,
             widget.Spacer(background='#363062'),
+            diskFreeRoot,
+            diskFreeHome,
+            diskFreeHDD,
             divider,
             widget_icon(''),
             ramMemory,
@@ -394,9 +399,6 @@ screens = [
             thermalSensorCPU,
             thermalSensorGPU,
             divider,
-            diskFreeRoot,
-            diskFreeHome,
-            diskFreeHDD,
             widget.Systray(background='#363062', padding=5),
             widget.Spacer(background='#363062', length=15)
         ], 25),
