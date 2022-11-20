@@ -44,7 +44,7 @@ keys = [
     Key([mod, shift], "x",          lazy.spawn('xkill'),                      desc="Launch xkill"),
     Key([mod, shift], "p",          lazy.spawn('killall picom'),              desc="turn off picom"),
     Key([mod, shift], "c",          lazy.group['6'].toscreen(),               desc="go to coding group"),
-    Key([mod], "p",                 lazy.spawn('picom --experimental-backends')),
+    Key([mod], "p",                 lazy.spawn('picom')),
     Key([mod, alt], "l",            lazy.spawn('lutris')),
     Key([mod, alt], "d",            lazy.spawn('discord')),
     Key([mod], "t",                 lazy.spawn('telegram-desktop')),
