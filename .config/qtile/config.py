@@ -25,11 +25,12 @@ browser = "brave"
 #  \____\___/|_|\___/|_|  |___/
 #
 
-LIGHT_PURPLE = '#4d4c7d'
-PURPLE = '#827397'
-DARK_PURPLE = '#363062'
-WARN_PINK = '#ff5677'
-LIGHT_PINK = '#e9d5da'
+light_purple = '#4d4c7d'
+purple = '#827397'
+dark_purple = '#363062'
+warn_pink = '#ff5677'
+light_pink = '#e9d5da'
+
 
 #  _  __          _     _           _
 # | |/ /___ _   _| |__ (_)_ __   __| |___
@@ -213,7 +214,7 @@ groups.append(
 #             |___/
 
 default_layout_settings = dict(
-    border_focus=LIGHT_PURPLE,
+    border_focus=light_purple,
     border_normal="#e9d5da",
     border_width=2,
 )
@@ -252,8 +253,8 @@ extension_defaults = widget_defaults.copy()
 def notification_widget():
     return widget.TextBox(
         font='Fira Code',
-        background=DARK_PURPLE,
-        foreground=PURPLE,
+        background=dark_purple,
+        foreground=purple,
         text='',
         mouse_callbacks={
             'Button1': lazy.spawn("dunstctl history-pop"),
@@ -267,23 +268,23 @@ def widget_icon(icon):
     return widget.TextBox(
         font='Fira Code',
         text=icon,
-        background=DARK_PURPLE,
-        foreground=PURPLE
+        background=dark_purple,
+        foreground=purple
     )
 
 
 def divider():
     return widget.TextBox(
         text='|',
-        background=DARK_PURPLE,
-        foreground=LIGHT_PURPLE
+        background=dark_purple,
+        foreground=light_purple
     )
 
 
 def keyboard_layout():
     return widget.KeyboardLayout(
-        foreground=LIGHT_PINK,
-        background=DARK_PURPLE,
+        foreground=light_pink,
+        background=dark_purple,
         padding=5,
         configured_keyboards=['us', 'rs latin', 'rs']
     )
@@ -291,8 +292,8 @@ def keyboard_layout():
 
 def ram_memory():
     return widget.Memory(
-        foreground=LIGHT_PINK,
-        background=DARK_PURPLE,
+        foreground=light_pink,
+        background=dark_purple,
         measure_mem='G',
         format='{MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}',
         mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')},
@@ -306,27 +307,27 @@ def check_package_updates():
         distro="Arch_checkupdates",
         display_format="{updates} ",
         no_update_string=' ',
-        colour_have_updates=WARN_PINK,
-        colour_no_updates=LIGHT_PINK,
+        colour_have_updates=warn_pink,
+        colour_no_updates=light_pink,
         mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e yay -Syu')},
         padding=5,
-        background=DARK_PURPLE
+        background=dark_purple
     )
 
 
 def pulse_volume():
     return widget.PulseVolume(
-        foreground=LIGHT_PINK,
-        background=DARK_PURPLE,
+        foreground=light_pink,
+        background=dark_purple,
         padding=5
     )
 
 
 def disk_free(disk_fmt, disk_partition):
     return widget.DF(
-        background=DARK_PURPLE,
-        foreground=LIGHT_PINK,
-        warn_color=WARN_PINK,
+        background=dark_purple,
+        foreground=light_pink,
+        warn_color=warn_pink,
         fmt=disk_fmt,
         format='{f}GB',
         partition=disk_partition,
@@ -336,17 +337,17 @@ def disk_free(disk_fmt, disk_partition):
 def system_clock():
     return widget.Clock(
         format="%e/%B/%Y %T",
-        background=DARK_PURPLE,
-        foreground=LIGHT_PINK,
+        background=dark_purple,
+        foreground=light_pink,
     )
 
 
-def thermal_sensor(sensor_fmt, sensor):
+def thermal_sensor(sensor_fmt, sensor, sensor_threshold):
     return widget.ThermalSensor(
-        foreground=LIGHT_PINK,
-        background=DARK_PURPLE,
-        foreground_alert=WARN_PINK,
-        threshold=45,
+        foreground=light_pink,
+        background=dark_purple,
+        foreground_alert=warn_pink,
+        threshold=sensor_threshold,
         fmt=sensor_fmt,
         tag_sensor=sensor,
         padding=5
@@ -371,12 +372,12 @@ def screen_widgets(primary=False):
             padding_x=7,
             borderwidth=3,
             highlight_method='line',
-            background=DARK_PURPLE,
-            highlight_color=DARK_PURPLE,
-            inactive=PURPLE,
-            active=LIGHT_PINK,
-            this_current_screen_border=LIGHT_PINK,
-            this_screen_border=LIGHT_PINK,
+            background=dark_purple,
+            highlight_color=dark_purple,
+            inactive=purple,
+            active=light_pink,
+            this_current_screen_border=light_pink,
+            this_screen_border=light_pink,
             rounded=False,
             disable_drag=True
         ),
@@ -392,25 +393,25 @@ def screen_widgets(primary=False):
         widget_icon(''),
         check_package_updates(),
         divider(),
-        widget.Spacer(background=DARK_PURPLE),
+        widget.Spacer(background=dark_purple),
         system_clock(),
-        widget.Spacer(background=DARK_PURPLE),
+        widget.Spacer(background=dark_purple),
         divider(),
         widget_icon(''),
         ram_memory(),
         divider(),
         widget_icon(''),
-        widget.CPU(format='{load_percent}%', background=DARK_PURPLE, foreground=LIGHT_PINK),
+        widget.CPU(format='{load_percent}%', background=dark_purple, foreground=light_pink),
         divider(),
         widget_icon(''),
-        thermal_sensor('CPU:{}', 'Tccd1'),
-        thermal_sensor('GPU:{}', 'edge'),
+        thermal_sensor('CPU:{}', 'Tccd1', 45),
+        thermal_sensor('GPU:{}', 'edge', 75),
     ]
     if primary:
         widgets.extend([
             divider(),
-            widget.Systray(background=DARK_PURPLE, padding=5),
-            widget.Spacer(background=DARK_PURPLE, length=15)
+            widget.Systray(background=dark_purple, padding=5),
+            widget.Spacer(background=dark_purple, length=15)
         ])
         return widgets
     return widgets
