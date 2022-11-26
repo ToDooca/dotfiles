@@ -31,7 +31,6 @@ DARK_PURPLE = '#363062'
 WARN_PINK = '#ff5677'
 LIGHT_PINK = '#e9d5da'
 
-
 #  _  __          _     _           _
 # | |/ /___ _   _| |__ (_)_ __   __| |___
 # | ' // _ \ | | | '_ \| | '_ \ / _` / __|
@@ -214,7 +213,7 @@ groups.append(
 #             |___/
 
 default_layout_settings = dict(
-    border_focus= LIGHT_PURPLE,
+    border_focus=LIGHT_PURPLE,
     border_normal="#e9d5da",
     border_width=2,
 )
@@ -360,154 +359,79 @@ def thermal_sensor(sensor_fmt, sensor):
 #  ___) | (__| | |  __/  __/ | | \__ \
 # |____/ \___|_|  \___|\___|_| |_|___/
 
-screens = [
-    Screen(
-        top=bar.Bar([
-            widget.GroupBox(
-                font='Fira Code Bold',
-                fontsize=14,
-                margin_y=3,
-                margin_x=0,
-                padding_y=7,
-                padding_x=7,
-                borderwidth=3,
-                highlight_method='line',
-                background=DARK_PURPLE,
-                highlight_color=DARK_PURPLE,
-                inactive=PURPLE,
-                active=LIGHT_PINK,
-                this_current_screen_border=LIGHT_PINK,
-                this_screen_border=LIGHT_PINK,
-                rounded=False,
-                disable_drag=True
-            ),
-            divider(),
-            widget_icon(''),
-            keyboard_layout(),
-            divider(),
-            widget_icon(''),
-            pulse_volume(),
-            divider(),
-            notification_widget(),
-            divider(),
-            widget_icon(''),
-            check_package_updates(),
-            divider(),
-            widget.Spacer(background=DARK_PURPLE),
-            system_clock(),
-            widget.Spacer(background=DARK_PURPLE),
-            disk_free(' {}', '/'),
-            disk_free(' {}', '/home'),
-            disk_free('', '/run/mount/sda1'),
-            divider(),
-            widget_icon(''),
-            ram_memory(),
-            divider(),
-            widget_icon(''),
-            widget.CPU(format='{load_percent}%', background=DARK_PURPLE, foreground=LIGHT_PINK),
-            divider(),
-            widget_icon(''),
-            thermal_sensor('CPU:{}', 'Tccd1'),
-            thermal_sensor('GPU:{}', 'edge'),
+def screen_widgets(primary=False):
+
+    widgets = [
+        widget.GroupBox(
+            font='Fira Code Bold',
+            fontsize=14,
+            margin_y=3,
+            margin_x=0,
+            padding_y=7,
+            padding_x=7,
+            borderwidth=3,
+            highlight_method='line',
+            background=DARK_PURPLE,
+            highlight_color=DARK_PURPLE,
+            inactive=PURPLE,
+            active=LIGHT_PINK,
+            this_current_screen_border=LIGHT_PINK,
+            this_screen_border=LIGHT_PINK,
+            rounded=False,
+            disable_drag=True
+        ),
+        divider(),
+        widget_icon(''),
+        keyboard_layout(),
+        divider(),
+        widget_icon(''),
+        pulse_volume(),
+        divider(),
+        notification_widget(),
+        divider(),
+        widget_icon(''),
+        check_package_updates(),
+        divider(),
+        widget.Spacer(background=DARK_PURPLE),
+        system_clock(),
+        widget.Spacer(background=DARK_PURPLE),
+        divider(),
+        widget_icon(''),
+        ram_memory(),
+        divider(),
+        widget_icon(''),
+        widget.CPU(format='{load_percent}%', background=DARK_PURPLE, foreground=LIGHT_PINK),
+        divider(),
+        widget_icon(''),
+        thermal_sensor('CPU:{}', 'Tccd1'),
+        thermal_sensor('GPU:{}', 'edge'),
+    ]
+    if primary:
+        widgets.extend([
             divider(),
             widget.Systray(background=DARK_PURPLE, padding=5),
             widget.Spacer(background=DARK_PURPLE, length=15)
-        ], 25),
+        ])
+        return widgets
+    return widgets
+
+
+screens = [
+    Screen(
+        top=bar.Bar(
+            screen_widgets(primary=True),
+            25),
     ),
     Screen(
-        top=bar.Bar([
-            widget.GroupBox(
-                font='Fira Code Bold',
-                fontsize=14,
-                margin_y=3,
-                margin_x=0,
-                padding_y=7,
-                padding_x=7,
-                borderwidth=3,
-                highlight_method='line',
-                background=DARK_PURPLE,
-                highlight_color=DARK_PURPLE,
-                inactive=PURPLE,
-                active=LIGHT_PINK,
-                this_current_screen_border=LIGHT_PINK,
-                this_screen_border=LIGHT_PINK,
-                rounded=False,
-                disable_drag=True
-            ),
-            divider(),
-            widget_icon(''),
-            keyboard_layout(),
-            divider(),
-            widget_icon(''),
-            pulse_volume(),
-            divider(),
-            notification_widget(),
-            divider(),
-            widget_icon(''),
-            check_package_updates(),
-            divider(),
-            widget.Spacer(background=DARK_PURPLE),
-            system_clock(),
-            widget.Spacer(background=DARK_PURPLE),
-            divider(),
-            widget_icon(''),
-            ram_memory(),
-            divider(),
-            widget_icon(''),
-            widget.CPU(format='{load_percent}%', background=DARK_PURPLE, foreground=LIGHT_PINK),
-            divider(),
-            widget_icon(''),
-            thermal_sensor('CPU:{}', 'Tccd1'),
-            thermal_sensor('GPU:{}', 'edge'),
-        ], 25),
+        top=bar.Bar(
+            screen_widgets(),
+            25),
     ),
     Screen(
-        top=bar.Bar([
-            widget.GroupBox(
-                font='Fira Code Bold',
-                fontsize=14,
-                margin_y=3,
-                margin_x=0,
-                padding_y=7,
-                padding_x=7,
-                borderwidth=3,
-                highlight_method='line',
-                background=DARK_PURPLE,
-                highlight_color=DARK_PURPLE,
-                inactive=PURPLE,
-                active=LIGHT_PINK,
-                this_current_screen_border=LIGHT_PINK,
-                this_screen_border=LIGHT_PINK,
-                rounded=False,
-                disable_drag=True
-            ),
-            divider(),
-            widget_icon(''),
-            keyboard_layout(),
-            divider(),
-            widget_icon(''),
-            pulse_volume(),
-            divider(),
-            notification_widget(),
-            divider(),
-            widget_icon(''),
-            check_package_updates(),
-            divider(),
-            widget.Spacer(background=DARK_PURPLE),
-            system_clock(),
-            widget.Spacer(background=DARK_PURPLE),
-            divider(),
-            widget_icon(''),
-            ram_memory(),
-            divider(),
-            widget_icon(''),
-            widget.CPU(format='{load_percent}%', background=DARK_PURPLE, foreground=LIGHT_PINK),
-            divider(),
-            widget_icon(''),
-            thermal_sensor('CPU:{}', 'Tccd1'),
-            thermal_sensor('GPU:{}', 'edge'),
-        ], 25),
-    )
+        top=bar.Bar(
+            screen_widgets(),
+            25),
+    ),
 ]
 
 #  __  __
