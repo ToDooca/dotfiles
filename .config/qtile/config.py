@@ -99,7 +99,7 @@ keys = [
     Key([mod], "l",                 lazy.spawn("setxkbmap -layout us"),
                                     lazy.spawn("xmodmap /home/du/.Xmodmap"),  desc='Toggle us layout'),
     Key([alt], "Tab",               lazy.widget["keyboardlayout"].next_keyboard(),
-                                    lazy.spawn("xmodmap /home/du/.Xmodmap"),  desc='Toggle us layout'),
+                                    lazy.spawn("xmodmap /home/du/.Xmodmap"),  desc='Cycle through keyboard layouts'),
 
     # Power options
     KeyChord([mod], "0", [
@@ -357,6 +357,28 @@ def thermal_sensor(sensor_fmt, sensor, sensor_threshold):
     )
 
 
+def music_widget():
+    return widget.Mpris2(
+        background=dark_purple,
+        foreground=light_pink,
+        width=200,
+        name='spotify',
+        objname='org.mpris.MediaPlayer2.spotify',
+        display_metadata=['xesam:title', 'xesam:artist'],
+        paused_text=' {track}',
+        playing_text=' {track}',
+        scroll_repeat=False,
+        scroll_interval=0.025,
+        # scroll_step=2,
+        mouse_callbacks={
+            'Button1': lambda: qtile.cmd_spawn("playerctl -p spotify next"),
+            'Button2': lambda: qtile.cmd_spawn("playerctl -p spotify play-pause"),
+            'Button3': lambda: qtile.cmd_spawn("playerctl -p spotify previous"),
+        },
+        padding=5,
+    )
+
+
 #  ____
 # / ___|  ___ _ __ ___  ___ _ __  ___
 # \___ \ / __| '__/ _ \/ _ \ '_ \/ __|
@@ -399,6 +421,8 @@ def screen_widgets(primary=False):
         widget.Spacer(background=dark_purple),
         system_clock(),
         widget.Spacer(background=dark_purple),
+        divider(),
+        music_widget(),
         divider(),
         widget_icon(''),
         ram_memory(),
