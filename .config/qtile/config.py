@@ -10,6 +10,7 @@ from libqtile import hook, qtile
 from libqtile import bar, layout, widget
 from libqtile.config import Drag, Group, Key, KeyChord, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
+from qtile_extras.popup.toolkit import PopupText
 
 mod = "mod4"
 alt = "mod1"
@@ -25,8 +26,8 @@ browser = "brave"
 #  \____\___/|_|\___/|_|  |___/
 #
 
-light_purple = '#4d4c7d'
 purple = '#827397'
+light_purple = '#4d4c7d'
 dark_purple = '#363062'
 warn_pink = '#ff5677'
 light_pink = '#e9d5da'
@@ -97,7 +98,8 @@ keys = [
     # Keyboard Layouts
     Key([mod], "l",                 lazy.spawn("setxkbmap -layout us"),
                                     lazy.spawn("xmodmap /home/du/.Xmodmap"),  desc='Toggle us layout'),
-    Key([mod, shift], "l",          lazy.spawn("setxkbmap -layout rs latin"), desc='Toggle Serbian latin layout'),
+    Key([alt], "Tab",               lazy.widget["keyboardlayout"].next_keyboard(),
+                                    lazy.spawn("xmodmap /home/du/.Xmodmap"),  desc='Toggle us layout'),
 
     # Power options
     KeyChord([mod], "0", [
@@ -215,7 +217,7 @@ groups.append(
 
 default_layout_settings = dict(
     border_focus=light_purple,
-    border_normal="#e9d5da",
+    border_normal=light_pink,
     border_width=2,
 )
 
@@ -339,6 +341,7 @@ def system_clock():
         format="%e/%B/%Y %T",
         background=dark_purple,
         foreground=light_pink,
+        popup_text=['%A, %B %d %Y', 'Time in UTC: %T'],
     )
 
 
