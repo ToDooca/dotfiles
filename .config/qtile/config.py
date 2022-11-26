@@ -273,89 +273,86 @@ def widget_icon(icon):
     )
 
 
-divider = widget.TextBox(
-    text='|',
-    background=DARK_PURPLE,
-    foreground=LIGHT_PURPLE
-)
-keyboardLayout = widget.KeyboardLayout(
-    foreground=LIGHT_PINK,
-    background=DARK_PURPLE,
-    padding=5,
-    configured_keyboards=['us', 'rs latin', 'rs']
+def divider():
+    return widget.TextBox(
+        text='|',
+        background=DARK_PURPLE,
+        foreground=LIGHT_PURPLE
+    )
 
-)
-ramMemory = widget.Memory(
-    foreground=LIGHT_PINK,
-    background=DARK_PURPLE,
-    measure_mem='G',
-    format='{MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}',
-    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')},
-    padding=5
-)
-checkPackageUpdates = widget.CheckUpdates(
-    update_interval=1800,
-    distro="Arch_checkupdates",
-    display_format="{updates} ",
-    no_update_string=' ',
-    colour_have_updates=WARN_PINK,
-    colour_no_updates=LIGHT_PINK,
-    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e yay -Syu')},
-    padding=5,
-    background=DARK_PURPLE
-)
-pulseVolume = widget.PulseVolume(
-    foreground=LIGHT_PINK,
-    background=DARK_PURPLE,
-    padding=5
-)
-diskFreeRoot = widget.DF(
-    background=DARK_PURPLE,
-    foreground=LIGHT_PINK,
-    warn_color=WARN_PINK,
-    fmt=' {}',
-    format='{f}GB',
-    partition="/",
-)
-diskFreeHome = widget.DF(
-    background=DARK_PURPLE,
-    foreground=LIGHT_PINK,
-    warn_color=WARN_PINK,
-    fmt=' {}',
-    format='{f}GB',
-    partition="/home",
-)
-diskFreeHDD = widget.DF(
-    background=DARK_PURPLE,
-    foreground=LIGHT_PINK,
-    warn_color=WARN_PINK,
-    fmt=' {}',
-    format='{f}GB',
-    partition="/run/mount/sda1",
-)
-systemClock = widget.Clock(
-    format="%e/%B/%Y %T",
-    background=DARK_PURPLE,
-    foreground=LIGHT_PINK,
-)
-thermalSensorCPU = widget.ThermalSensor(
-    foreground=LIGHT_PINK,
-    background=DARK_PURPLE,
-    foreground_alert=WARN_PINK,
-    threshold=45,
-    fmt='CPU:{}',
-    tag_sensor='Tccd1',
-    padding=5
-)
-thermalSensorGPU = widget.ThermalSensor(
-    foreground=LIGHT_PINK,
-    background=DARK_PURPLE,
-    foreground_alert=WARN_PINK,
-    threshold=75,
-    fmt='GPU:{}',
-    tag_sensor='edge',
-    padding=5
-)
+
+def keyboard_layout():
+    return widget.KeyboardLayout(
+        foreground=LIGHT_PINK,
+        background=DARK_PURPLE,
+        padding=5,
+        configured_keyboards=['us', 'rs latin', 'rs']
+    )
+
+
+def ram_memory():
+    return widget.Memory(
+        foreground=LIGHT_PINK,
+        background=DARK_PURPLE,
+        measure_mem='G',
+        format='{MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}',
+        mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')},
+        padding=5
+    )
+
+
+def check_package_updates():
+    return widget.CheckUpdates(
+        update_interval=1800,
+        distro="Arch_checkupdates",
+        display_format="{updates} ",
+        no_update_string=' ',
+        colour_have_updates=WARN_PINK,
+        colour_no_updates=LIGHT_PINK,
+        mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e yay -Syu')},
+        padding=5,
+        background=DARK_PURPLE
+    )
+
+
+def pulse_volume():
+    return widget.PulseVolume(
+        foreground=LIGHT_PINK,
+        background=DARK_PURPLE,
+        padding=5
+    )
+
+
+def disk_free(disk_fmt, disk_partition):
+    return widget.DF(
+        background=DARK_PURPLE,
+        foreground=LIGHT_PINK,
+        warn_color=WARN_PINK,
+        fmt=disk_fmt,
+        format='{f}GB',
+        partition=disk_partition,
+    )
+
+
+def system_clock():
+    return widget.Clock(
+        format="%e/%B/%Y %T",
+        background=DARK_PURPLE,
+        foreground=LIGHT_PINK,
+    )
+
+
+def thermal_sensor(sensor_fmt, sensor):
+    return widget.ThermalSensor(
+        foreground=LIGHT_PINK,
+        background=DARK_PURPLE,
+        foreground_alert=WARN_PINK,
+        threshold=45,
+        fmt=sensor_fmt,
+        tag_sensor=sensor,
+        padding=5
+    )
+
 
 #  ____
 # / ___|  ___ _ __ ___  ___ _ __  ___
@@ -384,35 +381,35 @@ screens = [
                 rounded=False,
                 disable_drag=True
             ),
-            divider,
+            divider(),
             widget_icon(''),
-            keyboardLayout,
-            divider,
+            keyboard_layout(),
+            divider(),
             widget_icon(''),
-            pulseVolume,
-            divider,
+            pulse_volume(),
+            divider(),
             notification_widget(),
-            divider,
+            divider(),
             widget_icon(''),
-            checkPackageUpdates,
-            divider,
+            check_package_updates(),
+            divider(),
             widget.Spacer(background=DARK_PURPLE),
-            systemClock,
+            system_clock(),
             widget.Spacer(background=DARK_PURPLE),
-            diskFreeRoot,
-            diskFreeHome,
-            diskFreeHDD,
-            divider,
+            disk_free(' {}', '/'),
+            disk_free(' {}', '/home'),
+            disk_free('', '/run/mount/sda1'),
+            divider(),
             widget_icon(''),
-            ramMemory,
-            divider,
+            ram_memory(),
+            divider(),
             widget_icon(''),
             widget.CPU(format='{load_percent}%', background=DARK_PURPLE, foreground=LIGHT_PINK),
-            divider,
+            divider(),
             widget_icon(''),
-            thermalSensorCPU,
-            thermalSensorGPU,
-            divider,
+            thermal_sensor('CPU:{}', 'Tccd1'),
+            thermal_sensor('GPU:{}', 'edge'),
+            divider(),
             widget.Systray(background=DARK_PURPLE, padding=5),
             widget.Spacer(background=DARK_PURPLE, length=15)
         ], 25),
@@ -437,31 +434,31 @@ screens = [
                 rounded=False,
                 disable_drag=True
             ),
-            divider,
+            divider(),
             widget_icon(''),
-            keyboardLayout,
-            divider,
+            keyboard_layout(),
+            divider(),
             widget_icon(''),
-            pulseVolume,
-            divider,
+            pulse_volume(),
+            divider(),
             notification_widget(),
-            divider,
+            divider(),
             widget_icon(''),
-            checkPackageUpdates,
-            divider,
+            check_package_updates(),
+            divider(),
             widget.Spacer(background=DARK_PURPLE),
-            systemClock,
+            system_clock(),
             widget.Spacer(background=DARK_PURPLE),
-            divider,
+            divider(),
             widget_icon(''),
-            ramMemory,
-            divider,
+            ram_memory(),
+            divider(),
             widget_icon(''),
             widget.CPU(format='{load_percent}%', background=DARK_PURPLE, foreground=LIGHT_PINK),
-            divider,
+            divider(),
             widget_icon(''),
-            thermalSensorCPU,
-            thermalSensorGPU,
+            thermal_sensor('CPU:{}', 'Tccd1'),
+            thermal_sensor('GPU:{}', 'edge'),
         ], 25),
     ),
     Screen(
@@ -484,31 +481,31 @@ screens = [
                 rounded=False,
                 disable_drag=True
             ),
-            divider,
+            divider(),
             widget_icon(''),
-            keyboardLayout,
-            divider,
+            keyboard_layout(),
+            divider(),
             widget_icon(''),
-            pulseVolume,
-            divider,
+            pulse_volume(),
+            divider(),
             notification_widget(),
-            divider,
+            divider(),
             widget_icon(''),
-            checkPackageUpdates,
-            divider,
+            check_package_updates(),
+            divider(),
             widget.Spacer(background=DARK_PURPLE),
-            systemClock,
+            system_clock(),
             widget.Spacer(background=DARK_PURPLE),
-            divider,
+            divider(),
             widget_icon(''),
-            ramMemory,
-            divider,
+            ram_memory(),
+            divider(),
             widget_icon(''),
             widget.CPU(format='{load_percent}%', background=DARK_PURPLE, foreground=LIGHT_PINK),
-            divider,
+            divider(),
             widget_icon(''),
-            thermalSensorCPU,
-            thermalSensorGPU,
+            thermal_sensor('CPU:{}', 'Tccd1'),
+            thermal_sensor('GPU:{}', 'edge'),
         ], 25),
     )
 ]
