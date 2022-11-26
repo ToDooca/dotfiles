@@ -294,6 +294,7 @@ def keyboard_layout():
 
 def ram_memory():
     return widget.Memory(
+        width=67,
         foreground=light_pink,
         background=dark_purple,
         measure_mem='G',
@@ -427,7 +428,7 @@ def screen_widgets(primary=False):
         ram_memory(),
         divider(),
         widget_icon(''),
-        widget.CPU(format='{load_percent}%', background=dark_purple, foreground=light_pink),
+        widget.CPU(format='{load_percent}%', background=dark_purple, foreground=light_pink, width=48),
         divider(),
         widget_icon(''),
         thermal_sensor('CPU:{}', 'Tccd1', 45),
