@@ -1,5 +1,5 @@
 #   ________        _        ____             __ _      ____
-#  / / /  _ \ _   _( )___   / ___|___  _ __  / _(_) __ _\ \ \   Copyright (c) 2021 Dušan Stanković
+#  / / /  _ \ _   _( )___   / ___|___  _ __  / _(_) __ _\ \ \   Copyright (c) 2022 Dušan Stanković
 # / / /| | | | | | |// __| | |   / _ \| '_ \| |_| |/ _` |\ \ \
 # \ \ \| |_| | |_| | \__ \ | |__| (_) | | | |  _| | (_| |/ / /
 #  \_\_\____/ \__,_| |___/  \____\___/|_| |_|_| |_|\__, /_/_/   http://www.github.com/ToDooca
@@ -427,6 +427,7 @@ screens = [
             screen_widgets(),
             25),
     ),
+    # Remove code block below for a two monitor setup
     Screen(
         top=bar.Bar(
             screen_widgets(),
