@@ -10,7 +10,6 @@ from libqtile import hook, qtile
 from libqtile import bar, layout, widget
 from libqtile.config import Drag, Group, Key, KeyChord, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
-from qtile_extras.popup.toolkit import PopupText
 
 mod = "mod4"
 alt = "mod1"
