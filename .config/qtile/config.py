@@ -359,6 +359,7 @@ def thermal_sensor(sensor_fmt, sensor, sensor_threshold):
 
 def music_widget():
     return widget.Mpris2(
+        fmt=' {}',
         background=dark_purple,
         foreground=light_pink,
         width=200,
@@ -366,7 +367,6 @@ def music_widget():
         objname='org.mpris.MediaPlayer2.spotify',
         display_metadata=['xesam:title', 'xesam:artist'],
         paused_text='',
-        playing_text=' {track}',
         stopped_text='',
         scroll_interval=0.025,
         mouse_callbacks={
