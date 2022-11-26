@@ -1,9 +1,9 @@
-#  ____        _        ____             __ _
-# |  _ \ _   _( )___   / ___|___  _ __  / _(_) __ _
-# | | | | | | |// __| | |   / _ \| '_ \| |_| |/ _` |
-# | |_| | |_| | \__ \ | |__| (_) | | | |  _| | (_| |
-# |____/ \__,_| |___/  \____\___/|_| |_|_| |_|\__, |
-#                                             |___/
+#   ________        _        ____             __ _      ____
+#  / / /  _ \ _   _( )___   / ___|___  _ __  / _(_) __ _\ \ \   Copyright (c) 2021 Dušan Stanković
+# / / /| | | | | | |// __| | |   / _ \| '_ \| |_| |/ _` |\ \ \
+# \ \ \| |_| | |_| | \__ \ | |__| (_) | | | |  _| | (_| |/ / /
+#  \_\_\____/ \__,_| |___/  \____\___/|_| |_|_| |_|\__, /_/_/   http://www.github.com/ToDooca
+#                                                  |___/
 import os
 import subprocess
 from libqtile import hook, qtile
@@ -17,6 +17,20 @@ shift = "shift"
 control = "control"
 terminal = "alacritty"
 browser = "brave"
+
+#   ____      _
+#  / ___|___ | | ___  _ __ ___
+# | |   / _ \| |/ _ \| '__/ __|
+# | |__| (_) | | (_) | |  \__ \
+#  \____\___/|_|\___/|_|  |___/
+#
+
+LIGHT_PURPLE = '#4d4c7d'
+PURPLE = '#827397'
+DARK_PURPLE = '#363062'
+WARN_PINK = '#ff5677'
+LIGHT_PINK = '#e9d5da'
+
 
 #  _  __          _     _           _
 # | |/ /___ _   _| |__ (_)_ __   __| |___
@@ -200,7 +214,7 @@ groups.append(
 #             |___/
 
 default_layout_settings = dict(
-    border_focus="#4d4c7d",
+    border_focus= LIGHT_PURPLE,
     border_normal="#e9d5da",
     border_width=2,
 )
@@ -239,8 +253,8 @@ extension_defaults = widget_defaults.copy()
 def notification_widget():
     return widget.TextBox(
         font='Fira Code',
-        background='#363062',
-        foreground='#827397',
+        background=DARK_PURPLE,
+        foreground=PURPLE,
         text='',
         mouse_callbacks={
             'Button1': lazy.spawn("dunstctl history-pop"),
@@ -254,26 +268,26 @@ def widget_icon(icon):
     return widget.TextBox(
         font='Fira Code',
         text=icon,
-        background='#363062',
-        foreground='#827397'
+        background=DARK_PURPLE,
+        foreground=PURPLE
     )
 
 
 divider = widget.TextBox(
     text='|',
-    background='#363062',
-    foreground='#4d4c7d'
+    background=DARK_PURPLE,
+    foreground=LIGHT_PURPLE
 )
 keyboardLayout = widget.KeyboardLayout(
-    foreground='#e9d5da',
-    background='#363062',
+    foreground=LIGHT_PINK,
+    background=DARK_PURPLE,
     padding=5,
     configured_keyboards=['us', 'rs latin', 'rs']
 
 )
 ramMemory = widget.Memory(
-    foreground='#e9d5da',
-    background='#363062',
+    foreground=LIGHT_PINK,
+    background=DARK_PURPLE,
     measure_mem='G',
     format='{MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}',
     mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')},
@@ -284,59 +298,59 @@ checkPackageUpdates = widget.CheckUpdates(
     distro="Arch_checkupdates",
     display_format="{updates} ",
     no_update_string=' ',
-    colour_have_updates='#ff5677',
-    colour_no_updates='#e9d5da',
+    colour_have_updates=WARN_PINK,
+    colour_no_updates=LIGHT_PINK,
     mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e yay -Syu')},
     padding=5,
-    background='#363062'
+    background=DARK_PURPLE
 )
 pulseVolume = widget.PulseVolume(
-    foreground='#e9d5da',
-    background='#363062',
+    foreground=LIGHT_PINK,
+    background=DARK_PURPLE,
     padding=5
 )
 diskFreeRoot = widget.DF(
-    background='#363062',
-    foreground='#e9d5da',
-    warn_color='#ff5677',
+    background=DARK_PURPLE,
+    foreground=LIGHT_PINK,
+    warn_color=WARN_PINK,
     fmt=' {}',
     format='{f}GB',
     partition="/",
 )
 diskFreeHome = widget.DF(
-    background='#363062',
-    foreground='#e9d5da',
-    warn_color='#ff5677',
+    background=DARK_PURPLE,
+    foreground=LIGHT_PINK,
+    warn_color=WARN_PINK,
     fmt=' {}',
     format='{f}GB',
     partition="/home",
 )
 diskFreeHDD = widget.DF(
-    background='#363062',
-    foreground='#e9d5da',
-    warn_color='#ff5677',
+    background=DARK_PURPLE,
+    foreground=LIGHT_PINK,
+    warn_color=WARN_PINK,
     fmt=' {}',
     format='{f}GB',
     partition="/run/mount/sda1",
 )
 systemClock = widget.Clock(
     format="%e/%B/%Y %T",
-    background='#363062',
-    foreground='#e9d5da',
+    background=DARK_PURPLE,
+    foreground=LIGHT_PINK,
 )
 thermalSensorCPU = widget.ThermalSensor(
-    foreground='#e9d5da',
-    background='#363062',
-    foreground_alert='#ff5677',
+    foreground=LIGHT_PINK,
+    background=DARK_PURPLE,
+    foreground_alert=WARN_PINK,
     threshold=45,
     fmt='CPU:{}',
     tag_sensor='Tccd1',
     padding=5
 )
 thermalSensorGPU = widget.ThermalSensor(
-    foreground='#e9d5da',
-    background='#363062',
-    foreground_alert='#ff5677',
+    foreground=LIGHT_PINK,
+    background=DARK_PURPLE,
+    foreground_alert=WARN_PINK,
     threshold=75,
     fmt='GPU:{}',
     tag_sensor='edge',
@@ -361,12 +375,12 @@ screens = [
                 padding_x=7,
                 borderwidth=3,
                 highlight_method='line',
-                background='#363062',
-                highlight_color='#363062',
-                inactive='#827397',
-                active='#e9d5da',
-                this_current_screen_border='#e9d5da',
-                this_screen_border='#e9d5da',
+                background=DARK_PURPLE,
+                highlight_color=DARK_PURPLE,
+                inactive=PURPLE,
+                active=LIGHT_PINK,
+                this_current_screen_border=LIGHT_PINK,
+                this_screen_border=LIGHT_PINK,
                 rounded=False,
                 disable_drag=True
             ),
@@ -382,9 +396,9 @@ screens = [
             widget_icon(''),
             checkPackageUpdates,
             divider,
-            widget.Spacer(background='#363062'),
+            widget.Spacer(background=DARK_PURPLE),
             systemClock,
-            widget.Spacer(background='#363062'),
+            widget.Spacer(background=DARK_PURPLE),
             diskFreeRoot,
             diskFreeHome,
             diskFreeHDD,
@@ -393,14 +407,14 @@ screens = [
             ramMemory,
             divider,
             widget_icon(''),
-            widget.CPU(format='{load_percent}%', background='#363062', foreground='#e9d5da'),
+            widget.CPU(format='{load_percent}%', background=DARK_PURPLE, foreground=LIGHT_PINK),
             divider,
             widget_icon(''),
             thermalSensorCPU,
             thermalSensorGPU,
             divider,
-            widget.Systray(background='#363062', padding=5),
-            widget.Spacer(background='#363062', length=15)
+            widget.Systray(background=DARK_PURPLE, padding=5),
+            widget.Spacer(background=DARK_PURPLE, length=15)
         ], 25),
     ),
     Screen(
@@ -414,12 +428,12 @@ screens = [
                 padding_x=7,
                 borderwidth=3,
                 highlight_method='line',
-                background='#363062',
-                highlight_color='#363062',
-                inactive='#827397',
-                active='#e9d5da',
-                this_current_screen_border='#e9d5da',
-                this_screen_border='#e9d5da',
+                background=DARK_PURPLE,
+                highlight_color=DARK_PURPLE,
+                inactive=PURPLE,
+                active=LIGHT_PINK,
+                this_current_screen_border=LIGHT_PINK,
+                this_screen_border=LIGHT_PINK,
                 rounded=False,
                 disable_drag=True
             ),
@@ -435,15 +449,15 @@ screens = [
             widget_icon(''),
             checkPackageUpdates,
             divider,
-            widget.Spacer(background='#363062'),
+            widget.Spacer(background=DARK_PURPLE),
             systemClock,
-            widget.Spacer(background='#363062'),
+            widget.Spacer(background=DARK_PURPLE),
             divider,
             widget_icon(''),
             ramMemory,
             divider,
             widget_icon(''),
-            widget.CPU(format='{load_percent}%', background='#363062', foreground='#e9d5da'),
+            widget.CPU(format='{load_percent}%', background=DARK_PURPLE, foreground=LIGHT_PINK),
             divider,
             widget_icon(''),
             thermalSensorCPU,
@@ -461,12 +475,12 @@ screens = [
                 padding_x=7,
                 borderwidth=3,
                 highlight_method='line',
-                background='#363062',
-                highlight_color='#363062',
-                inactive='#827397',
-                active='#e9d5da',
-                this_current_screen_border='#e9d5da',
-                this_screen_border='#e9d5da',
+                background=DARK_PURPLE,
+                highlight_color=DARK_PURPLE,
+                inactive=PURPLE,
+                active=LIGHT_PINK,
+                this_current_screen_border=LIGHT_PINK,
+                this_screen_border=LIGHT_PINK,
                 rounded=False,
                 disable_drag=True
             ),
@@ -482,15 +496,15 @@ screens = [
             widget_icon(''),
             checkPackageUpdates,
             divider,
-            widget.Spacer(background='#363062'),
+            widget.Spacer(background=DARK_PURPLE),
             systemClock,
-            widget.Spacer(background='#363062'),
+            widget.Spacer(background=DARK_PURPLE),
             divider,
             widget_icon(''),
             ramMemory,
             divider,
             widget_icon(''),
-            widget.CPU(format='{load_percent}%', background='#363062', foreground='#e9d5da'),
+            widget.CPU(format='{load_percent}%', background=DARK_PURPLE, foreground=LIGHT_PINK),
             divider,
             widget_icon(''),
             thermalSensorCPU,
