@@ -365,11 +365,10 @@ def music_widget():
         name='spotify',
         objname='org.mpris.MediaPlayer2.spotify',
         display_metadata=['xesam:title', 'xesam:artist'],
-        paused_text=' {track}',
+        paused_text='',
         playing_text=' {track}',
-        scroll_repeat=False,
+        stopped_text='',
         scroll_interval=0.025,
-        # scroll_step=2,
         mouse_callbacks={
             'Button1': lambda: qtile.cmd_spawn("playerctl -p spotify next"),
             'Button2': lambda: qtile.cmd_spawn("playerctl -p spotify play-pause"),
