@@ -367,6 +367,7 @@ def music_widget():
         paused_text='',
         stopped_text='',
         scroll_interval=0.025,
+        scroll_delay=3,
         mouse_callbacks={
             'Button1': lambda: qtile.cmd_spawn("playerctl -p spotify next"),
             'Button2': lambda: qtile.cmd_spawn("playerctl -p spotify play-pause"),
