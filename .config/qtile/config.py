@@ -31,7 +31,6 @@ dark_purple = '#363062'
 warn_pink = '#ff5677'
 light_pink = '#e9d5da'
 
-
 #  _  __          _     _           _
 # | |/ /___ _   _| |__ (_)_ __   __| |___
 # | ' // _ \ | | | '_ \| | '_ \ / _` / __|
@@ -359,7 +358,6 @@ def thermal_sensor(sensor_fmt, sensor, sensor_threshold):
 
 def music_widget():
     return widget.Mpris2(
-        fmt=' {}',
         background=dark_purple,
         foreground=light_pink,
         width=200,
@@ -378,6 +376,7 @@ def music_widget():
     )
 
 
+
 #  ____
 # / ___|  ___ _ __ ___  ___ _ __  ___
 # \___ \ / __| '__/ _ \/ _ \ '_ \/ __|
@@ -385,7 +384,6 @@ def music_widget():
 # |____/ \___|_|  \___|\___|_| |_|___/
 
 def screen_widgets(primary=False):
-
     widgets = [
         widget.GroupBox(
             font='Fira Code Bold',
@@ -421,6 +419,7 @@ def screen_widgets(primary=False):
         system_clock(),
         widget.Spacer(background=dark_purple),
         divider(),
+        widget_icon(''),
         music_widget(),
         divider(),
         widget_icon(''),
