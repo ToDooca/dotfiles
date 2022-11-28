@@ -122,6 +122,7 @@ keys = [
     # Music and audio related keybinds
     Key([mod, shift], "m",             lazy.group['scratchpad'].dropdown_toggle('pavucontrol')),
     Key([mod], "m",                    lazy.group['scratchpad'].dropdown_toggle('spotify')),
+    Key([mod, control], "m",           lazy.group['scratchpad'].dropdown_toggle('spt')),
     Key([mod, alt, control], "m",      lazy.spawn('stremio'), lazy.group['8'].toscreen()),
     Key([mod], "comma",                lazy.spawn("playerctl --player=spotify,%any previous")),
     Key([mod], "period",               lazy.spawn("playerctl --player=spotify,%any next")),
@@ -199,7 +200,8 @@ for i in groups:
 groups.append(
     ScratchPad("scratchpad", [
         # define a drop down terminal.
-        DropDown("term", terminal, opacity=0.75, height=0.5, width=0.8),
+        DropDown("term", terminal, y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
+        DropDown("spt", terminal+" -e spt", y=0.13, x=0.17, opacity=0.75, height=0.7, width=0.65),
         DropDown("spotify", "spotify", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
         DropDown("Steam", "Steam", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
         DropDown("pavucontrol", "pavucontrol", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
