@@ -200,7 +200,7 @@ for i in groups:
 groups.append(
     ScratchPad("scratchpad", [
         # define a drop down terminal.
-        DropDown("term", terminal, y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
+        DropDown("term", terminal, y=0.13, x=0.17, opacity=1, height=0.9, width=0.65),
         DropDown("spt", terminal+" -e spt", y=0.13, x=0.17, opacity=0.75, height=0.7, width=0.65),
         DropDown("spotify", "spotify", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
         DropDown("Steam", "Steam", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
