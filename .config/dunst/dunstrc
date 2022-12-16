@@ -19,7 +19,7 @@
 
     #geometry = "1024x4-16+20"
 	origin = top-right
-	offset = 18x42
+	offset = 22x58
 	width = (250, 400)
 	height = 1100
 
@@ -204,7 +204,7 @@
     # corners.
     # The radius will be automatically lowered if it exceeds half of the
     # notification height to avoid clipping text and/or icons.
-    corner_radius = 5
+    corner_radius = 12
 
     ### Legacy
 

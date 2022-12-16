@@ -10,6 +10,8 @@ from libqtile import hook, qtile
 from libqtile import bar, layout, widget
 from libqtile.config import Drag, Group, Key, KeyChord, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
+from qtile_extras.widget.decorations import RectDecoration
+from qtile_extras import widget as qtile_extras_widget
 
 mod = "mod4"
 alt = "mod1"
@@ -30,6 +32,7 @@ light_purple = '#4d4c7d'
 dark_purple = '#363062'
 warn_pink = '#ff5677'
 light_pink = '#e9d5da'
+picom_transparent = '#00000000'
 
 #  _  __          _     _           _
 # | |/ /___ _   _| |__ (_)_ __   __| |___
@@ -201,7 +204,7 @@ groups.append(
     ScratchPad("scratchpad", [
         # define a drop down terminal.
         DropDown("term", terminal, y=0.13, x=0.17, opacity=1, height=0.9, width=0.65),
-        DropDown("spt", terminal+" -e spt", y=0.13, x=0.17, opacity=0.75, height=0.7, width=0.65),
+        DropDown("spt", terminal + " -e spt", y=0.13, x=0.17, opacity=0.75, height=0.7, width=0.65),
         DropDown("spotify", "spotify", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
         DropDown("Steam", "Steam", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
         DropDown("pavucontrol", "pavucontrol", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
@@ -247,17 +250,25 @@ layouts = [
 widget_defaults = dict(
     font="Fira Code Bold",
     fontsize=14,
-    padding=3,
+    padding=10,
 )
+decoration_group = {
+    "decorations": [
+        RectDecoration(colour=dark_purple, radius=12, filled=True, padding_y=4, group=True)
+    ],
+    "decoration_width": 0,
+    "decoration_height": 0,
+}
 extension_defaults = widget_defaults.copy()
 
 
 def notification_widget():
-    return widget.TextBox(
+    return qtile_extras_widget.TextBox(
+        **decoration_group,
         font='Fira Code',
-        background=dark_purple,
         foreground=purple,
         text='',
+        padding=10,
         mouse_callbacks={
             'Button1': lazy.spawn("dunstctl history-pop"),
             'Button2': lazy.spawn("dunstctl set-paused toggle"),
@@ -267,45 +278,36 @@ def notification_widget():
 
 
 def widget_icon(icon):
-    return widget.TextBox(
+    return qtile_extras_widget.TextBox(
+        **decoration_group,
         font='Fira Code',
         text=icon,
-        background=dark_purple,
-        foreground=purple
-    )
-
-
-def divider():
-    return widget.TextBox(
-        text='|',
-        background=dark_purple,
-        foreground=light_purple
+        foreground=purple,
     )
 
 
 def keyboard_layout():
-    return widget.KeyboardLayout(
+    return qtile_extras_widget.KeyboardLayout(
+        **decoration_group,
         foreground=light_pink,
-        background=dark_purple,
-        padding=5,
         configured_keyboards=['us', 'rs latin', 'rs']
     )
 
 
 def ram_memory():
-    return widget.Memory(
-        width=67,
+    return qtile_extras_widget.Memory(
+        **decoration_group,
+        width=80,
         foreground=light_pink,
-        background=dark_purple,
         measure_mem='G',
         format='{MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}',
         mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')},
-        padding=5
     )
 
 
 def check_package_updates():
-    return widget.CheckUpdates(
+    return qtile_extras_widget.CheckUpdates(
+        **decoration_group,
         update_interval=1800,
         distro="Arch_checkupdates",
         display_format="{updates} ",
@@ -313,22 +315,19 @@ def check_package_updates():
         colour_have_updates=warn_pink,
         colour_no_updates=light_pink,
         mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e yay -Syu')},
-        padding=5,
-        background=dark_purple
     )
 
 
 def pulse_volume():
-    return widget.PulseVolume(
+    return qtile_extras_widget.PulseVolume(
+        **decoration_group,
         foreground=light_pink,
-        background=dark_purple,
-        padding=5
     )
 
 
 def disk_free(disk_fmt, disk_partition):
-    return widget.DF(
-        background=dark_purple,
+    return qtile_extras_widget.DF(
+        **decoration_group,
         foreground=light_pink,
         warn_color=warn_pink,
         fmt=disk_fmt,
@@ -338,29 +337,28 @@ def disk_free(disk_fmt, disk_partition):
 
 
 def system_clock():
-    return widget.Clock(
+    return qtile_extras_widget.Clock(
+        **decoration_group,
         format="%e/%B/%Y %T",
-        background=dark_purple,
         foreground=light_pink,
         popup_text=['%A, %B %d %Y', 'Time in UTC: %T'],
     )
 
 
 def thermal_sensor(sensor_fmt, sensor, sensor_threshold):
-    return widget.ThermalSensor(
+    return qtile_extras_widget.ThermalSensor(
+        **decoration_group,
         foreground=light_pink,
-        background=dark_purple,
         foreground_alert=warn_pink,
         threshold=sensor_threshold,
         fmt=sensor_fmt,
         tag_sensor=sensor,
-        padding=5
     )
 
 
 def music_widget():
-    return widget.Mpris2(
-        background=dark_purple,
+    return qtile_extras_widget.Mpris2(
+        **decoration_group,
         foreground=light_pink,
         width=200,
         name='spotify',
@@ -375,7 +373,16 @@ def music_widget():
             'Button2': lambda: qtile.cmd_spawn("playerctl -p spotify play-pause"),
             'Button3': lambda: qtile.cmd_spawn("playerctl -p spotify previous"),
         },
-        padding=5,
+    )
+
+
+def drawer(widgets_arr):
+    return qtile_extras_widget.WidgetBox(
+        **decoration_group,
+        foreground=light_pink,
+        text_open='',
+        text_closed='  ',
+        widgets=widgets_arr,
     )
 
 
@@ -387,7 +394,9 @@ def music_widget():
 
 def screen_widgets(primary=False):
     widgets = [
-        widget.GroupBox(
+        widget.Spacer(length=7),
+        qtile_extras_widget.GroupBox(
+            **decoration_group,
             font='Fira Code Bold',
             fontsize=14,
             margin_y=3,
@@ -395,8 +404,10 @@ def screen_widgets(primary=False):
             padding_y=7,
             padding_x=7,
             borderwidth=3,
-            highlight_method='line',
-            background=dark_purple,
+            highlight_method='text',
+            urgent_alert_method='text',
+            urgent_border=warn_pink,
+            border_color=dark_purple,
             highlight_color=dark_purple,
             inactive=purple,
             active=light_pink,
@@ -405,40 +416,37 @@ def screen_widgets(primary=False):
             rounded=False,
             disable_drag=True
         ),
-        divider(),
+        widget.Spacer(length=3),
         widget_icon(''),
         keyboard_layout(),
-        divider(),
+        widget.Spacer(length=3),
         widget_icon(''),
         pulse_volume(),
-        divider(),
-        notification_widget(),
-        divider(),
+        widget.Spacer(length=3),
         widget_icon(''),
         check_package_updates(),
-        divider(),
-        widget.Spacer(background=dark_purple),
+        widget.Spacer(length=3),
+        notification_widget(),
+        widget.Spacer(),
         system_clock(),
-        widget.Spacer(background=dark_purple),
-        divider(),
+        widget.Spacer(),
         widget_icon(''),
         music_widget(),
-        divider(),
+        widget.Spacer(length=3),
         widget_icon(''),
         ram_memory(),
-        divider(),
+        widget.Spacer(length=3),
         widget_icon(''),
-        widget.CPU(format='{load_percent}%', background=dark_purple, foreground=light_pink, width=48),
-        divider(),
+        qtile_extras_widget.CPU(format='{load_percent}%', foreground=light_pink, width=65, **decoration_group),
+        widget.Spacer(length=3),
         widget_icon(''),
-        thermal_sensor('CPU:{}', 'Tccd1', 45),
-        thermal_sensor('GPU:{}', 'edge', 75),
+        drawer([thermal_sensor('CPU:{}', 'Tccd1', 45), thermal_sensor('GPU:{}', 'edge', 75)]),
+        widget.Spacer(length=7),
     ]
     if primary:
         widgets.extend([
-            divider(),
-            widget.Systray(background=dark_purple, padding=5),
-            widget.Spacer(background=dark_purple, length=15)
+            qtile_extras_widget.Systray(),
+            widget.Spacer(length=7),
         ])
         return widgets
     return widgets
@@ -448,18 +456,21 @@ screens = [
     Screen(
         top=bar.Bar(
             screen_widgets(primary=True),
-            25),
+            38,
+            background=picom_transparent),
     ),
     Screen(
         top=bar.Bar(
             screen_widgets(),
-            25),
+            38,
+            background=picom_transparent),
     ),
     # Remove code block below for a two monitor setup
     Screen(
         top=bar.Bar(
             screen_widgets(),
-            25),
+            38,
+            background=picom_transparent),
     ),
 ]
 
