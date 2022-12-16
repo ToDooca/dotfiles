@@ -161,12 +161,12 @@ keys = [
 #                       |_|
 
 groups = [
-    Group('1', matches=[Match(wm_class='brave')], layout="columns"),
-    Group('2', layout="columns"),
-    Group('3', layout="columns"),
-    Group('4', layout="columns"),
-    Group('5', layout="columns"),
-    Group('6', label="", layout="stack", matches=[
+    Group('1', label="", matches=[Match(wm_class='brave')], layout="columns"),
+    Group('2', label="", layout="columns"),
+    Group('3', label="", layout="columns"),
+    Group('4', label="", layout="columns"),
+    Group('5', label="", layout="columns"),
+    Group('6', label="", layout="stack", matches=[
         Match(wm_class="jetbrains-idea"),
         Match(wm_class="jetbrains-webstorm"),
         Match(wm_class="jetbrains-pycharm"),
@@ -386,6 +386,12 @@ def drawer(widgets_arr):
     )
 
 
+def group():
+    return qtile_extras_widget.AGroupBox(
+        **decoration_group,
+    )
+
+
 #  ____
 # / ___|  ___ _ __ ___  ___ _ __  ___
 # \___ \ / __| '__/ _ \/ _ \ '_ \/ __|
@@ -397,24 +403,22 @@ def screen_widgets(primary=False):
         widget.Spacer(length=7),
         qtile_extras_widget.GroupBox(
             **decoration_group,
-            font='Fira Code Bold',
-            fontsize=14,
+            font='Fira Code',
+            fontsize=16,
             margin_y=3,
-            margin_x=0,
-            padding_y=7,
-            padding_x=7,
-            borderwidth=3,
-            highlight_method='text',
-            urgent_alert_method='text',
+            margin_x=8,
+            padding_y=2,
+            padding_x=3,
+            borderwidth=1.2,
             urgent_border=warn_pink,
-            border_color=dark_purple,
-            highlight_color=dark_purple,
+            urgent_text=warn_pink,
             inactive=purple,
             active=light_pink,
             this_current_screen_border=light_pink,
             this_screen_border=light_pink,
-            rounded=False,
-            disable_drag=True
+            other_current_screen_border=purple,
+            other_screen_border=purple,
+            disable_drag=True,
         ),
         widget.Spacer(length=3),
         widget_icon(''),
