@@ -52,6 +52,7 @@ keys = [
     Key([mod], "a",                 lazy.spawn('rofi -show combi'),           desc="Open rofi combi"),
     Key([mod], "d",                 lazy.spawn('rofi -show drun'),            desc="Open drun drun"),
     Key([mod], "w",                 lazy.spawn(browser),                      desc="Launch default browser"),
+    Key([mod, shift], "w",          lazy.spawn('google-chrome-stable'),       desc="Launch google chrome"),
     Key([mod, shift], "f",          lazy.window.toggle_floating(),            desc="Toggle Floating layout"),
     Key([mod, alt], "f",            lazy.window.toggle_maximize(),            desc="Toggle Full-screen layout"),
     Key([mod], "f",                 lazy.window.toggle_fullscreen(),          desc="Toggle Full-screen layout"),
@@ -175,11 +176,11 @@ groups = [
         Match(wm_class="Steam"),
         Match(wm_class="lutris"),
     ]),
-    Group('8', label="", layout="columns", matches=[
+    Group('8', label="", layout="columns", matches=[
         Match(wm_class="netflix"),
         Match(wm_class="stremio"),
     ]),
-    Group('9', label="", layout="columns", matches=[
+    Group('9', label="", layout="columns", matches=[
         Match(wm_class="telegram-desktop"),
         Match(wm_class="discord"),
         Match(wm_class="whatsapp-for-linux"),
