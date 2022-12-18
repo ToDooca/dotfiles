@@ -253,6 +253,7 @@ widget_defaults = dict(
     fontsize=14,
     padding=10,
 )
+
 decoration_group = {
     "decorations": [
         RectDecoration(colour=dark_purple, radius=12, filled=True, padding_y=4, group=True)
@@ -260,6 +261,7 @@ decoration_group = {
     "decoration_width": 0,
     "decoration_height": 0,
 }
+
 extension_defaults = widget_defaults.copy()
 
 
@@ -278,7 +280,7 @@ def notification_widget():
     )
 
 
-def widget_icon(icon):
+def widget_icon(icon: str):
     return qtile_extras_widget.TextBox(
         **decoration_group,
         font='Fira Code',
@@ -326,7 +328,7 @@ def pulse_volume():
     )
 
 
-def disk_free(disk_fmt, disk_partition):
+def disk_free(disk_fmt: str, disk_partition: str):
     return qtile_extras_widget.DF(
         **decoration_group,
         foreground=light_pink,
@@ -346,7 +348,7 @@ def system_clock():
     )
 
 
-def thermal_sensor(sensor_fmt, sensor, sensor_threshold):
+def thermal_sensor(sensor_fmt: str, sensor: str, sensor_threshold: int):
     return qtile_extras_widget.ThermalSensor(
         **decoration_group,
         foreground=light_pink,
@@ -377,7 +379,7 @@ def music_widget():
     )
 
 
-def drawer(widgets_arr):
+def drawer(widgets_arr: list):
     return qtile_extras_widget.WidgetBox(
         **decoration_group,
         foreground=light_pink,
@@ -387,9 +389,9 @@ def drawer(widgets_arr):
     )
 
 
-def group():
-    return qtile_extras_widget.AGroupBox(
-        **decoration_group,
+def spacer(spacer_width: int):
+    return widget.Spacer(
+        length=spacer_width
     )
 
 
@@ -401,7 +403,7 @@ def group():
 
 def screen_widgets(primary=False):
     widgets = [
-        widget.Spacer(length=7),
+        spacer(7),
         qtile_extras_widget.GroupBox(
             **decoration_group,
             font='Fira Code',
@@ -421,37 +423,37 @@ def screen_widgets(primary=False):
             other_screen_border=purple,
             disable_drag=True,
         ),
-        widget.Spacer(length=3),
+        spacer(3),
         widget_icon(''),
         keyboard_layout(),
-        widget.Spacer(length=3),
+        spacer(3),
         widget_icon(''),
         pulse_volume(),
-        widget.Spacer(length=3),
+        spacer(3),
         widget_icon(''),
         check_package_updates(),
-        widget.Spacer(length=3),
+        spacer(3),
         notification_widget(),
         widget.Spacer(),
         system_clock(),
         widget.Spacer(),
         widget_icon(''),
         music_widget(),
-        widget.Spacer(length=3),
+        spacer(3),
         widget_icon(''),
         ram_memory(),
-        widget.Spacer(length=3),
+        spacer(3),
         widget_icon(''),
         qtile_extras_widget.CPU(format='{load_percent}%', foreground=light_pink, width=65, **decoration_group),
-        widget.Spacer(length=3),
+        spacer(3),
         widget_icon(''),
         drawer([thermal_sensor('CPU:{}', 'Tccd1', 45), thermal_sensor('GPU:{}', 'edge', 75)]),
-        widget.Spacer(length=7),
+        spacer(7),
     ]
     if primary:
         widgets.extend([
             qtile_extras_widget.Systray(),
-            widget.Spacer(length=7),
+            spacer(7),
         ])
         return widgets
     return widgets
