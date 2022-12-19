@@ -50,7 +50,8 @@ keys = [
                                     lazy.spawn("xmodmap /home/du/.Xmodmap"),  desc="Reload the config"),
     Key([mod, control], "q",        lazy.shutdown(),                          desc="Shutdown Qtile"),
     Key([mod], "a",                 lazy.spawn('rofi -show combi'),           desc="Open rofi combi"),
-    Key([mod], "d",                 lazy.spawn('rofi -show drun'),            desc="Open drun drun"),
+    Key([mod], "d",                 lazy.spawn('rofi -show drun'),            desc="Open rofi drun"),
+    Key([alt], "tab",               lazy.spawn('rofi -show window'),          desc="Open rofi windows"),
     Key([mod], "w",                 lazy.spawn(browser),                      desc="Launch default browser"),
     Key([mod, shift], "w",          lazy.spawn('google-chrome-stable'),       desc="Launch google chrome"),
     Key([mod, shift], "f",          lazy.window.toggle_floating(),            desc="Toggle Floating layout"),
@@ -100,7 +101,7 @@ keys = [
     # Keyboard Layouts
     Key([mod], "l",                 lazy.spawn("setxkbmap -layout us"),
                                     lazy.spawn("xmodmap /home/du/.Xmodmap"),  desc='Toggle us layout'),
-    Key([alt], "Tab",               lazy.widget["keyboardlayout"].next_keyboard(),
+    Key([control], "Tab",           lazy.widget["keyboardlayout"].next_keyboard(),
                                     lazy.spawn("xmodmap /home/du/.Xmodmap"),  desc='Cycle through keyboard layouts'),
 
     # Power options
