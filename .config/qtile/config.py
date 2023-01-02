@@ -512,6 +512,7 @@ floating_layout = layout.Floating(
         Match(wm_class="Steam"),
         Match(wm_class="lutris"),
         Match(wm_class="battle.net.exe"),
+        Match(wm_class="ArenaTracker"),
         Match(wm_class="confirmreset"),  # gitk
         Match(wm_class="makebranch"),  # gitk
         Match(wm_class="maketag"),  # gitk
