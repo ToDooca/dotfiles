@@ -13,12 +13,20 @@ from libqtile.lazy import lazy
 from qtile_extras.widget.decorations import RectDecoration
 from qtile_extras import widget as qtile_extras_widget
 
+
+terminal = os.getenv("terminal", "alacritty")
+browser = os.getenv("browser", "brave")
+
+
 mod = "mod4"
 alt = "mod1"
 shift = "shift"
 control = "control"
-terminal = "alacritty"
-browser = "brave"
+mouse_left = "Button1"
+mouse_middle = "Button2"
+mouse_right = "Button3"
+scroll_up = "Button4"
+scroll_down = "Button5"
 
 #   ____      _
 #  / ___|___ | | ___  _ __ ___
@@ -277,9 +285,9 @@ def notification_widget():
         text='',
         padding=10,
         mouse_callbacks={
-            'Button1': lazy.spawn("dunstctl history-pop"),
-            'Button2': lazy.spawn("dunstctl set-paused toggle"),
-            'Button3': lazy.spawn("dunstctl close-all")
+            mouse_left: lazy.spawn("dunstctl history-pop"),
+            mouse_middle: lazy.spawn("dunstctl set-paused toggle"),
+            mouse_right: lazy.spawn("dunstctl close-all")
         }
     )
 
@@ -308,7 +316,7 @@ def ram_memory():
         foreground=light_pink,
         measure_mem='G',
         format='{MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}',
-        mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')},
+        mouse_callbacks={mouse_left: lambda: qtile.cmd_spawn(terminal + ' -e htop')},
     )
 
 
@@ -321,7 +329,7 @@ def check_package_updates():
         no_update_string=' ',
         colour_have_updates=warn_pink,
         colour_no_updates=light_pink,
-        mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e yay -Syu')},
+        mouse_callbacks={mouse_left: lambda: qtile.cmd_spawn(terminal + ' -e yay -Syu')},
     )
 
 
@@ -376,9 +384,9 @@ def music_widget():
         scroll_interval=0.025,
         scroll_delay=3,
         mouse_callbacks={
-            'Button1': lambda: qtile.cmd_spawn("playerctl -p spotify next"),
-            'Button2': lambda: qtile.cmd_spawn("playerctl -p spotify play-pause"),
-            'Button3': lambda: qtile.cmd_spawn("playerctl -p spotify previous"),
+            mouse_left: lambda: qtile.cmd_spawn("playerctl -p spotify next"),
+            mouse_middle: lambda: qtile.cmd_spawn("playerctl -p spotify play-pause"),
+            mouse_right: lambda: qtile.cmd_spawn("playerctl -p spotify previous"),
         },
     )
 
@@ -493,8 +501,8 @@ screens = [
 
 # Drag floating layouts.
 mouse = [
-    Drag([mod], "Button2", lazy.window.set_position_floating(), start=lazy.window.get_position()),
-    Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
+    Drag([mod], mouse_middle, lazy.window.set_position_floating(), start=lazy.window.get_position()),
+    Drag([mod], mouse_right, lazy.window.set_size_floating(), start=lazy.window.get_size()),
 ]
 
 #  _   _             _
