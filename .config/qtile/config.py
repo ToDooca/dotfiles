@@ -6,7 +6,6 @@
 #                                                  |___/
 import os
 import subprocess
-from abc import ABC, abstractmethod
 from libqtile import hook, qtile
 from libqtile import bar, layout, widget
 from libqtile.config import Drag, Group, Key, KeyChord, Match, Screen, ScratchPad, DropDown
