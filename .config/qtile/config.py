@@ -294,7 +294,7 @@ def headset_battery():
     return qtile_extras_widget.GenPollText(
         **decoration_group,
         foreground=light_pink,
-        func=(lambda: subprocess.getoutput("headsetcontrol -b | grep -Eo '[0-9][0-9]%'")),
+        func=(lambda: subprocess.getoutput("headsetcontrol -b | grep -Eo '[0-9]{1,3}%'")),
         update_interval=900
     )
 
