@@ -6,6 +6,7 @@
 #                                                  |___/
 import os
 import subprocess
+from abc import ABC, abstractmethod
 from libqtile import hook, qtile
 from libqtile import bar, layout, widget
 from libqtile.config import Drag, Group, Key, KeyChord, Match, Screen, ScratchPad, DropDown
@@ -280,15 +281,22 @@ extension_defaults = widget_defaults.copy()
 def notification_widget():
     return qtile_extras_widget.TextBox(
         **decoration_group,
-        font='Fira Code',
         foreground=purple,
         text='',
-        padding=10,
         mouse_callbacks={
             mouse_left: lazy.spawn("dunstctl history-pop"),
             mouse_middle: lazy.spawn("dunstctl set-paused toggle"),
             mouse_right: lazy.spawn("dunstctl close-all")
         }
+    )
+
+
+def headset_battery():
+    return qtile_extras_widget.GenPollText(
+        **decoration_group,
+        foreground=light_pink,
+        func=(lambda: subprocess.getoutput("headsetcontrol -b | grep -Eo '[0-9][0-9]%'")),
+        update_interval=900
     )
 
 
@@ -441,6 +449,9 @@ def screen_widgets(primary=False):
         spacer(3),
         widget_icon(''),
         pulse_volume(),
+        spacer(3),
+        widget_icon('󰋋'),
+        headset_battery(),
         spacer(3),
         widget_icon(''),
         check_package_updates(),
