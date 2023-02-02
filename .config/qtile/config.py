@@ -298,6 +298,7 @@ def headset_battery():
                 " | sed 's/Charging/󰢟/;s/Unavailable/󰂲/;s/No supported headset found//'"
             )
         ),
+        mouse_callbacks={"Button1": lazy.widget["genpolltext"].function(lambda w: w.update(w.poll()))},
         update_interval=600
     )
 
