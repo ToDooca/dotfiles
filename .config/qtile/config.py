@@ -13,10 +13,8 @@ from libqtile.lazy import lazy
 from qtile_extras.widget.decorations import RectDecoration
 from qtile_extras import widget as qtile_extras_widget
 
-
 terminal = os.getenv("terminal", "alacritty")
 browser = os.getenv("browser", "brave")
-
 
 mod = "mod4"
 alt = "mod1"
@@ -294,8 +292,13 @@ def headset_battery():
     return qtile_extras_widget.GenPollText(
         **decoration_group,
         foreground=light_pink,
-        func=(lambda: subprocess.getoutput("headsetcontrol -b | grep -Eo '[0-9]{1,3}%'")),
-        update_interval=900
+        func=(
+            lambda: subprocess.getoutput(
+                "headsetcontrol -b 2>&1 | grep  -Eo '([0-9]{1,3}%|Charging|Unavailable|No supported headset found)'"
+                " | sed 's/Charging/󰢟/;s/Unavailable/󰂲/;s/No supported headset found//'"
+            )
+        ),
+        update_interval=600
     )
 
 
