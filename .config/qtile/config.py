@@ -299,7 +299,7 @@ def headset_battery():
             )
         ),
         mouse_callbacks={"Button1": lazy.widget["genpolltext"].function(lambda w: w.update(w.poll()))},
-        update_interval=600
+        update_interval=180
     )
 
 
