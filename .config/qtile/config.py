@@ -296,7 +296,7 @@ def headset_battery():
             lambda: subprocess.getoutput(
                 "headsetcontrol -b 2>&1 | grep  -Eo '([0-9]{1,3}%|Charging|Unavailable|No supported headset found)'"
                 " | sed 's/Charging/󰢟/;s/Unavailable/󰂲/;s/No supported headset found//"
-                ";s/25%/󰁺/;s/50%/󰁽/;s/75%/󰁿/;s/100%//'"
+                ";s/25%/󰁺/;s/50%/󰁽/;s/75%/󰂀/;s/100%//'"
             )
         ),
         mouse_callbacks={"Button1": lazy.widget["genpolltext"].function(lambda w: w.update(w.poll()))},
@@ -545,13 +545,13 @@ floating_layout = layout.Floating(
     ], **default_layout_settings)
 # When using the Wayland backend, this can be used to configure input devices.
 wl_input_rules = None
-bring_front_click = False
+bring_front_click = "floating_only"
 auto_fullscreen = True
 follow_mouse_focus = True
 cursor_warp = False
 focus_on_window_activation = "smart"
 reconfigure_screens = True
-auto_minimize = True
+auto_minimize = False
 wmname = "LG3D"
 
 
