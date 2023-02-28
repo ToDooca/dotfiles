@@ -531,6 +531,7 @@ floating_layout = layout.Floating(
         # Run the utility of `xprop` to see the wm class and name of an X client.
         *layout.Floating.default_float_rules,
         Match(wm_class="spotify"),
+        Match(wm_class="nitrogen"),
         Match(wm_class="pavucontrol"),
         Match(wm_class="Steam"),
         Match(wm_class="lutris"),
