@@ -172,11 +172,11 @@ keys = [
 #                       |_|
 
 groups = [
-    Group('1', label="", matches=[Match(wm_class='brave')], layout="columns"),
-    Group('2', label="", layout="columns"),
-    Group('3', label="", layout="columns"),
-    Group('4', label="", layout="columns"),
-    Group('5', label="", layout="columns"),
+    Group('1', label="", matches=[Match(wm_class='brave')], layout="columns"),
+    Group('2', label="", layout="columns"),
+    Group('3', label="", layout="columns"),
+    Group('4', label="󰉓", layout="columns"),
+    Group('5', label="󰒓", layout="columns"),
     Group('6', label="", layout="stack", matches=[
         Match(wm_class="jetbrains-idea"),
         Match(wm_class="jetbrains-webstorm"),
@@ -190,7 +190,7 @@ groups = [
         Match(wm_class="netflix"),
         Match(wm_class="stremio"),
     ]),
-    Group('9', label="", layout="columns", matches=[
+    Group('9', label="", layout="columns", matches=[
         Match(wm_class="telegram-desktop"),
         Match(wm_class="discord"),
         Match(wm_class="whatsapp-for-linux"),
@@ -279,7 +279,7 @@ def notification_widget():
     return qtile_extras_widget.TextBox(
         **decoration_group,
         foreground=purple,
-        text='',
+        text='',
         mouse_callbacks={
             mouse_left: lazy.spawn("dunstctl history-pop"),
             mouse_middle: lazy.spawn("dunstctl set-paused toggle"),
@@ -451,7 +451,7 @@ def screen_widgets(primary=False):
         widget_icon(''),
         keyboard_layout(),
         spacer(3),
-        widget_icon(''),
+        widget_icon('󰕾'),
         pulse_volume(),
         spacer(3),
         widget_icon('󰋋'),
@@ -467,10 +467,10 @@ def screen_widgets(primary=False):
         widget_icon(''),
         music_widget(),
         spacer(3),
-        widget_icon(''),
+        widget_icon(''),
         ram_memory(),
         spacer(3),
-        widget_icon(''),
+        widget_icon(''),
         qtile_extras_widget.CPU(format='{load_percent}%', foreground=light_pink, width=65, **decoration_group),
         spacer(3),
         widget_icon(''),
