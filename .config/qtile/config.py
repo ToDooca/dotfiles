@@ -230,8 +230,8 @@ groups.append(
 #             |___/
 
 default_layout_settings = dict(
-    border_focus=light_purple,
-    border_normal=light_pink,
+    border_focus=light_pink,
+    border_normal=light_purple,
     border_width=2,
 )
 
@@ -292,11 +292,13 @@ def headset_battery():
     return qtile_extras_widget.GenPollText(
         **decoration_group,
         foreground=light_pink,
+        font='Fira Code',
+        fontsize=17,
         func=(
             lambda: subprocess.getoutput(
                 "headsetcontrol -b 2>&1 | grep  -Eo '([0-9]{1,3}%|Charging|Unavailable|No supported headset found)'"
-                " | sed 's/Charging/󰢟/;s/Unavailable/󰂲/;s/No supported headset found//"
-                ";s/25%/󰁺/;s/50%/󰁽/;s/75%/󰂀/;s/100%//'"
+                " | sed 's/Charging/󰂄/;s/Unavailable/󰥇/;s/No supported headset found//"
+                ";s/25%/󱊡/;s/50%/󱊢/;s/75%/󱊢/;s/100%/󱊣/'"
             )
         ),
         mouse_callbacks={"Button1": lazy.widget["genpolltext"].function(lambda w: w.update(w.poll()))},
