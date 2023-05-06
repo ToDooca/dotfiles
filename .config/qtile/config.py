@@ -190,7 +190,7 @@ groups = [
         Match(wm_class="netflix"),
         Match(wm_class="stremio"),
     ]),
-    Group('9', label="", layout="columns", matches=[
+    Group('9', label="", layout="columns", matches=[
         Match(wm_class="telegram-desktop"),
         Match(wm_class="discord"),
         Match(wm_class="whatsapp-for-linux"),
