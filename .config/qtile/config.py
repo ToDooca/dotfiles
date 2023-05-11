@@ -385,26 +385,6 @@ def thermal_sensor(sensor_fmt: str, sensor: str, sensor_threshold: int):
     )
 
 
-def music_widget():
-    return qtile_extras_widget.Mpris2(
-        **decoration_group,
-        foreground=light_pink,
-        width=200,
-        name='spotify',
-        objname='org.mpris.MediaPlayer2.spotify',
-        display_metadata=['xesam:title', 'xesam:artist'],
-        paused_text='',
-        stopped_text='',
-        scroll_interval=0.025,
-        scroll_delay=3,
-        mouse_callbacks={
-            mouse_left: lambda: qtile.cmd_spawn("playerctl -p spotify next"),
-            mouse_middle: lambda: qtile.cmd_spawn("playerctl -p spotify play-pause"),
-            mouse_right: lambda: qtile.cmd_spawn("playerctl -p spotify previous"),
-        },
-    )
-
-
 def drawer(widgets_arr: list):
     return qtile_extras_widget.WidgetBox(
         **decoration_group,
@@ -450,24 +430,22 @@ def screen_widgets(primary=False):
             disable_drag=True,
         ),
         spacer(3),
-        widget_icon(''),
-        keyboard_layout(),
-        spacer(3),
         widget_icon('󰕾'),
         pulse_volume(),
         spacer(3),
         widget_icon('󰋋'),
         headset_battery(),
         spacer(3),
-        widget_icon(''),
-        check_package_updates(),
-        spacer(3),
         notification_widget(),
         widget.Spacer(),
         system_clock(),
         widget.Spacer(),
-        widget_icon(''),
-        music_widget(),
+        spacer(3),
+        widget_icon(''),
+        check_package_updates(),
+        spacer(3),
+        widget_icon(''),
+        keyboard_layout(),
         spacer(3),
         widget_icon(''),
         ram_memory(),
