@@ -155,6 +155,7 @@ keys = [
     Key([mod], "XF86AudioLowerVolume", lazy.spawn("padefault volume-focus -5%")),
     Key([mod], "XF86AudioRaiseVolume", lazy.spawn("padefault volume-focus +5%")),
     Key([mod], "XF86AudioMute",        lazy.spawn("playerctl --player=spotify,%any play-pause")),
+    Key([mod, alt], "XF86AudioMute",   lazy.spawn('reload-headphones')),
 
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
