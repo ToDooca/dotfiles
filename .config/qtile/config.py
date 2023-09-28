@@ -173,25 +173,25 @@ keys = [
 #                       |_|
 
 groups = [
-    Group('1', label="", matches=[Match(wm_class='brave')], layout="columns"),
-    Group('2', label="", layout="columns"),
-    Group('3', label="", layout="columns"),
-    Group('4', label="󰉓", layout="columns"),
-    Group('5', label="󰒓", layout="columns"),
-    Group('6', label="", layout="stack", matches=[
+    Group('1', matches=[Match(wm_class='brave')], layout="columns"),
+    Group('2', layout="columns"),
+    Group('3', layout="columns"),
+    Group('4', layout="columns"),
+    Group('5', layout="columns"),
+    Group('6', layout="stack", matches=[
         Match(wm_class="jetbrains-idea"),
         Match(wm_class="jetbrains-webstorm"),
         Match(wm_class="jetbrains-pycharm"),
     ]),
-    Group('7', label="", layout="monadwide", matches=[
+    Group('7', layout="monadwide", matches=[
         Match(wm_class="Steam"),
         Match(wm_class="lutris"),
     ]),
-    Group('8', label="", layout="columns", matches=[
+    Group('8', layout="columns", matches=[
         Match(wm_class="netflix"),
         Match(wm_class="stremio"),
     ]),
-    Group('9', label="", layout="columns", matches=[
+    Group('9', layout="columns", matches=[
         Match(wm_class="telegram-desktop"),
         Match(wm_class="discord"),
         Match(wm_class="whatsapp-for-linux"),
@@ -413,13 +413,12 @@ def screen_widgets(primary=False):
         spacer(7),
         qtile_extras_widget.GroupBox(
             **decoration_group,
-            font='Fira Code',
-            fontsize=16,
+            fontsize=14,
             margin_y=3,
-            margin_x=8,
-            padding_y=2,
-            padding_x=3,
-            borderwidth=1.2,
+            margin_x=5,
+            padding_y=1,
+            padding_x=5,
+            borderwidth=1.1,
             urgent_border=warn_pink,
             urgent_text=warn_pink,
             inactive=purple,
@@ -455,7 +454,7 @@ def screen_widgets(primary=False):
         qtile_extras_widget.CPU(format='{load_percent}%', foreground=light_pink, width=65, **decoration_group),
         spacer(3),
         widget_icon(''),
-        drawer([thermal_sensor('CPU:{}', 'Tccd1', 45), thermal_sensor('GPU:{}', 'edge', 75)]),
+        drawer([thermal_sensor('CPU:{}', 'Package id 0', 45), thermal_sensor('GPU:{}', 'edge', 75)]),
         spacer(7),
     ]
     if primary:
