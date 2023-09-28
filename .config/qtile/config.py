@@ -280,7 +280,8 @@ def notification_widget():
     return qtile_extras_widget.TextBox(
         **decoration_group,
         foreground=purple,
-        text='',
+        text=' ',
+        padding=14,
         mouse_callbacks={
             mouse_left: lazy.spawn("dunstctl history-pop"),
             mouse_middle: lazy.spawn("dunstctl set-paused toggle"),
