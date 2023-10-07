@@ -109,14 +109,8 @@ keys = [
                                     lazy.spawn("xmodmap /home/du/.Xmodmap"),  desc='Toggle us layout'),
     Key([control], "Tab",           lazy.widget["keyboardlayout"].next_keyboard(),
                                     lazy.spawn("xmodmap /home/du/.Xmodmap"),  desc='Cycle through keyboard layouts'),
-
     # Power options
-    KeyChord([mod], "0", [
-        Key([shift], "s",           lazy.spawn('systemctl poweroff'),         desc='Turn off the computer'),
-        Key([], "r",                lazy.spawn('systemctl reboot'),           desc='Reboot the computer'),
-        Key([], "s",                lazy.spawn('systemctl suspend'),          desc='Suspend'),
-        Key([], "h",                lazy.spawn('systemctl hibernate'),        desc='Hibernate'),
-    ]),
+    Key([mod], "0",                 lazy.spawn("xfce4-session-logout"),       desc='poweroff settings'),
 
     # Code Editors
     KeyChord([mod, shift], "o", [
@@ -349,13 +343,6 @@ def check_package_updates():
     )
 
 
-def pulse_volume():
-    return qtile_extras_widget.PulseVolume(
-        **decoration_group,
-        foreground=light_pink,
-    )
-
-
 def disk_free(disk_fmt: str, disk_partition: str):
     return qtile_extras_widget.DF(
         **decoration_group,
@@ -403,6 +390,27 @@ def spacer(spacer_width: int):
     )
 
 
+def groupbox_widget():
+    return qtile_extras_widget.GroupBox(
+        **decoration_group,
+        fontsize=14,
+        margin_y=3,
+        margin_x=5,
+        padding_y=1,
+        padding_x=5,
+        borderwidth=1.1,
+        urgent_border=warn_pink,
+        urgent_text=warn_pink,
+        inactive=purple,
+        active=light_pink,
+        this_current_screen_border=light_pink,
+        this_screen_border=light_pink,
+        other_current_screen_border=purple,
+        other_screen_border=purple,
+        disable_drag=True,
+    )
+
+
 #  ____
 # / ___|  ___ _ __ ___  ___ _ __  ___
 # \___ \ / __| '__/ _ \/ _ \ '_ \/ __|
@@ -412,27 +420,8 @@ def spacer(spacer_width: int):
 def screen_widgets(primary=False):
     widgets = [
         spacer(7),
-        qtile_extras_widget.GroupBox(
-            **decoration_group,
-            fontsize=14,
-            margin_y=3,
-            margin_x=5,
-            padding_y=1,
-            padding_x=5,
-            borderwidth=1.1,
-            urgent_border=warn_pink,
-            urgent_text=warn_pink,
-            inactive=purple,
-            active=light_pink,
-            this_current_screen_border=light_pink,
-            this_screen_border=light_pink,
-            other_current_screen_border=purple,
-            other_screen_border=purple,
-            disable_drag=True,
-        ),
+        groupbox_widget(),
         spacer(3),
-        widget_icon('󰕾'),
-        pulse_volume(),
         spacer(3),
         widget_icon('󰋋'),
         headset_battery(),
@@ -497,8 +486,10 @@ screens = [
 
 # Drag floating layouts.
 mouse = [
-    Drag([mod], mouse_middle, lazy.window.set_position_floating(), start=lazy.window.get_position()),
-    Drag([mod], mouse_right, lazy.window.set_size_floating(), start=lazy.window.get_size()),
+    Drag([mod], mouse_middle, lazy.window.set_position_floating(),
+         start=lazy.window.get_position()),
+    Drag([mod], mouse_right, lazy.window.set_size_floating(),
+         start=lazy.window.get_size()),
 ]
 
 #  _   _             _
