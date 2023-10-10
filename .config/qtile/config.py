@@ -97,8 +97,8 @@ keys = [
 
     # Toggle between monitors
     Key([mod], "x",                 lazy.to_screen(0),                        desc='Keyboard focus to monitor 1'),
-    Key([mod], "z",                 lazy.to_screen(1),                        desc='Keyboard focus to monitor 2'),
-    Key([mod], "c",                 lazy.to_screen(2),                        desc='Keyboard focus to monitor 3'),
+    Key([mod], "z",                 lazy.to_screen(2),                        desc='Keyboard focus to monitor 2'),
+    Key([mod], "c",                 lazy.to_screen(1),                        desc='Keyboard focus to monitor 3'),
 
     # Notifications
     Key([mod, alt], "n",            lazy.spawn("dunstctl set-paused toggle"), desc='Toggle notifications'),
@@ -336,7 +336,7 @@ def check_package_updates():
         update_interval=1800,
         distro="Arch_checkupdates",
         display_format="{updates} ",
-        no_update_string=' ',
+        no_update_string='󰸞',
         colour_have_updates=warn_pink,
         colour_no_updates=light_pink,
         mouse_callbacks={mouse_left: lambda: qtile.cmd_spawn(terminal + ' -e yay -Syu')},
@@ -379,7 +379,7 @@ def drawer(widgets_arr: list):
         **decoration_group,
         foreground=light_pink,
         text_open='',
-        text_closed='  ',
+        text_closed=' ',
         widgets=widgets_arr,
     )
 
