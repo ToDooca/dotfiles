@@ -363,14 +363,16 @@ def system_clock():
     )
 
 
-def thermal_sensor(sensor_fmt: str, sensor: str, sensor_threshold: int):
-    return qtile_extras_widget.ThermalSensor(
+def thermal_sensor():
+    return qtile_extras_widget.ThermalZone(
         **decoration_group,
         foreground=light_pink,
         foreground_alert=warn_pink,
-        threshold=sensor_threshold,
-        fmt=sensor_fmt,
-        tag_sensor=sensor,
+        high=60,
+        crit=80,
+        format='CPU: {temp}°C',
+        format_crit='CPU: {temp}°C ',
+        fgcolor_crit=warn_pink,
     )
 
 
@@ -387,6 +389,15 @@ def drawer(widgets_arr: list):
 def spacer(spacer_width: int):
     return widget.Spacer(
         length=spacer_width
+    )
+
+
+def cpu_widget():
+    return qtile_extras_widget.CPU(
+        **decoration_group,
+        format='{load_percent}%',
+        foreground=light_pink,
+        width=65
     )
 
 
@@ -440,10 +451,10 @@ def screen_widgets(primary=False):
         ram_memory(),
         spacer(3),
         widget_icon(''),
-        qtile_extras_widget.CPU(format='{load_percent}%', foreground=light_pink, width=65, **decoration_group),
+        cpu_widget(),
         spacer(3),
         widget_icon(''),
-        drawer([thermal_sensor('CPU:{}', 'Package id 0', 45), thermal_sensor('GPU:{}', 'edge', 75)]),
+        thermal_sensor(),
         spacer(7),
     ]
     if primary:
