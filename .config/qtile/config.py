@@ -366,8 +366,7 @@ def system_clock():
 def thermal_sensor():
     return qtile_extras_widget.ThermalZone(
         **decoration_group,
-        foreground=light_pink,
-        foreground_alert=warn_pink,
+        fgcolor_normal=light_pink,
         high=60,
         crit=80,
         format='CPU: {temp}°C',
