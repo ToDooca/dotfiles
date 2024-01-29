@@ -116,12 +116,12 @@ keys = [
     KeyChord([mod, shift], "o", [
         Key([], "i",                lazy.spawn('idea'),     lazy.group['6'].toscreen()),
         Key([], "p",                lazy.spawn('pycharm'),  lazy.group['6'].toscreen()),
-        Key([], "w",                lazy.spawn('webstorm'), lazy.group['6'].toscreen()),
+        Key([], "w",                lazy.spawn('webstorm1'), lazy.group['6'].toscreen()),
     ]),
     KeyChord([mod], "o", [
         Key([], "i",                lazy.spawn('codeopen -m rofi -t idea'),     lazy.group['6'].toscreen()),
         Key([], "p",                lazy.spawn('codeopen -m rofi -t pycharm'),  lazy.group['6'].toscreen()),
-        Key([], "w",                lazy.spawn('codeopen -m rofi -t webstorm'), lazy.group['6'].toscreen()),
+        Key([], "w",                lazy.spawn('codeopen -m rofi -t webstorm1'), lazy.group['6'].toscreen()),
     ]),
 
     # Music and audio related keybinds
@@ -370,7 +370,7 @@ def thermal_sensor():
         high=60,
         crit=80,
         format='CPU: {temp}°C',
-        format_crit='CPU: {temp}°C ',
+        format_crit='CPU: {temp}°C  ',
         fgcolor_crit=warn_pink,
     )
 
