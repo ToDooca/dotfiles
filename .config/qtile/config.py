@@ -302,6 +302,20 @@ def headset_battery():
     )
 
 
+def spotify_widget():
+    return qtile_extras_widget.Mpris2(
+        **decoration_group,
+        name='spotify',
+        foreground=light_pink,
+        objname='org.mpris.MediaPlayer2.spotify',
+        display_metadata=['xesam:title', 'xesam:artist'],
+        width=250,
+        scroll_interval=0.02,
+        stopped_text='',
+        paused_text='',
+    )
+
+
 def widget_icon(icon: str):
     return qtile_extras_widget.TextBox(
         **decoration_group,
@@ -432,19 +446,21 @@ def screen_widgets(primary=False):
         spacer(7),
         groupbox_widget(),
         spacer(3),
-        widget_icon(''),
-        keyboard_layout(),
-        spacer(3),
         widget_icon('󰋋'),
         headset_battery(),
         spacer(3),
         notification_widget(),
+        spacer(3),
+        widget_icon(''),
+        spotify_widget(),
         widget.Spacer(),
         system_clock(),
         widget.Spacer(),
-        spacer(3),
         widget_icon(''),
         check_package_updates(),
+        spacer(3),
+        widget_icon(''),
+        keyboard_layout(),
         spacer(3),
         widget_icon(''),
         ram_memory(),
@@ -550,3 +566,4 @@ wmname = "LG3D"
 def autostart():
     home = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.run([home])
+
