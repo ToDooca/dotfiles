@@ -303,39 +303,41 @@ def headset_battery():
     )
 
 
-def mouse_battery():
-    device_manger = DeviceManager()
+def get_basilisk_battery_level():
+    device_manager = DeviceManager()
     basilisk = None
-    for device in device_manger.devices:
+    for device in device_manager.devices:
         if "Razer Basilisk V3 Pro (Wireless)" == device.name:
             basilisk = device
-    if None == basilisk:
-        return qtile_extras_widget.TextBox(
-            **decoration_group,
-            font='Fira Code',
-            foreground=purple,
-            text='N/A'
-        )
-    text = basilisk.battery_level
-    if text == 0:
-        text = '󰂄'
-    elif text == 100:
-        text = '󱊣'
-    elif text > 75:
-        text = '󱊢'
-    elif text > 50:
-        text = '󱊡'
-    elif text > 25:
-        text = '󱊡'
+            break
+
+    if basilisk is None:
+        return 'N/A'
+
+    battery_level = basilisk.battery_level
+
+    if battery_level == 0:
+        return '󰂄'
+    elif battery_level == 100:
+        return '󱊣'
+    elif battery_level > 75:
+        return '󱊢'
+    elif battery_level > 50:
+        return '󱊢'
+    elif battery_level > 25:
+        return '󱊡'
     else:
-        text = '󱊡'
+        return ''
+
+def mouse_battery():
     return qtile_extras_widget.GenPollText(
         **decoration_group,
         foreground=light_pink,
         font='Fira Code',
         fontsize=17,
         update_interval=180,
-        fmt=('{}'.format(text)),
+        func=get_basilisk_battery_level,
+        fmt='{}'
     )
 
 
