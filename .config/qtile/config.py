@@ -295,7 +295,7 @@ def headset_battery():
             lambda: subprocess.getoutput(
                 "headsetcontrol -b 2>&1 | grep  -Eo '([0-9]{1,3}%|Charging|Unavailable|No supported headset found)'"
                 " | sed 's/Charging/󰂄/;s/Unavailable/󰥇/;s/No supported headset found//"
-                ";s/25%/󱊡/;s/50%/󱊢/;s/75%/󱊢/;s/100%/󱊣/'"
+                ";s/25%/󱊡/;s/50%/󱊢/;s/75%/󱊣/;s/100%/󱊣/'"
             )
         ),
         mouse_callbacks={"Button1": lazy.widget["genpolltext"].function(lambda w: w.update(w.poll()))},
@@ -321,7 +321,7 @@ def get_basilisk_battery_level():
     elif battery_level == 100:
         return '󱊣'
     elif battery_level > 75:
-        return '󱊢'
+        return '󱊣'
     elif battery_level > 50:
         return '󱊢'
     elif battery_level > 25:
