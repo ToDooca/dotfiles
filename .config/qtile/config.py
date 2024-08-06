@@ -12,6 +12,7 @@ from libqtile.config import Drag, Group, Key, KeyChord, Match, Screen, ScratchPa
 from libqtile.lazy import lazy
 from qtile_extras.widget.decorations import RectDecoration
 from qtile_extras import widget as qtile_extras_widget
+from openrazer.client import DeviceManager
 
 terminal = os.getenv("terminal", "alacritty")
 browser = os.getenv("browser", "brave")
@@ -302,6 +303,42 @@ def headset_battery():
     )
 
 
+def mouse_battery():
+    device_manger = DeviceManager()
+    basilisk = None
+    for device in device_manger.devices:
+        if "Razer Basilisk V3 Pro (Wireless)" == device.name:
+            basilisk = device
+    if None == basilisk:
+        return qtile_extras_widget.TextBox(
+            **decoration_group,
+            font='Fira Code',
+            foreground=purple,
+            text='N/A'
+        )
+    text = basilisk.battery_level
+    if text == 0:
+        text = '󰂄'
+    elif text == 100:
+        text = '󱊣'
+    elif text > 75:
+        text = '󱊢'
+    elif text > 50:
+        text = '󱊡'
+    elif text > 25:
+        text = '󱊡'
+    else:
+        text = '󱊡'
+    return qtile_extras_widget.GenPollText(
+        **decoration_group,
+        foreground=light_pink,
+        font='Fira Code',
+        fontsize=17,
+        update_interval=180,
+        fmt=('{}'.format(text)),
+    )
+
+
 def spotify_widget():
     return qtile_extras_widget.Mpris2(
         **decoration_group,
@@ -449,6 +486,9 @@ def screen_widgets(primary=False):
         widget_icon('󰋋'),
         headset_battery(),
         spacer(3),
+        widget_icon('󰍽'),
+        mouse_battery(),
+        spacer(3),
         notification_widget(),
         spacer(3),
         widget_icon(''),
@@ -566,4 +606,3 @@ wmname = "LG3D"
 def autostart():
     home = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.run([home])
-

@@ -144,3 +144,4 @@ function code() {
                         fi
                 fi
         }
+		export PATH="$PATH:$HOME/.local/bin"
