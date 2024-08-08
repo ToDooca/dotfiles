@@ -12,6 +12,7 @@ from libqtile.config import Drag, Group, Key, KeyChord, Match, Screen, ScratchPa
 from libqtile.lazy import lazy
 from qtile_extras.widget.decorations import RectDecoration
 from qtile_extras import widget as qtile_extras_widget
+from libqtile.log_utils import logger
 from openrazer.client import DeviceManager
 
 terminal = os.getenv("terminal", "alacritty")
@@ -313,21 +314,26 @@ def get_basilisk_battery_level():
 
     if basilisk is None:
         return 'N/A'
-
+    
+    charging = basilisk.is_charging
     battery_level = basilisk.battery_level
-
-    if battery_level == 0:
-        return '󰂄'
-    elif battery_level == 100:
-        return '󱊣'
-    elif battery_level > 75:
-        return '󱊣'
-    elif battery_level > 50:
-        return '󱊢'
-    elif battery_level > 25:
-        return '󱊡'
+    
+    if charging is False:
+        if battery_level == 0:
+            return '󰒲'
+        elif battery_level == 100:
+            return '󱊣'
+        elif battery_level > 75:
+            return '󱊣'
+        elif battery_level > 50:
+            return '󱊢'
+        elif battery_level > 25:
+            return '󱊡'
+        else:
+            return ''
     else:
-        return ''
+        return '󰂄'
+    
 
 def mouse_battery():
     return qtile_extras_widget.GenPollText(

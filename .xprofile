@@ -1,5 +1,4 @@
-export PATH="$HOME/.local/bin:$PATH"
-
 xrandr --output DisplayPort-0 --primary --mode 1920x1080 --rate 165.00 --auto --output HDMI-A-0 --left-of DisplayPort-0 --output DisplayPort-2 --right-of DisplayPort-0
 xmodmap ~/.Xmodmap
 export CODE="$HOME/.local/src"
+export PATH="$HOME/.local/bin:$PATH"
