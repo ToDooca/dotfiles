@@ -313,7 +313,7 @@ def get_basilisk_battery_level():
             break
 
     if basilisk is None:
-        return 'N/A'
+        return ''
     
     charging = basilisk.is_charging
     battery_level = basilisk.battery_level
@@ -321,8 +321,6 @@ def get_basilisk_battery_level():
     if charging is False:
         if battery_level == 0:
             return '󰒲'
-        elif battery_level == 100:
-            return '󱊣'
         elif battery_level > 75:
             return '󱊣'
         elif battery_level > 50:
@@ -431,9 +429,9 @@ def thermal_sensor():
         **decoration_group,
         fgcolor_normal=light_pink,
         high=60,
-        crit=80,
-        format='CPU: {temp}°C',
-        format_crit='CPU: {temp}°C  ',
+        crit=85,
+        format='{temp}°C',
+        format_crit='{temp}°C  ',
         fgcolor_crit=warn_pink,
     )
 
