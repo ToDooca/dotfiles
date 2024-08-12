@@ -16,7 +16,7 @@ from libqtile.log_utils import logger
 from openrazer.client import DeviceManager
 
 terminal = os.getenv("terminal", "alacritty")
-browser = os.getenv("browser", "brave")
+browser = os.getenv("browser", "google-chrome-stable")
 
 mod = "mod4"
 alt = "mod1"
@@ -61,7 +61,7 @@ keys = [
     Key([mod], "d",                 lazy.spawn('rofi -show drun'),            desc="Open rofi drun"),
     Key([alt], "tab",               lazy.spawn('rofi -show window'),          desc="Open rofi windows"),
     Key([mod], "w",                 lazy.spawn(browser),                      desc="Launch default browser"),
-    Key([mod, shift], "w",          lazy.spawn('google-chrome-stable'),       desc="Launch google chrome"),
+    Key([mod, shift], "w",          lazy.spawn('firefox'),                    desc="Launch firefox"),
     Key([mod, shift], "f",          lazy.window.toggle_floating(),            desc="Toggle Floating layout"),
     Key([mod, alt], "f",            lazy.window.toggle_maximize(),            desc="Toggle Full-screen layout"),
     Key([mod], "f",                 lazy.window.toggle_fullscreen(),          desc="Toggle Full-screen layout"),
@@ -314,10 +314,10 @@ def get_basilisk_battery_level():
 
     if basilisk is None:
         return ''
-    
+
     charging = basilisk.is_charging
     battery_level = basilisk.battery_level
-    
+
     if charging is False:
         if battery_level == 0:
             return '󰒲'
@@ -335,7 +335,24 @@ def get_basilisk_battery_level():
             return ''
     else:
         return '󰂄'
-    
+
+
+def laptop_battery():
+    return qtile_extras_widget.Battery(
+        **decoration_group,
+        format='{char} {percent:2.0%}',
+        foreground=light_pink,
+        not_charging_char='󱟢',
+        charge_char='󰂄',
+        discharge_char='󱟤',
+        full_char='󱊣',
+        unknown_char='󰂑',
+        empty_char='󰂎',
+        notify_below=0.25,
+        low_background=warn_pink,
+        update_interval=120,
+    )
+
 
 def mouse_battery():
     return qtile_extras_widget.GenPollText(
@@ -520,6 +537,8 @@ def screen_widgets(primary=False):
         spacer(3),
         widget_icon(''),
         thermal_sensor(),
+        spacer(3),
+        laptop_battery(),
         spacer(7),
     ]
     if primary:
@@ -543,14 +562,7 @@ screens = [
             screen_widgets(),
             38,
             background=picom_transparent),
-    ),
-    # Remove code block below for a two monitor setup
-    Screen(
-        top=bar.Bar(
-            screen_widgets(),
-            38,
-            background=picom_transparent),
-    ),
+    )
 ]
 
 #  __  __
