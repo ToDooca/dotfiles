@@ -340,13 +340,13 @@ def get_basilisk_battery_level():
 def laptop_battery():
     return qtile_extras_widget.Battery(
         **decoration_group,
-        format='{char} {percent:2.0%}',
+        format='{percent:2.0%} {char}',
         foreground=light_pink,
-        not_charging_char='󱟢',
-        charge_char='󰂄',
-        discharge_char='󱟤',
+        not_charging_char='',
+        charge_char='',
+        discharge_char='',
         full_char='󱊣',
-        unknown_char='󰂑',
+        unknown_char='',
         empty_char='󰂎',
         notify_below=0.25,
         low_background=warn_pink,
@@ -538,6 +538,7 @@ def screen_widgets(primary=False):
         widget_icon(''),
         thermal_sensor(),
         spacer(3),
+        widget_icon('󰁹'),
         laptop_battery(),
         spacer(7),
     ]
