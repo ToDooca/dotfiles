@@ -314,17 +314,15 @@ def get_basilisk_battery_level():
 
     if basilisk is None:
         return ''
-    
+
     charging = basilisk.is_charging
     battery_level = basilisk.battery_level
-    
+
     if charging is False:
         if battery_level == 0:
             return '󰒲'
         elif battery_level > 75:
             return '󱊣'
-        elif battery_level > 50:
-            return '󱊢'
         elif battery_level > 25:
             return '󱊢'
         elif battery_level > 10:
@@ -335,7 +333,7 @@ def get_basilisk_battery_level():
             return ''
     else:
         return '󰂄'
-    
+
 
 def mouse_battery():
     return qtile_extras_widget.GenPollText(
