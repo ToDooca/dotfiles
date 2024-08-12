@@ -323,8 +323,6 @@ def get_basilisk_battery_level():
             return '󰒲'
         elif battery_level > 75:
             return '󱊣'
-        elif battery_level > 50:
-            return '󱊢'
         elif battery_level > 25:
             return '󱊢'
         elif battery_level > 10:
