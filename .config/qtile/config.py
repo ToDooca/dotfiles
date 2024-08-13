@@ -235,12 +235,12 @@ default_layout_settings = dict(
 layouts = [
     layout.Columns(
         **default_layout_settings,
-        margin=7,
+        margin=6,
         border_on_single=True,
     ),
     layout.Stack(
         **default_layout_settings,
-        margin=7,
+        margin=6,
         num_stacks=1,
     ),
     layout.MonadWide(
