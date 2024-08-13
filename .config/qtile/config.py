@@ -263,7 +263,7 @@ widget_defaults = dict(
 
 decoration_group = {
     "decorations": [
-        RectDecoration(colour=dark_purple, radius=12, filled=True, padding_y=4, group=True)
+        RectDecoration(colour=dark_purple, radius=9, filled=True, padding_y=4, group=True)
     ],
     "decoration_width": 0,
     "decoration_height": 0,
@@ -416,9 +416,16 @@ def disk_free(disk_fmt: str, disk_partition: str):
 def system_clock():
     return qtile_extras_widget.Clock(
         **decoration_group,
-        format="%e/%B/%Y %T",
+        format="%T",
         foreground=light_pink,
-        popup_text=['%A, %B %d %Y', 'Time in UTC: %T'],
+    )
+
+
+def calendar_widget():
+    return qtile_extras_widget.Clock(
+        **decoration_group,
+        format="%e/%B/%Y",
+        foreground=light_pink,
     )
 
 
@@ -493,16 +500,18 @@ def screen_widgets(primary=False):
         spacer(3),
         widget_icon('󰋋'),
         headset_battery(),
-        spacer(3),
         widget_icon('󰍽'),
         mouse_battery(),
         spacer(3),
         notification_widget(),
         spacer(3),
-        widget_icon(''),
+        widget_icon(' '),
         spotify_widget(),
         widget.Spacer(),
+        widget_icon('󰥔'),
         system_clock(),
+        widget_icon(''),
+        calendar_widget(),
         widget.Spacer(),
         widget_icon(''),
         check_package_updates(),
@@ -512,10 +521,8 @@ def screen_widgets(primary=False):
         spacer(3),
         widget_icon(''),
         ram_memory(),
-        spacer(3),
         widget_icon(''),
         cpu_widget(),
-        spacer(3),
         widget_icon(''),
         thermal_sensor(),
         spacer(7),
