@@ -257,13 +257,13 @@ layouts = [
 
 widget_defaults = dict(
     font="Fira Code Bold",
-    fontsize=14,
+    fontsize=15,
     padding=10,
 )
 
 decoration_group = {
     "decorations": [
-        RectDecoration(colour=dark_purple, radius=12, filled=True, padding_y=4, group=True)
+        RectDecoration(colour=dark_purple, radius=9, filled=True, padding_y=3.4, group=True)
     ],
     "decoration_width": 0,
     "decoration_height": 0,
@@ -291,7 +291,7 @@ def headset_battery():
         **decoration_group,
         foreground=light_pink,
         font='Fira Code',
-        fontsize=17,
+        fontsize=16,
         func=(
             lambda: subprocess.getoutput(
                 "headsetcontrol -b 2>&1 | grep  -Eo '([0-9]{1,3}%|Charging|Unavailable|No supported headset found)'"
@@ -338,11 +338,11 @@ def get_basilisk_battery_level():
 def laptop_battery():
     return qtile_extras_widget.Battery(
         **decoration_group,
-        format='{percent:2.0%} {char}',
+        format='{char} {percent:2.0%}',
         foreground=light_pink,
         not_charging_char='',
-        charge_char='',
-        discharge_char='',
+        charge_char='󱐋',
+        discharge_char='',
         full_char='󱊣',
         unknown_char='',
         empty_char='󰂎',
@@ -357,7 +357,7 @@ def mouse_battery():
         **decoration_group,
         foreground=light_pink,
         font='Fira Code',
-        fontsize=17,
+        fontsize=16,
         update_interval=180,
         func=get_basilisk_battery_level,
         fmt='{}'
@@ -433,9 +433,16 @@ def disk_free(disk_fmt: str, disk_partition: str):
 def system_clock():
     return qtile_extras_widget.Clock(
         **decoration_group,
-        format="%e/%B/%Y %T",
+        format="%T",
         foreground=light_pink,
-        popup_text=['%A, %B %d %Y', 'Time in UTC: %T'],
+    )
+
+
+def calendar_widget():
+    return qtile_extras_widget.Clock(
+        **decoration_group,
+        format="%e/%B/%Y",
+        foreground=light_pink,
     )
 
 
@@ -479,7 +486,7 @@ def cpu_widget():
 def groupbox_widget():
     return qtile_extras_widget.GroupBox(
         **decoration_group,
-        fontsize=14,
+        fontsize=15,
         margin_y=3,
         margin_x=5,
         padding_y=1,
@@ -510,16 +517,18 @@ def screen_widgets(primary=False):
         spacer(3),
         widget_icon('󰋋'),
         headset_battery(),
-        spacer(3),
         widget_icon('󰍽'),
         mouse_battery(),
         spacer(3),
         notification_widget(),
         spacer(3),
-        widget_icon(''),
+        widget_icon(' '),
         spotify_widget(),
         widget.Spacer(),
+        widget_icon('󰥔'),
         system_clock(),
+        widget_icon(''),
+        calendar_widget(),
         widget.Spacer(),
         widget_icon(''),
         check_package_updates(),
@@ -529,10 +538,8 @@ def screen_widgets(primary=False):
         spacer(3),
         widget_icon(''),
         ram_memory(),
-        spacer(3),
         widget_icon(''),
         cpu_widget(),
-        spacer(3),
         widget_icon(''),
         thermal_sensor(),
         spacer(3),
@@ -553,13 +560,13 @@ screens = [
     Screen(
         top=bar.Bar(
             screen_widgets(primary=True),
-            38,
+            40,
             background=picom_transparent),
     ),
     Screen(
         top=bar.Bar(
             screen_widgets(),
-            38,
+            40,
             background=picom_transparent),
     )
 ]
