@@ -145,3 +145,5 @@ function code() {
                 fi
         }
 		export PATH="$PATH:$HOME/.local/bin"
+
+export PATH=$PATH:/home/du/.spicetify

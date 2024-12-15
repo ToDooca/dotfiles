@@ -16,7 +16,7 @@ from libqtile.log_utils import logger
 from openrazer.client import DeviceManager
 
 terminal = os.getenv("terminal", "alacritty")
-browser = os.getenv("browser", "brave")
+browser = os.getenv("browser", "floorp")
 
 mod = "mod4"
 alt = "mod1"
@@ -169,7 +169,7 @@ keys = [
 #                       |_|
 
 groups = [
-    Group('1', matches=[Match(wm_class='brave')], layout="columns"),
+    Group('1', matches=[Match(wm_class='floorp')], layout="columns"),
     Group('2', layout="columns"),
     Group('3', layout="columns"),
     Group('4', layout="columns"),
