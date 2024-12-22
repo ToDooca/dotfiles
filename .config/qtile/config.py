@@ -98,9 +98,8 @@ keys = [
     Key([mod], "n",                 lazy.layout.normalize(),                  desc="Reset all window sizes"),
 
     # Toggle between monitors
-    Key([mod], "x",                 lazy.to_screen(0),                        desc='Keyboard focus to monitor 1'),
-    Key([mod], "z",                 lazy.to_screen(2),                        desc='Keyboard focus to monitor 2'),
-    Key([mod], "c",                 lazy.to_screen(1),                        desc='Keyboard focus to monitor 3'),
+    Key([mod], "z",                 lazy.to_screen(0),                        desc='Keyboard focus to monitor 1'),
+    Key([mod], "x",                 lazy.to_screen(1),                        desc='Keyboard focus to monitor 3'),
 
     # Notifications
     Key([mod, alt], "n",            lazy.spawn("dunstctl set-paused toggle"), desc='Toggle notifications'),
@@ -342,7 +341,7 @@ def laptop_battery():
         foreground=light_pink,
         not_charging_char='',
         charge_char='󱐋',
-        discharge_char='',
+        discharge_char='󰁆',
         full_char='󱊣',
         unknown_char='',
         empty_char='󰂎',
