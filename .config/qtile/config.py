@@ -13,7 +13,6 @@ from libqtile.lazy import lazy
 from qtile_extras.widget.decorations import RectDecoration
 from qtile_extras import widget as qtile_extras_widget
 from libqtile.log_utils import logger
-from openrazer.client import DeviceManager
 
 terminal = os.getenv("terminal", "alacritty")
 browser = os.getenv("browser", "google-chrome-stable")
@@ -303,37 +302,6 @@ def headset_battery():
     )
 
 
-def get_basilisk_battery_level():
-    device_manager = DeviceManager()
-    basilisk = None
-    for device in device_manager.devices:
-        if "Razer Basilisk V3 Pro (Wireless)" == device.name:
-            basilisk = device
-            break
-
-    if basilisk is None:
-        return ''
-
-    charging = basilisk.is_charging
-    battery_level = basilisk.battery_level
-
-    if charging is False:
-        if battery_level == 0:
-            return '󰒲'
-        elif battery_level > 75:
-            return '󱊣'
-        elif battery_level > 25:
-            return '󱊢'
-        elif battery_level > 10:
-            return '󱊡'
-        elif battery_level > 0:
-            return '󰂎'
-        else:
-            return ''
-    else:
-        return '󰂄'
-
-
 def laptop_battery():
     return qtile_extras_widget.Battery(
         **decoration_group,
@@ -348,18 +316,6 @@ def laptop_battery():
         notify_below=0.25,
         low_background=warn_pink,
         update_interval=120,
-    )
-
-
-def mouse_battery():
-    return qtile_extras_widget.GenPollText(
-        **decoration_group,
-        foreground=light_pink,
-        font='Fira Code',
-        fontsize=16,
-        update_interval=180,
-        func=get_basilisk_battery_level,
-        fmt='{}'
     )
 
 
@@ -516,8 +472,6 @@ def screen_widgets(primary=False):
         spacer(4),
         widget_icon('󰋋'),
         headset_battery(),
-        widget_icon('󰍽'),
-        mouse_battery(),
         spacer(4),
         notification_widget(),
         spacer(4),
