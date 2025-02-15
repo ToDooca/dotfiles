@@ -353,7 +353,7 @@ def spotify_widget():
         name='spotify',
         foreground=light_pink,
         objname='org.mpris.MediaPlayer2.spotify',
-        display_metadata=['xesam:title', 'xesam:artist'],
+        format='{xesam:title} - {xesam:artist}',
         width=250,
         scroll_interval=0.02,
         stopped_text='',
