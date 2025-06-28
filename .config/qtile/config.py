@@ -73,7 +73,7 @@ keys = [
     Key([mod], "p",                 lazy.spawn('picom')),
     Key([mod, alt], "l",            lazy.spawn('lutris')),
     Key([mod, alt], "d",            lazy.spawn('discord')),
-    Key([mod], "t",                 lazy.spawn('telegram-desktop')),
+    Key([mod], "t",                 lazy.spawn('Telegram')),
     Key([mod, shift], "t",          lazy.spawn('whatsapp-for-linux')),
 
     # Layout Keybinds
@@ -180,15 +180,15 @@ groups = [
         Match(wm_class="jetbrains-pycharm"),
     ]),
     Group('7', layout="monadwide", matches=[
-        Match(wm_class="Steam"),
-        Match(wm_class="lutris"),
+        Match(wm_class="steam"),
+        Match(wm_class="net.lutris.Lutris"),
     ]),
     Group('8', layout="columns", matches=[
         Match(wm_class="netflix"),
         Match(wm_class="stremio"),
     ]),
     Group('9', layout="columns", matches=[
-        Match(wm_class="telegram-desktop"),
+        Match(wm_class="Telegram"),
         Match(wm_class="discord"),
         Match(wm_class="whatsapp-for-linux"),
     ]),
@@ -214,7 +214,7 @@ groups.append(
         DropDown("term", terminal, y=0.13, x=0.17, opacity=1, height=0.9, width=0.65),
         DropDown("spt", terminal + " -e spt", y=0.13, x=0.17, opacity=0.75, height=0.7, width=0.65),
         DropDown("spotify", "spotify", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
-        DropDown("Steam", "Steam", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
+        DropDown("steam", "steam", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
         DropDown("pavucontrol", "pavucontrol", y=0.13, x=0.17, opacity=1, height=0.7, width=0.65),
     ]),
 )
@@ -586,7 +586,7 @@ floating_layout = layout.Floating(
         Match(wm_class="nitrogen"),
         Match(wm_class="pavucontrol"),
         Match(wm_class="steam"),
-        Match(wm_class="lutris"),
+        Match(wm_class="net.lutris.Lutris"),
         Match(wm_class="battle.net.exe"),
         Match(wm_class="ArenaTracker"),
         Match(wm_class="transmission-qt"),
