@@ -179,9 +179,12 @@ groups = [
         Match(wm_class="jetbrains-webstorm"),
         Match(wm_class="jetbrains-pycharm"),
     ]),
-    Group('7', layout="monadwide", matches=[
+    Group('7', layout="max", matches=[
         Match(wm_class="steam"),
         Match(wm_class="net.lutris.Lutris"),
+        Match(wm_class="battle.net.exe"),
+        Match(wm_class="hearthstone.exe"),
+        Match(wm_class="hearthstonedecktracker.exe"),
     ]),
     Group('8', layout="columns", matches=[
         Match(wm_class="netflix"),
@@ -588,7 +591,7 @@ floating_layout = layout.Floating(
         Match(wm_class="steam"),
         Match(wm_class="net.lutris.Lutris"),
         Match(wm_class="battle.net.exe"),
-        Match(wm_class="ArenaTracker"),
+        Match(wm_class="hearthstonedecktracker.exe"),
         Match(wm_class="transmission-qt"),
         Match(wm_class="zoom"),
         Match(wm_class="confirmreset"),  # gitk
@@ -601,16 +604,18 @@ floating_layout = layout.Floating(
 # When using the Wayland backend, this can be used to configure input devices.
 wl_input_rules = None
 bring_front_click = "floating_only"
+floats_kept_above = False
 auto_fullscreen = True
-follow_mouse_focus = True
+follow_mouse_focus = False
 cursor_warp = False
-focus_on_window_activation = "smart"
+focus_on_window_activation = "never"
 reconfigure_screens = True
-auto_minimize = False
+auto_minimize = True
 wmname = "LG3D"
 
 
-#  ____  _             _
+
+    #  ____  _             _
 # / ___|| |_ __ _ _ __| |_ _   _ _ __
 # \___ \| __/ _` | '__| __| | | | '_ \
 #  ___) | || (_| | |  | |_| |_| | |_) |
