@@ -13,7 +13,7 @@ from libqtile.lazy import lazy
 from qtile_extras.widget.decorations import RectDecoration
 from qtile_extras import widget as qtile_extras_widget
 from libqtile.log_utils import logger
-from openrazer.client import DeviceManager
+# from openrazer.client import DeviceManager
 
 terminal = os.getenv("terminal", "alacritty")
 browser = os.getenv("browser", "floorp")
@@ -307,47 +307,47 @@ def headset_battery():
     )
 
 
-def get_basilisk_battery_level():
-    device_manager = DeviceManager()
-    basilisk = None
-    for device in device_manager.devices:
-        if "Razer Basilisk V3 Pro (Wireless)" == device.name:
-            basilisk = device
-            break
+# def get_basilisk_battery_level():
+#     device_manager = DeviceManager()
+#     basilisk = None
+#     for device in device_manager.devices:
+#         if "Razer Basilisk V3 Pro (Wireless)" == device.name:
+#             basilisk = device
+#             break
+#
+#     if basilisk is None:
+#         return ''
+#
+#     charging = basilisk.is_charging
+#     battery_level = basilisk.battery_level
+#
+#     if charging is False:
+#         if battery_level == 0:
+#             return '󰒲'
+#         elif battery_level > 75:
+#             return '󱊣'
+#         elif battery_level > 25:
+#             return '󱊢'
+#         elif battery_level > 10:
+#             return '󱊡'
+#         elif battery_level > 0:
+#             return '󰂎'
+#         else:
+#             return ''
+#     else:
+#         return '󰂄'
 
-    if basilisk is None:
-        return ''
 
-    charging = basilisk.is_charging
-    battery_level = basilisk.battery_level
-
-    if charging is False:
-        if battery_level == 0:
-            return '󰒲'
-        elif battery_level > 75:
-            return '󱊣'
-        elif battery_level > 25:
-            return '󱊢'
-        elif battery_level > 10:
-            return '󱊡'
-        elif battery_level > 0:
-            return '󰂎'
-        else:
-            return ''
-    else:
-        return '󰂄'
-
-
-def mouse_battery():
-    return qtile_extras_widget.GenPollText(
-        **decoration_group,
-        foreground=light_pink,
-        font='Fira Code',
-        fontsize=17,
-        update_interval=180,
-        func=get_basilisk_battery_level,
-        fmt='{}'
-    )
+# def mouse_battery():
+#     return qtile_extras_widget.GenPollText(
+#         **decoration_group,
+#         foreground=light_pink,
+#         font='Fira Code',
+#         fontsize=17,
+#         update_interval=180,
+#         func=get_basilisk_battery_level,
+#         fmt='{}'
+#     )
 
 
 def spotify_widget():
@@ -503,8 +503,8 @@ def screen_widgets(primary=False):
         spacer(3),
         widget_icon('󰋋'),
         headset_battery(),
-        widget_icon('󰍽'),
-        mouse_battery(),
+        # widget_icon('󰍽'),
+        # mouse_battery(),
         spacer(3),
         notification_widget(),
         spacer(3),
