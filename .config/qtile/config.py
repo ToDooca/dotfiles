@@ -301,8 +301,8 @@ def _get_notification_icon():
     # true = paused, false = active
     paused = subprocess.getoutput("dunstctl is-paused").strip().lower() == "true"
     if paused:
-        return _wrap_warn("󰂵 ")  # bell-off, warn color
-    return "󰂴 "  # bell
+        return _wrap_warn(" ")  # bell-off, warn color
+    return " "  # bell
 
 
 def notification_widget():
@@ -381,18 +381,18 @@ def get_basilisk_battery_level():
         charging = basilisk.is_charging
         battery_level = basilisk.battery_level
         if charging:
-            return '󰂄'
+            return '󰂄'  # charging (bolt)
         if battery_level == 0:
-            return '󰒲'
+            return '󰒲'  # empty
         if battery_level > 75:
-            return '󱊣'
+            return '󱊣'  # high
         if battery_level > 25:
-            return '󱊢'
+            return '󱊢'  # medium
         if battery_level > 10:
-            return _wrap_warn('󱊡')
+            return _wrap_warn('󱊡')  # low (11–25%), warn color
         if battery_level > 0:
-            return _wrap_warn('󰂎')
-        return '񬫐'
+            return _wrap_warn('󰂎')  # critical (1–10%), warn color
+        return '񬫐'  # unknown
     except Exception:
         return ' '  # openrazer error
 
@@ -478,18 +478,10 @@ def disk_free(disk_fmt: str, disk_partition: str):
     )
 
 
-def system_clock():
+def datetime_widget():
     return qtile_extras_widget.Clock(
         **decoration_group,
-        format="%T",
-        foreground=light_pink,
-    )
-
-
-def calendar_widget():
-    return qtile_extras_widget.Clock(
-        **decoration_group,
-        format="%e/%B/%Y",
+        format="%a %e %B – %T",
         foreground=light_pink,
     )
 
@@ -572,11 +564,10 @@ def screen_widgets(primary=False):
         spacer(3),
         widget_icon(' '),
         spotify_widget(),
+        spacer(3),
         widget.Spacer(),
-        widget_icon('󰥔'),
-        system_clock(),
-        widget_icon(''),
-        calendar_widget(),
+        widget_icon('󰃰'),
+        datetime_widget(),
         widget.Spacer(),
         widget_icon(''),
         check_package_updates(),
@@ -671,7 +662,7 @@ auto_fullscreen = True
 follow_mouse_focus = False
 cursor_warp = False
 focus_on_window_activation = "never"
-reconfigure_screens = True
+reconfigure_screens = False
 auto_minimize = True
 wmname = "LG3D"
 
