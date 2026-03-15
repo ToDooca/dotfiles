@@ -47,6 +47,7 @@ themes = {
         "background": "#363062",
         "warn": "#ff5677",
         "accent": "#e9d5da",
+        "ok": "#1ab96d",
         "transparent": "#00000000",
     },
 }
@@ -59,6 +60,7 @@ light_purple = theme["secondary"]
 dark_purple = theme["background"]
 warn_pink = theme["warn"]
 light_pink = theme["accent"]
+ok = theme.get("ok")
 picom_transparent = theme["transparent"]
 
 #  _  __          _     _           _
@@ -297,12 +299,15 @@ def _wrap_warn(text):
     return '<span foreground="{}">{}</span>'.format(warn_pink, text)
 
 
+def _wrap_ok(text):
+    return '<span foreground="{}">{}</span>'.format(ok, text)
+
+
 def _get_notification_icon():
-    # true = paused, false = active
     paused = subprocess.getoutput("dunstctl is-paused").strip().lower() == "true"
     if paused:
-        return _wrap_warn(" ")  # bell-off, warn color
-    return " "  # bell
+        return _wrap_warn(" ")
+    return " "
 
 
 def notification_widget():
@@ -326,21 +331,21 @@ def _get_headset_battery():
     try:
         out = subprocess.getoutput("headsetcontrol -b 2>&1")
         if "Charging" in out:
-            return "󰂄"
+            return _wrap_ok("󰂄")
         if "Unavailable" in out or "No supported" in out:
-            return "񬫐"
-        m = re.search(r"(\d{1,3})%", out)
-        if not m:
-            return "񬫐"
-        pct = int(m.group(1))
-        icons = (None, "󱊡", "󱊢", "󱊣", "󱊤")
+            return _wrap_warn('󰂲')
+        battery_percentage = re.search(r"(\d{1,3})%", out)
+        if not battery_percentage:
+            return _wrap_warn('󰂲')
+        pct = int(battery_percentage.group(1))
+        icons = ("󰂲", "󱊡", "󱊢", "󱊣", "󱊤")
         idx = 4 if pct > 75 else 3 if pct > 50 else 2 if pct > 25 else 1
         icon = icons[idx]
         if pct <= 25:
             return _wrap_warn(icon)
         return icon
     except Exception:
-        return "񬫐"
+        return _wrap_warn('')
 
 
 def headset_battery():
@@ -369,7 +374,7 @@ def get_basilisk_battery_level():
             except Exception:
                 _openrazer_dm = None
         if _openrazer_dm is None:
-            return ' '  # openrazer broken
+            return _wrap_warn(' ')  # openrazer broken
         device_manager = _openrazer_dm()
         basilisk = None
         for device in device_manager.devices:
@@ -377,24 +382,24 @@ def get_basilisk_battery_level():
                 basilisk = device
                 break
         if basilisk is None:
-            return ''  # Device not found
+            return _wrap_warn('')  # Device not found
         charging = basilisk.is_charging
         battery_level = basilisk.battery_level
         if charging:
-            return '󰂄'  # charging (bolt)
+            return _wrap_ok('󰂄')  # charging (bolt)
         if battery_level == 0:
-            return '󰒲'  # empty
+            return _wrap_ok('󰂄')  # seems like there is no 0% battery state, and instead it's being used when mouse is charging
         if battery_level > 75:
-            return '󱊣'  # high
+            return '󱊣'
         if battery_level > 25:
-            return '󱊢'  # medium
+            return '󱊢'
         if battery_level > 10:
-            return _wrap_warn('󱊡')  # low (11–25%), warn color
+            return _wrap_warn('󱊡')
         if battery_level > 0:
-            return _wrap_warn('󰂎')  # critical (1–10%), warn color
-        return '񬫐'  # unknown
+            return _wrap_warn('󰂎')
+        return _wrap_warn('')  # unknown
     except Exception:
-        return ' '  # openrazer error
+        return _wrap_warn(' ')  # openrazer error
 
 
 def mouse_battery():
@@ -460,7 +465,7 @@ def check_package_updates():
         update_interval=1800,
         distro="Arch_checkupdates",
         display_format="{updates} ",
-        no_update_string='󰸞',
+        no_update_string=_wrap_ok('󰸞'),
         colour_have_updates=warn_pink,
         colour_no_updates=light_pink,
         mouse_callbacks={mouse_left: lambda: qtile.cmd_spawn(terminal + ' -e yay -Syu')},
@@ -562,16 +567,13 @@ def screen_widgets(primary=False):
         spacer(3),
         notification_widget(),
         spacer(3),
-        widget_icon(' '),
+        widget_icon(_wrap_ok(' ')),
         spotify_widget(),
         spacer(3),
         widget.Spacer(),
         widget_icon('󰃰'),
         datetime_widget(),
         widget.Spacer(),
-        widget_icon(''),
-        check_package_updates(),
-        spacer(3),
         widget_icon(''),
         keyboard_layout(),
         spacer(3),
@@ -585,6 +587,9 @@ def screen_widgets(primary=False):
     ]
     if primary:
         widgets.extend([
+            widget_icon(''),
+            check_package_updates(),
+            spacer(3),
             qtile_extras_widget.Systray(),
             spacer(7),
         ])
