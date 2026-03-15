@@ -5,6 +5,7 @@
 #  \_\_\____/ \__,_| |___/  \____\___/|_| |_|_| |_|\__, /_/_/   http://www.github.com/ToDooca
 #                                                  |___/
 import os
+import re
 import subprocess
 from libqtile import hook, qtile
 from libqtile import bar, layout, widget
@@ -292,12 +293,27 @@ decoration_group = {
 extension_defaults = widget_defaults.copy()
 
 
+def _wrap_warn(text):
+    return '<span foreground="{}">{}</span>'.format(warn_pink, text)
+
+
+def _get_notification_icon():
+    # true = paused, false = active
+    paused = subprocess.getoutput("dunstctl is-paused").strip().lower() == "true"
+    if paused:
+        return _wrap_warn("󰂵 ")  # bell-off, warn color
+    return "󰂴 "  # bell
+
+
 def notification_widget():
-    return qtile_extras_widget.TextBox(
+    return qtile_extras_widget.GenPollText(
         **decoration_group,
         foreground=purple,
-        text=' ',
         padding=14,
+        markup=True,
+        func=_get_notification_icon,
+        fmt="{}",
+        update_interval=2,
         mouse_callbacks={
             mouse_left: lazy.spawn("dunstctl history-pop"),
             mouse_middle: lazy.spawn("dunstctl set-paused toggle"),
@@ -306,21 +322,39 @@ def notification_widget():
     )
 
 
+def _get_headset_battery():
+    try:
+        out = subprocess.getoutput("headsetcontrol -b 2>&1")
+        if "Charging" in out:
+            return "󰂄"
+        if "Unavailable" in out or "No supported" in out:
+            return "񬫐"
+        m = re.search(r"(\d{1,3})%", out)
+        if not m:
+            return "񬫐"
+        pct = int(m.group(1))
+        icons = (None, "󱊡", "󱊢", "󱊣", "󱊤")
+        idx = 4 if pct > 75 else 3 if pct > 50 else 2 if pct > 25 else 1
+        icon = icons[idx]
+        if pct <= 25:
+            return _wrap_warn(icon)
+        return icon
+    except Exception:
+        return "񬫐"
+
+
 def headset_battery():
     return qtile_extras_widget.GenPollText(
         **decoration_group,
+        name="headset_battery",
         foreground=light_pink,
         font='Fira Code',
         fontsize=17,
-        func=(
-            lambda: subprocess.getoutput(
-                "headsetcontrol -b 2>&1 | grep  -Eo '([0-9]{1,3}%|Charging|Unavailable|No supported headset found)'"
-                " | sed 's/Charging/󰂄/;s/Unavailable/󰥇/;s/No supported headset found//"
-                ";s/25%/󱊡/;s/50%/󱊢/;s/75%/󱊣/;s/100%/󱊣/'"
-            )
-        ),
-        mouse_callbacks={"Button1": lazy.widget["genpolltext"].function(lambda w: w.update(w.poll()))},
-        update_interval=30
+        markup=True,
+        func=_get_headset_battery,
+        fmt='{}',
+        update_interval=30,
+        mouse_callbacks={mouse_left: lazy.widget["headset_battery"].function(lambda w: w.update(w.poll()))},
     )
 
 
@@ -355,10 +389,10 @@ def get_basilisk_battery_level():
         if battery_level > 25:
             return '󱊢'
         if battery_level > 10:
-            return '󱊡'
+            return _wrap_warn('󱊡')
         if battery_level > 0:
-            return '󰂎'
-        return ''
+            return _wrap_warn('󰂎')
+        return '񬫐'
     except Exception:
         return ' '  # openrazer error
 
@@ -370,6 +404,7 @@ def mouse_battery():
         foreground=light_pink,
         font='Fira Code',
         fontsize=17,
+        markup=True,
         update_interval=30,
         func=get_basilisk_battery_level,
         fmt='{}',
