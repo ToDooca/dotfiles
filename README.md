@@ -4,6 +4,7 @@
 ## <font color="teal">Dependencies:</font>
 
 - [Qtile](http://www.qtile.org/)
+- [qtile-extras](https://github.com/qtile-extras/qtile-extras) (for extended widgets)
 - [Alacritty](https://alacritty.org/)
 - [Dunst](https://dunst-project.org/)
 - [Rofi](https://github.com/davatorium/rofi)
@@ -20,6 +21,30 @@ As my desktop environment I use qtile, and as my terminal emulator I use alacrit
 Along the files, you will find I use dunst for notifications, rofi for application launching and searching, and picom for compositing.
 
 You will also find that I have a neovim config as well, which I don't use as my main editor, but I'm aspiring to!
+
+### Qtile setup
+
+The Qtile config provides a top bar across 3 screens with a scratchpad for dropdown terminals and apps. Keybind summary (mod = Super/Windows key):
+
+| Keybind | Action |
+|---------|--------|
+| mod+Return | Terminal |
+| mod+d | Rofi drun |
+| mod+a | Rofi combi |
+| mod+w | Browser |
+| mod+Tab | Next layout |
+| mod+1..9 | Switch groups |
+| mod+alt+n | Toggle notifications |
+| mod+m | Spotify dropdown |
+| mod+0 | Power/session logout |
+
+**Widgets:** GroupBox, headset battery, mouse battery (Razer), notifications, Spotify/Mpris2, clock, calendar, package updates, keyboard layout, RAM, CPU, thermal sensor. Systray on primary screen only.
+
+**Optional dependencies:** `headsetcontrol` (headset battery), `openrazer` daemon (mouse battery via sysfs), `playerctl` (media keys), `dunst` (notifications).
+
+**Config validation:** Before reloading Qtile, run `python3 ~/.config/qtile/config.py` to catch syntax/import errors. A broken config can freeze Qtile or fall back to defaults.
+
+**Theme switching:** Set `QTILE_THEME` environment variable (e.g. `purple`) or edit `THEME` in `config.py` to switch themes.
 
 Nerdfont is used for icons in all of my config files, as well as the FiraCode font.
 

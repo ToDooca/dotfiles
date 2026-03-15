@@ -13,7 +13,7 @@ from libqtile.lazy import lazy
 from qtile_extras.widget.decorations import RectDecoration
 from qtile_extras import widget as qtile_extras_widget
 from libqtile.log_utils import logger
-# from openrazer.client import DeviceManager
+import glob
 
 terminal = os.getenv("terminal", "alacritty")
 browser = os.getenv("browser", "floorp")
@@ -35,12 +35,28 @@ scroll_down = "Button5"
 #  \____\___/|_|\___/|_|  |___/
 #
 
-purple = '#827397'
-light_purple = '#4d4c7d'
-dark_purple = '#363062'
-warn_pink = '#ff5677'
-light_pink = '#e9d5da'
-picom_transparent = '#00000000'
+THEME = os.getenv("QTILE_THEME", "purple")
+
+themes = {
+    "purple": {
+        "primary": "#827397",
+        "secondary": "#4d4c7d",
+        "background": "#363062",
+        "warn": "#ff5677",
+        "accent": "#e9d5da",
+        "transparent": "#00000000",
+    },
+}
+
+theme = themes.get(THEME, themes["purple"])
+
+# Theme aliases (for backward compatibility in this config)
+purple = theme["primary"]
+light_purple = theme["secondary"]
+dark_purple = theme["background"]
+warn_pink = theme["warn"]
+light_pink = theme["accent"]
+picom_transparent = theme["transparent"]
 
 #  _  __          _     _           _
 # | |/ /___ _   _| |__ (_)_ __   __| |___
@@ -307,47 +323,42 @@ def headset_battery():
     )
 
 
-# def get_basilisk_battery_level():
-#     device_manager = DeviceManager()
-#     basilisk = None
-#     for device in device_manager.devices:
-#         if "Razer Basilisk V3 Pro (Wireless)" == device.name:
-#             basilisk = device
-#             break
-#
-#     if basilisk is None:
-#         return ''
-#
-#     charging = basilisk.is_charging
-#     battery_level = basilisk.battery_level
-#
-#     if charging is False:
-#         if battery_level == 0:
-#             return '󰒲'
-#         elif battery_level > 75:
-#             return '󱊣'
-#         elif battery_level > 25:
-#             return '󱊢'
-#         elif battery_level > 10:
-#             return '󱊡'
-#         elif battery_level > 0:
-#             return '󰂎'
-#         else:
-#             return ''
-#     else:
-#         return '󰂄'
+def get_razer_mouse_battery():
+    """Read Razer mouse battery from sysfs (openrazer). No Python API dependency."""
+    try:
+        charge_level_glob = '/sys/bus/hid/drivers/razermouse/*/charge_level'
+        charge_status_glob = '/sys/bus/hid/drivers/razermouse/*/charge_status'
+        level_paths = glob.glob(charge_level_glob)
+        status_paths = glob.glob(charge_status_glob)
+        if not level_paths or not status_paths:
+            return ' '  # No Razer mouse found
+        level = int(open(level_paths[0]).read().strip())
+        status = open(status_paths[0]).read().strip()
+        if status in ('1', '2'):  # 1=charging, 2=fully charged
+            return '󰂄'
+        if level <= 25:
+            return '󱊡'   # 1 bar
+        if level <= 50:
+            return '󱊢'   # 2 bars
+        if level <= 75:
+            return '󱊣'   # 3 bars
+        return '󱊤'       # 4 bars (76-100%)
+    except (ValueError, OSError, IndexError):
+        return ' '
 
 
-# def mouse_battery():
-#     return qtile_extras_widget.GenPollText(
-#         **decoration_group,
-#         foreground=light_pink,
-#         font='Fira Code',
-#         fontsize=17,
-#         update_interval=180,
-#         func=get_basilisk_battery_level,
-#         fmt='{}'
-#     )
+def mouse_battery():
+    return qtile_extras_widget.GenPollText(
+        **decoration_group,
+        name="mouse_battery",
+        foreground=light_pink,
+        font='Fira Code',
+        fontsize=17,
+        update_interval=180,
+        func=get_razer_mouse_battery,
+        fmt='{}',
+        mouse_callbacks={mouse_left: lazy.widget["mouse_battery"].function(lambda w: w.update(w.poll()))},
+    )
 
 
 def spotify_widget():
@@ -503,8 +514,8 @@ def screen_widgets(primary=False):
         spacer(3),
         widget_icon('󰋋'),
         headset_battery(),
-        # widget_icon('󰍽'),
-        # mouse_battery(),
+        widget_icon('󰍽'),
+        mouse_battery(),
         spacer(3),
         notification_widget(),
         spacer(3),
