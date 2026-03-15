@@ -40,9 +40,7 @@ The Qtile config provides a top bar across 3 screens with a scratchpad for dropd
 
 **Widgets:** GroupBox, headset battery, mouse battery (Razer), notifications, Spotify/Mpris2, clock, calendar, package updates, keyboard layout, RAM, CPU, thermal sensor. Systray on primary screen only.
 
-**Optional dependencies:** `headsetcontrol` (headset battery), `openrazer` daemon (mouse battery via sysfs), `playerctl` (media keys), `dunst` (notifications).
-
-**Config validation:** Before reloading Qtile, run `python3 ~/.config/qtile/config.py` to catch syntax/import errors. A broken config can freeze Qtile or fall back to defaults.
+**Optional dependencies:** `headsetcontrol` (headset battery), `openrazer` daemon (mouse battery), `playerctl` (media keys), `dunst` (notifications).
 
 **Theme switching:** Set `QTILE_THEME` environment variable (e.g. `purple`) or edit `THEME` in `config.py` to switch themes.
 

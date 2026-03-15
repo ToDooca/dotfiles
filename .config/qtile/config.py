@@ -13,7 +13,9 @@ from libqtile.lazy import lazy
 from qtile_extras.widget.decorations import RectDecoration
 from qtile_extras import widget as qtile_extras_widget
 from libqtile.log_utils import logger
-import glob
+
+# openrazer: lazy-loaded to avoid breaking config when deps are broken/updated
+_openrazer_dm = "unloaded"
 
 terminal = os.getenv("terminal", "alacritty")
 browser = os.getenv("browser", "floorp")
@@ -70,8 +72,7 @@ keys = [
     Key([mod], "Return",            lazy.spawn(terminal),                     desc="Launch terminal"),
     Key([mod], "Tab",               lazy.next_layout(),                       desc="Toggle between layouts"),
     Key([mod], "q",                 lazy.window.kill(),                       desc="Kill focused window"),
-    Key([mod, control], "r",        lazy.reload_config(),
-                                    lazy.spawn("xmodmap /home/du/.Xmodmap"),  desc="Reload the config"),
+    Key([mod, control], "r",        lazy.restart(),                           desc="Restart Qtile (clean reinit, avoids widget bugs)"),
     Key([mod, control], "q",        lazy.shutdown(),                          desc="Shutdown Qtile"),
     Key([mod], "a",                 lazy.spawn('rofi -show combi'),           desc="Open rofi combi"),
     Key([mod], "d",                 lazy.spawn('rofi -show drun'),            desc="Open rofi drun"),
@@ -319,32 +320,47 @@ def headset_battery():
             )
         ),
         mouse_callbacks={"Button1": lazy.widget["genpolltext"].function(lambda w: w.update(w.poll()))},
-        update_interval=180
+        update_interval=30
     )
 
 
-def get_razer_mouse_battery():
-    """Read Razer mouse battery from sysfs (openrazer). No Python API dependency."""
+
+def get_basilisk_battery_level():
+    global _openrazer_dm
     try:
-        charge_level_glob = '/sys/bus/hid/drivers/razermouse/*/charge_level'
-        charge_status_glob = '/sys/bus/hid/drivers/razermouse/*/charge_status'
-        level_paths = glob.glob(charge_level_glob)
-        status_paths = glob.glob(charge_status_glob)
-        if not level_paths or not status_paths:
-            return ' '  # No Razer mouse found
-        level = int(open(level_paths[0]).read().strip())
-        status = open(status_paths[0]).read().strip()
-        if status in ('1', '2'):  # 1=charging, 2=fully charged
+        if _openrazer_dm == "unloaded":
+            try:
+                from openrazer.client import DeviceManager
+                _openrazer_dm = DeviceManager
+            except Exception:
+                _openrazer_dm = None
+        if _openrazer_dm is None:
+            return ' '  # openrazer broken
+        device_manager = _openrazer_dm()
+        basilisk = None
+        for device in device_manager.devices:
+            if "Basilisk" in (device.name or ""):
+                basilisk = device
+                break
+        if basilisk is None:
+            return ''  # Device not found
+        charging = basilisk.is_charging
+        battery_level = basilisk.battery_level
+        if charging:
             return '󰂄'
-        if level <= 25:
-            return '󱊡'   # 1 bar
-        if level <= 50:
-            return '󱊢'   # 2 bars
-        if level <= 75:
-            return '󱊣'   # 3 bars
-        return '󱊤'       # 4 bars (76-100%)
-    except (ValueError, OSError, IndexError):
-        return ' '
+        if battery_level == 0:
+            return '󰒲'
+        if battery_level > 75:
+            return '󱊣'
+        if battery_level > 25:
+            return '󱊢'
+        if battery_level > 10:
+            return '󱊡'
+        if battery_level > 0:
+            return '󰂎'
+        return ''
+    except Exception:
+        return ' '  # openrazer error
 
 
 def mouse_battery():
@@ -354,8 +370,8 @@ def mouse_battery():
         foreground=light_pink,
         font='Fira Code',
         fontsize=17,
-        update_interval=180,
-        func=get_razer_mouse_battery,
+        update_interval=30,
+        func=get_basilisk_battery_level,
         fmt='{}',
         mouse_callbacks={mouse_left: lazy.widget["mouse_battery"].function(lambda w: w.update(w.poll()))},
     )
