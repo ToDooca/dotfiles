@@ -388,7 +388,7 @@ def get_basilisk_battery_level():
         if charging:
             return _wrap_ok('󰂄')  # charging (bolt)
         if battery_level == 0:
-            return _wrap_ok('󰂄')  # seems like there is no 0% battery state, and instead it's being used when mouse is charging
+            return '󰒲'
         if battery_level > 75:
             return '󱊣'
         if battery_level > 25:
