@@ -435,7 +435,7 @@ def spotify_widget():
         foreground=light_pink,
         objname='org.mpris.MediaPlayer2.spotify',
         format='{xesam:title} - {xesam:artist}',
-        width=250,
+        width=230,
         scroll_interval=0.02,
         stopped_text='',
         paused_text='',
@@ -541,7 +541,6 @@ def cpu_widget():
         **decoration_group,
         format='{load_percent}%',
         foreground=light_pink,
-        width=65
     )
 
 
@@ -579,11 +578,8 @@ def screen_widgets(primary=False):
         spacer(3),
         widget_icon('󰋋'),
         headset_battery(),
-        spacer(3),
         widget_icon('󰍽'),
         mouse_battery(),
-        spacer(3),
-        notification_widget(),
         spacer(3),
         spotify_icon(),
         spotify_widget(),
@@ -593,19 +589,22 @@ def screen_widgets(primary=False):
         widget_icon('󰃰'),
         datetime_widget(),
         widget.Spacer(),
+        notification_widget(),
+        spacer(3),
         widget_icon(''),
         keyboard_layout(),
         spacer(3),
-        widget_icon(''),
+        widget_icon(' '),
         ram_memory(),
-        widget_icon(''),
+        spacer(3),
+        widget_icon(''),
         cpu_widget(),
         widget_icon(''),
         thermal_sensor(),
-        spacer(7),
     ]
     if primary:
         widgets.extend([
+            spacer(3),
             widget_icon(''),
             check_package_updates(),
             spacer(3),
@@ -613,7 +612,7 @@ def screen_widgets(primary=False):
             spacer(7),
         ])
         return widgets
-    return widgets
+    return widgets + [spacer(7)]
 
 
 screens = [
