@@ -16,7 +16,7 @@ __pycache__
 .config/mpd/state
 .config/mpd/sticker.sql
 
-.config/ranger/plugins/*
+.config/ranger/plugins/*  
 
 .config/xfce4/xfconf/xfce-perchannel-xml/xfce4-power-manager.xml
 .config/xfce4/xfconf/xfce-perchannel-xml/displays.xml
