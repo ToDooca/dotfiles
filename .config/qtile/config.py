@@ -417,6 +417,17 @@ def mouse_battery():
     )
 
 
+def spotify_icon():
+    return qtile_extras_widget.TextBox(
+        **decoration_group,
+        font='Fira Code',
+        padding=14,
+        text=_wrap_ok(''),
+        foreground=purple,
+        mouse_callbacks={mouse_left: lazy.spawn("spotify")},
+    )
+
+
 def spotify_widget():
     return qtile_extras_widget.Mpris2(
         **decoration_group,
@@ -427,8 +438,14 @@ def spotify_widget():
         width=250,
         scroll_interval=0.02,
         stopped_text='',
-        paused_text='',
+        paused_text='',
     )
+
+
+def spotify_trailing_pad():
+    # Ugly workaround because the management of the prefix and suffix text for Mpris2 widget is very poor, and if
+    # you have the scrolling text on, it scrolls to the full width of the widget which looks ugly with any decorations
+    return qtile_extras_widget.TextBox(**decoration_group, text=' ', padding=1)
 
 
 def widget_icon(icon: str):
@@ -562,13 +579,15 @@ def screen_widgets(primary=False):
         spacer(3),
         widget_icon('󰋋'),
         headset_battery(),
+        spacer(3),
         widget_icon('󰍽'),
         mouse_battery(),
         spacer(3),
         notification_widget(),
         spacer(3),
-        widget_icon(_wrap_ok(' ')),
+        spotify_icon(),
         spotify_widget(),
+        spotify_trailing_pad(),
         spacer(3),
         widget.Spacer(),
         widget_icon('󰃰'),
@@ -671,9 +690,7 @@ reconfigure_screens = False
 auto_minimize = True
 wmname = "LG3D"
 
-
-
-    #  ____  _             _
+#  ____  _             _
 # / ___|| |_ __ _ _ __| |_ _   _ _ __
 # \___ \| __/ _` | '__| __| | | | '_ \
 #  ___) | || (_| | |  | |_| |_| | |_) |
