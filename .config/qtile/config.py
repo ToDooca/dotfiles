@@ -338,8 +338,8 @@ def _get_headset_battery():
         if not battery_percentage:
             return _wrap_warn('󰂲')
         pct = int(battery_percentage.group(1))
-        icons = ("󰂲", "󱊡", "󱊢", "󱊣", "󱊤")
-        idx = 4 if pct > 75 else 3 if pct > 50 else 2 if pct > 25 else 1
+        icons = ("󰂲", "󱊡", "󱊢", "󱊣")
+        idx = 3 if pct > 50 else 2 if pct > 25 else 1
         icon = icons[idx]
         if pct <= 25:
             return _wrap_warn(icon)
