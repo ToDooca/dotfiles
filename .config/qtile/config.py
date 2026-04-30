@@ -571,36 +571,42 @@ def groupbox_widget():
 #  ___) | (__| | |  __/  __/ | | \__ \
 # |____/ \___|_|  \___|\___|_| |_|___/
 
+
+_shared_widgets = {
+    "headset_battery": headset_battery(),
+    "mouse_battery": mouse_battery(),
+    "spotify_widget": spotify_widget(),
+    "datetime_widget": datetime_widget(),
+    "notification_widget": notification_widget(),
+    "keyboard_layout": keyboard_layout(),
+    "ram_memory": ram_memory(),
+    "cpu_widget": cpu_widget(),
+    "thermal_sensor": thermal_sensor(),
+}
+
+
 def screen_widgets(primary=False):
     widgets = [
         spacer(7),
         groupbox_widget(),
         spacer(3),
         widget_icon('󰋋'),
-        headset_battery(),
+        _shared_widgets["headset_battery"],
         widget_icon('󰍽'),
-        mouse_battery(),
+        _shared_widgets["mouse_battery"],
         spacer(3),
         spotify_icon(),
-        spotify_widget(),
+        _shared_widgets["spotify_widget"],
         spotify_trailing_pad(),
         spacer(3),
         widget.Spacer(),
         widget_icon('󰃰'),
-        datetime_widget(),
+        _shared_widgets["datetime_widget"],
         widget.Spacer(),
-        notification_widget(),
+        _shared_widgets["notification_widget"],
         spacer(3),
         widget_icon(''),
-        keyboard_layout(),
-        spacer(3),
-        widget_icon(' '),
-        ram_memory(),
-        spacer(3),
-        widget_icon(''),
-        cpu_widget(),
-        widget_icon(''),
-        thermal_sensor(),
+        _shared_widgets["keyboard_layout"],
     ]
     if primary:
         widgets.extend([
@@ -612,7 +618,17 @@ def screen_widgets(primary=False):
             spacer(7),
         ])
         return widgets
-    return widgets + [spacer(7)]
+    return widgets + [
+        spacer(3),
+        widget_icon(' '),
+        _shared_widgets["ram_memory"],
+        spacer(3),
+        widget_icon(''),
+        _shared_widgets["cpu_widget"],
+        widget_icon(''),
+        _shared_widgets["thermal_sensor"],
+        spacer(7),
+    ]
 
 
 screens = [
