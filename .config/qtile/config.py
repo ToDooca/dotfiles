@@ -569,14 +569,6 @@ def groupbox_widget():
 # |____/ \___|_|  \___|\___|_| |_|___/
 
 
-# Mpris2/spotify_widget is intentionally NOT shared. It's a scrolling _TextBox
-# subclass and qtile-extras' QTEMirror freezes its `length_type` at the moment
-# the mirror is created; once the source flips to scroll mode (long titles)
-# the mirror falls back to `_TextBox.calculate_length` which returns the
-# natural text width instead of the configured 230 px scroll width, blowing
-# out the bar layout on secondary screens. Mpris2 is event-driven over dbus,
-# so each per-screen instance gets the same `PropertiesChanged` signal at the
-# same time; there is no drift to mitigate by sharing.
 _shared_widgets = {
     "headset_battery": headset_battery(),
     "mouse_battery": mouse_battery(),
