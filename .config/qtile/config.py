@@ -4,6 +4,7 @@
 # \ \ \| |_| | |_| | \__ \ | |__| (_) | | | |  _| | (_| |/ / /
 #  \_\_\____/ \__,_| |___/  \____\___/|_| |_|_| |_|\__, /_/_/   http://www.github.com/ToDooca
 #                                                  |___/
+import functools
 import os
 import re
 import subprocess
@@ -13,13 +14,10 @@ from libqtile.config import Drag, Group, Key, KeyChord, Match, Screen, ScratchPa
 from libqtile.lazy import lazy
 from qtile_extras.widget.decorations import RectDecoration
 from qtile_extras import widget as qtile_extras_widget
-from libqtile.log_utils import logger
-
-# openrazer: lazy-loaded to avoid breaking config when deps are broken/updated
-_openrazer_dm = "unloaded"
 
 terminal = os.getenv("terminal", "alacritty")
 browser = os.getenv("browser", "floorp")
+_xmodmap_cmd = "xmodmap " + os.path.expanduser("~/.Xmodmap")
 
 mod = "mod4"
 alt = "mod1"
@@ -28,8 +26,23 @@ control = "control"
 mouse_left = "Button1"
 mouse_middle = "Button2"
 mouse_right = "Button3"
-scroll_up = "Button4"
-scroll_down = "Button5"
+
+
+def _player(action, players="spotify,%any"):
+    return lazy.spawn(f"playerctl --player={players} {action}")
+
+
+def _vol(amount):
+    return lazy.spawn(f"padefault volume-focus {amount}")
+
+
+@lazy.function
+def _toggle_notifications(qtile):
+    subprocess.run(["dunstctl", "set-paused", "toggle"], check=False, timeout=2)
+    notif = qtile.widgets_map.get("notifications")
+    if notif is not None:
+        notif.force_update()
+
 
 #   ____      _
 #  / ___|___ | | ___  _ __ ___
@@ -123,14 +136,14 @@ keys = [
     Key([mod], "c",                 lazy.to_screen(1),                        desc='Keyboard focus to monitor 3'),
 
     # Notifications
-    Key([mod, alt], "n",            lazy.spawn("dunstctl set-paused toggle"), desc='Toggle notifications'),
+    Key([mod, alt], "n",            _toggle_notifications,                    desc='Toggle notifications'),
     Key([mod], "n",                 lazy.spawn("dunstctl close-all"),         desc='Toggle notifications'),
 
     # Keyboard Layouts
     Key([mod], "l",                 lazy.spawn("setxkbmap -layout us"),
-                                    lazy.spawn("xmodmap /home/du/.Xmodmap"),  desc='Toggle us layout'),
+                                    lazy.spawn(_xmodmap_cmd),                desc='Toggle us layout'),
     Key([control], "Tab",           lazy.widget["keyboardlayout"].next_keyboard(),
-                                    lazy.spawn("xmodmap /home/du/.Xmodmap"),  desc='Cycle through keyboard layouts'),
+                                    lazy.spawn(_xmodmap_cmd),                desc='Cycle through keyboard layouts'),
     # Power options
     Key([mod], "0",                 lazy.spawn("xfce4-session-logout"),       desc='poweroff settings'),
 
@@ -151,26 +164,24 @@ keys = [
     Key([mod], "m",                    lazy.group['scratchpad'].dropdown_toggle('spotify')),
     Key([mod, control], "m",           lazy.group['scratchpad'].dropdown_toggle('spt')),
     Key([mod, alt, control], "m",      lazy.spawn('stremio'), lazy.group['8'].toscreen()),
-    Key([mod], "comma",                lazy.spawn("playerctl --player=spotify,%any previous")),
-    Key([mod], "period",               lazy.spawn("playerctl --player=spotify,%any next")),
-    Key([mod], "slash",                lazy.spawn("playerctl --player=spotify,%any play-pause")),
-    Key([control], "XF86AudioMute",    lazy.spawn("playerctl --player=spotify,%any next")),
+    Key([mod], "comma",                _player("previous")),
+    Key([mod], "period",               _player("next")),
+    Key([mod], "slash",                _player("play-pause")),
+    Key([control], "XF86AudioMute",    _player("next")),
     Key([], "XF86AudioMute",           lazy.spawn("playerctl -p spotify play-pause")),
     Key([], "XF86AudioRaiseVolume",    lazy.spawn("playerctl -p spotify volume 0.05+")),
     Key([], "XF86AudioLowerVolume",    lazy.spawn("playerctl -p spotify volume 0.05-")),
-    Key([], "XF86AudioPlay",           lazy.spawn("playerctl --player=spotify,%any play-pause")),
-    Key([], "XF86AudioPlay",           lazy.spawn("playerctl --player=spotify,%any play-pause")),
-    Key([], "XF86AudioPlay",           lazy.spawn("playerctl --player=spotify,%any play-pause")),
-    Key([], "XF86AudioPause",          lazy.spawn("playerctl --player=spotify,%any play-pause")),
-    Key([], "XF86AudioStop",           lazy.spawn("playerctl --player=spotify,%any stop")),
-    Key([], "XF86AudioNext",           lazy.spawn("playerctl --player=spotify,%any next")),
-    Key([], "XF86AudioPrev",           lazy.spawn("playerctl --player=spotify,%any previous")),
-    Key([mod, control, alt], "comma",  lazy.spawn("padefault volume-focus -5%")),
-    Key([mod, control, alt], "period", lazy.spawn("padefault volume-focus +5%")),
-    Key([mod, control, alt], "slash",  lazy.spawn("padefault volume-focus 100%")),
-    Key([mod], "XF86AudioLowerVolume", lazy.spawn("padefault volume-focus -5%")),
-    Key([mod], "XF86AudioRaiseVolume", lazy.spawn("padefault volume-focus +5%")),
-    Key([mod], "XF86AudioMute",        lazy.spawn("playerctl --player=spotify,%any play-pause")),
+    Key([], "XF86AudioPlay",           _player("play-pause")),
+    Key([], "XF86AudioPause",          _player("play-pause")),
+    Key([], "XF86AudioStop",           _player("stop")),
+    Key([], "XF86AudioNext",           _player("next")),
+    Key([], "XF86AudioPrev",           _player("previous")),
+    Key([mod, control, alt], "comma",  _vol("-5%")),
+    Key([mod, control, alt], "period", _vol("+5%")),
+    Key([mod, control, alt], "slash",  _vol("100%")),
+    Key([mod], "XF86AudioLowerVolume", _vol("-5%")),
+    Key([mod], "XF86AudioRaiseVolume", _vol("+5%")),
+    Key([mod], "XF86AudioMute",        _player("play-pause")),
     Key([mod, alt], "XF86AudioMute",   lazy.spawn('reload-headphones')),
 
     # Toggle between split and unsplit sides of stack.
@@ -292,8 +303,6 @@ decoration_group = {
     "decoration_height": 0,
 }
 
-extension_defaults = widget_defaults.copy()
-
 
 def _wrap_warn(text):
     return '<span foreground="{}">{}</span>'.format(warn_pink, text)
@@ -304,7 +313,14 @@ def _wrap_ok(text):
 
 
 def _get_notification_icon():
-    paused = subprocess.getoutput("dunstctl is-paused").strip().lower() == "true"
+    try:
+        result = subprocess.run(
+            ["dunstctl", "is-paused"],
+            capture_output=True, text=True, timeout=2,
+        )
+        paused = result.stdout.strip().lower() == "true"
+    except (subprocess.TimeoutExpired, FileNotFoundError):
+        paused = False
     if paused:
         return _wrap_warn(" ")
     return " "
@@ -313,6 +329,7 @@ def _get_notification_icon():
 def notification_widget():
     return qtile_extras_widget.GenPollText(
         **decoration_group,
+        name="notifications",
         foreground=purple,
         padding=14,
         markup=True,
@@ -321,7 +338,7 @@ def notification_widget():
         update_interval=2,
         mouse_callbacks={
             mouse_left: lazy.spawn("dunstctl history-pop"),
-            mouse_middle: lazy.spawn("dunstctl set-paused toggle"),
+            mouse_middle: _toggle_notifications,
             mouse_right: lazy.spawn("dunstctl close-all")
         }
     )
@@ -329,7 +346,11 @@ def notification_widget():
 
 def _get_headset_battery():
     try:
-        out = subprocess.getoutput("headsetcontrol -b 2>&1")
+        result = subprocess.run(
+            ["headsetcontrol", "-b"],
+            capture_output=True, text=True, timeout=2,
+        )
+        out = (result.stdout or "") + (result.stderr or "")
         if "Charging" in out:
             return _wrap_ok("󰂄")
         if "Unavailable" in out or "No supported" in out:
@@ -348,34 +369,41 @@ def _get_headset_battery():
         return _wrap_warn('')
 
 
-def headset_battery():
+def _battery_widget(name, func):
     return qtile_extras_widget.GenPollText(
         **decoration_group,
-        name="headset_battery",
+        name=name,
         foreground=light_pink,
         font='Fira Code',
         fontsize=17,
         markup=True,
-        func=_get_headset_battery,
-        fmt='{}',
         update_interval=30,
-        mouse_callbacks={mouse_left: lazy.widget["headset_battery"].function(lambda w: w.update(w.poll()))},
+        func=func,
+        fmt='{}',
+        mouse_callbacks={mouse_left: lazy.widget[name].function(lambda w: w.update(w.poll()))},
     )
 
 
+def headset_battery():
+    return _battery_widget("headset_battery", _get_headset_battery)
+
+
+
+@functools.cache
+def _openrazer_device_manager_class():
+    try:
+        from openrazer.client import DeviceManager
+        return DeviceManager
+    except Exception:
+        return None
+
 
 def get_basilisk_battery_level():
-    global _openrazer_dm
     try:
-        if _openrazer_dm == "unloaded":
-            try:
-                from openrazer.client import DeviceManager
-                _openrazer_dm = DeviceManager
-            except Exception:
-                _openrazer_dm = None
-        if _openrazer_dm is None:
+        DM = _openrazer_device_manager_class()
+        if DM is None:
             return _wrap_warn(' ')  # openrazer broken
-        device_manager = _openrazer_dm()
+        device_manager = DM()
         basilisk = None
         for device in device_manager.devices:
             if "Basilisk" in (device.name or ""):
@@ -403,18 +431,7 @@ def get_basilisk_battery_level():
 
 
 def mouse_battery():
-    return qtile_extras_widget.GenPollText(
-        **decoration_group,
-        name="mouse_battery",
-        foreground=light_pink,
-        font='Fira Code',
-        fontsize=17,
-        markup=True,
-        update_interval=30,
-        func=get_basilisk_battery_level,
-        fmt='{}',
-        mouse_callbacks={mouse_left: lazy.widget["mouse_battery"].function(lambda w: w.update(w.poll()))},
-    )
+    return _battery_widget("mouse_battery", get_basilisk_battery_level)
 
 
 def spotify_icon():
@@ -436,7 +453,7 @@ def spotify_widget():
         objname='org.mpris.MediaPlayer2.spotify',
         format='{xesam:title} - {xesam:artist}',
         width=230,
-        scroll_interval=0.02,
+        scroll_interval=0.05,
         stopped_text='',
         paused_text='',
     )
@@ -460,6 +477,7 @@ def widget_icon(icon: str):
 def keyboard_layout():
     return qtile_extras_widget.KeyboardLayout(
         **decoration_group,
+        name="keyboardlayout",
         foreground=light_pink,
         configured_keyboards=['us', 'rs latin', 'rs']
     )
@@ -472,7 +490,7 @@ def ram_memory():
         foreground=light_pink,
         measure_mem='G',
         format='{MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}',
-        mouse_callbacks={mouse_left: lambda: qtile.cmd_spawn(terminal + ' -e htop')},
+        mouse_callbacks={mouse_left: lazy.spawn(terminal + ' -e htop')},
     )
 
 
@@ -485,18 +503,7 @@ def check_package_updates():
         no_update_string=_wrap_ok('󰸞'),
         colour_have_updates=warn_pink,
         colour_no_updates=light_pink,
-        mouse_callbacks={mouse_left: lambda: qtile.cmd_spawn(terminal + ' -e yay -Syu')},
-    )
-
-
-def disk_free(disk_fmt: str, disk_partition: str):
-    return qtile_extras_widget.DF(
-        **decoration_group,
-        foreground=light_pink,
-        warn_color=warn_pink,
-        fmt=disk_fmt,
-        format='{f}GB',
-        partition=disk_partition,
+        mouse_callbacks={mouse_left: lazy.spawn(terminal + ' -e yay -Syu')},
     )
 
 
@@ -517,16 +524,6 @@ def thermal_sensor():
         format='{temp}°C',
         format_crit='{temp}°C  ',
         fgcolor_crit=warn_pink,
-    )
-
-
-def drawer(widgets_arr: list):
-    return qtile_extras_widget.WidgetBox(
-        **decoration_group,
-        foreground=light_pink,
-        text_open='',
-        text_closed=' ',
-        widgets=widgets_arr,
     )
 
 
@@ -572,10 +569,17 @@ def groupbox_widget():
 # |____/ \___|_|  \___|\___|_| |_|___/
 
 
+# Mpris2/spotify_widget is intentionally NOT shared. It's a scrolling _TextBox
+# subclass and qtile-extras' QTEMirror freezes its `length_type` at the moment
+# the mirror is created; once the source flips to scroll mode (long titles)
+# the mirror falls back to `_TextBox.calculate_length` which returns the
+# natural text width instead of the configured 230 px scroll width, blowing
+# out the bar layout on secondary screens. Mpris2 is event-driven over dbus,
+# so each per-screen instance gets the same `PropertiesChanged` signal at the
+# same time; there is no drift to mitigate by sharing.
 _shared_widgets = {
     "headset_battery": headset_battery(),
     "mouse_battery": mouse_battery(),
-    "spotify_widget": spotify_widget(),
     "datetime_widget": datetime_widget(),
     "notification_widget": notification_widget(),
     "keyboard_layout": keyboard_layout(),
@@ -596,7 +600,7 @@ def screen_widgets(primary=False):
         _shared_widgets["mouse_battery"],
         spacer(3),
         spotify_icon(),
-        _shared_widgets["spotify_widget"],
+        spotify_widget(),
         spotify_trailing_pad(),
         spacer(3),
         widget.Spacer(),
@@ -631,26 +635,10 @@ def screen_widgets(primary=False):
     ]
 
 
+# Change `range(3)` to `range(2)` for a two-monitor setup.
 screens = [
-    Screen(
-        top=bar.Bar(
-            screen_widgets(primary=True),
-            38,
-            background=picom_transparent),
-    ),
-    Screen(
-        top=bar.Bar(
-            screen_widgets(),
-            38,
-            background=picom_transparent),
-    ),
-    # Remove code block below for a two monitor setup
-    Screen(
-        top=bar.Bar(
-            screen_widgets(),
-            38,
-            background=picom_transparent),
-    ),
+    Screen(top=bar.Bar(screen_widgets(primary=(i == 0)), 38, background=picom_transparent))
+    for i in range(3)
 ]
 
 #  __  __
@@ -702,7 +690,7 @@ follow_mouse_focus = False
 cursor_warp = False
 focus_on_window_activation = "never"
 reconfigure_screens = False
-auto_minimize = True
+auto_minimize = False
 wmname = "LG3D"
 
 #  ____  _             _
@@ -715,4 +703,4 @@ wmname = "LG3D"
 @hook.subscribe.startup_once
 def autostart():
     home = os.path.expanduser('~/.config/qtile/autostart.sh')
-    subprocess.run([home])
+    subprocess.Popen([home])
